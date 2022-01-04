@@ -42,7 +42,6 @@ pyparsing==2.4.7
 pytest==6.2.5
 python-slugify==5.0.2
 pytz==2021.1
-pywin32==301
 redis==3.5.3
 regex==2021.8.28
 requests==2.26.0
