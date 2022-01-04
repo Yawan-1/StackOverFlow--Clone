@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'martor',
     'simple_history',
-    'background_task',
+    # 'background_task',
     'review.templatetags',
     'tagbadge.tb_templatetags',
     'online_users',
