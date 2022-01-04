@@ -256,4 +256,4 @@ CKEDITOR_IMAGE_BACKEND = "pillow"
 #     'debug_toolbar.panels.profiling.ProfilingPanel',
 # ]
 
-django_heroku.settings(locals()
+django_heroku.settings(locals())
