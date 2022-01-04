@@ -1,0 +1,420 @@
+.myClass{
+    /*flex-shrink: 0;*/
+    /*margin-top: -1px;*/
+    /*margin-right: 4px;*/
+    color: hsl(210,8%,15%);
+}
+
+.myNavbar .profile_dd,
+.notification_dd{
+  right: 40px;
+  /*background-color: red;*/
+  /*padding: 2em;*/
+  width: 350px;
+  height: auto;
+  display: none;
+  position: absolute;
+}
+
+/*.myNavbar{
+    font-family: 'Trade Winds';
+   font-size: 20px;
+}
+*/
+.myNavbar .navbar_right{
+   display: flex;
+}
+
+.myNavbar .navbar_right img{
+  width: 35px;
+}
+
+.myNavbar .navbar_right .icon_wrap{
+  cursor: pointer;
+}
+
+.myNavbar .navbar_right .myNotification{
+  margin-left: 400px;
+  /*max-width: -500;*/
+  width: 40%;
+}
+
+/*.myNavbar .navbar_right .myNotification .icon_wrap{
+  font-size: 28px;
+}*/
+
+
+.myNavbar .navbar_right .myNotification{
+  position: relative;
+}
+
+.myNavbar .myProfile .profile_dd ul li .btn{
+    height: 32px;
+    padding: 7px 10px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    background: #3b80f9;
+    width: 125px;
+    margin: 5px auto 15px;
+}
+
+.myNavbar .myProfile .profile_dd ul li .btn:hover{
+  background: #6593e4;
+}
+
+
+.myNavbar .myProfile.active .profile_dd,
+.myNavbar .myNotification.active .notification_dd{
+  display: block;
+}
+
+
+
+
+
+
+.achievement_navbar .profile_dd,
+.achievement_dd {
+  right: 25px;
+  /*background-color: red;*/
+  /*padding: 2em;*/
+  width: 350px;
+  height: auto;
+  display: none;
+  position: absolute;
+}
+
+/*.achievement-navbar {
+    font-size: 20px;
+}
+*/
+.achievement_navbar .achievement_bar_right {
+    display: flex;
+}
+
+.achievement_navbar .achievement_bar_right img{
+    width: 35px;
+}
+
+.achievement_navbar .achievement_bar_right .achieve_icon_wrap {
+    cursor: pointer;
+}
+
+.achievement_navbar .achievement_bar_right .achievement_notification {
+  margin-left: 600px;
+  width: 50%;
+}
+
+/*.achievement-navbar .achievement-bar-right .achievement_notification .achieve-icon-wrap {
+    font-size: 28px;
+}
+*/
+.achievement_navbar .achievement_bar_right .achievement_notification {
+    position: relative;
+}
+
+.achievement_navbar ul li .btn{
+    height: 32px;
+    padding: 7px 10px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    background: #3b80f9;
+    width: 125px;
+    margin: 5px auto 15px;
+}
+
+.achievement_navbar ul li .btn:hover{
+  background: #6593e4;
+}
+
+.achievement_navbar .achievement_notification.active .achievement_dd{
+  display: block;
+}
+
+
+
+
+
+.review_navbar .profile_dd,
+.review_dd {
+  right: 45px;
+  /*background-color: red;*/
+  /*padding: 2em;*/
+  width: 350px;
+  height: auto;
+  display: none;
+  position: absolute;
+}
+
+.review_navbar .review_bar_right {
+    display: flex;
+}
+
+.review_navbar .review_bar_right img{
+    width: 35px;
+}
+
+.review_navbar .review_bar_right .review_icon_wrap {
+    cursor: pointer;
+}
+
+.review_navbar .review_bar_right .review_notification {
+  margin-left: 600px;
+  width: 50%;
+}
+
+/*.achievement-navbar .achievement-bar-right .achievement_notification .achieve-icon-wrap {
+    font-size: 28px;
+}
+*/
+.review_navbar .review_bar_right .review_notification {
+    position: relative;
+}
+
+.review_navbar ul li .btn{
+    height: 32px;
+    padding: 7px 10px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    background: #3b80f9;
+    width: 125px;
+    margin: 5px auto 15px;
+}
+
+.review_navbar ul li .btn:hover{
+  background: #6593e4;
+}
+
+.review_navbar .review_notification.active .review_dd{
+  display: block;
+}
+
+.fillTheSVG {
+    color: hsl(210,8%,15%);
+}
+
+.blue {
+    color: hsl(210,8%,15%);
+}
+
+.forBackgroundClass {
+    background-color: hsl(210,8%,85%);;
+}
+
+
+
+
+
+
+.warpper-B{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+/*.tab{
+  cursor: pointer;
+  padding:10px 20px;
+  margin:0px 2px;
+  background:#000;
+  display:inline-block;
+  color:#fff;
+  border-radius:3px 3px 0px 0px;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+}*/
+.panels-B{
+  background:#fffffff6;
+  width:100%;
+  max-width:500px;
+  border-radius:3px;
+  overflow:hidden;
+}
+.panel-B{
+  display:none;
+  animation: fadein .5s;
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+.panel-title-B{
+  font-size:1.5em;
+  font-weight:bold
+}
+.radio-B{
+  display:none;
+}
+#one-B:checked ~ .panels-B #one-panel-B,
+#two-B:checked ~ .panels-B #two-panel-B,
+#three-B:checked ~ .panels-B #three-panel-B,
+#fourth-B:checked ~ .panels-B #fourth-panel-B,
+#fifth-B:checked ~ .panels-B #fifth-panel-B{
+  display:block
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.warpper-Q{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+/*.tab{
+  cursor: pointer;
+  padding:10px 20px;
+  margin:0px 2px;
+  background:#000;
+  display:inline-block;
+  color:#fff;
+  border-radius:3px 3px 0px 0px;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+}*/
+.panels-Q{
+  background:#fffffff6;
+  width:100%;
+  max-width:500px;
+  border-radius:3px;
+  overflow:hidden;
+}
+.panel-Q{
+  display:none;
+  animation: fadein .5s;
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+.panel-title-Q{
+  font-size:1.5em;
+  font-weight:bold
+}
+.radio-Q{
+  display:none;
+}
+#one-Q:checked ~ .panels-Q #one-panel-Q,
+#two-Q:checked ~ .panels-Q #two-panel-Q,
+#three-Q:checked ~ .panels-Q #three-panel-Q,
+#four-Q:checked ~ .panels-Q #four-panel-Q{
+  display:block
+}
+
+
+
+
+
+
+
+
+
+.warpper{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+/*.tab{
+  cursor: pointer;
+  padding:10px 20px;
+  margin:0px 2px;
+  background:#000;
+  display:inline-block;
+  color:#fff;
+  border-radius:3px 3px 0px 0px;
+}*/
+.panels{
+  background:#fffffff6;
+  width:100%;
+  max-width:500px;
+  border-radius:3px;
+  overflow:hidden;
+}
+.panel{
+  display:none;
+  animation: fadein .5s;
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+.panel-title{
+  font-size:1.5em;
+  font-weight:bold
+}
+.radio{
+  display:none;
+}
+#one:checked ~ .panels #one-panel,
+#two:checked ~ .panels #two-panel,
+#three:checked ~ .panels #three-panel{
+  display:block
+}
+.tab-selected {
+    background-color: white;
+    /*color: white;*/
+}
+.tab-selected.active {
+    background-color: grey;
+    color: white;
+}
+
+    .fa, .fas {
+    font-family: 'Font Awesome 5 Pro';
+    font-weight: 600 !important;
+}
+
+.unseen-reputation {
+  background-color: green;
+  border-radius: 1em;
+  color: white;
+ 
+  padding: 1px 3px;
+  font-size: 10px;
+  
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
+
+.button__badge {
+  background-color: #fa3e3e;
+  border-radius: 1em;
+  color: white;
+ 
+  padding: 1px 3px;
+  font-size: 10px;
+  
+  position: absolute;
+  top: 0;
+  right: 0;
+}

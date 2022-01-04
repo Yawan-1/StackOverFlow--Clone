@@ -1,0 +1,270 @@
+{% extends "profile/base.html" %}
+{% load qa_tags %}
+
+{% block content %}
+
+
+
+    <head>
+        <title>Log In - Stack Overflow</title>
+    </head>
+
+
+    <body class="universal-auth-page unified-theme floating-content">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+        
+
+
+{% if request.user.is_authenticated %}
+
+<header class="top-bar js-top-bar top-bar__network">
+    <div class="wmx12 mx-auto d-flex ai-center h100" role="menubar">
+        <div class="-main flex--item">
+            <a href="#" class="left-sidebar-toggle p0 ai-center jc-center" role="menuitem" aria-haspopup="true" aria-controls="left-sidebar" aria-expanded="false"><span class="ps-relative"></span></a>
+            <div class="topbar-dialog leftnav-dialog js-leftnav-dialog dno">
+                <div class="left-sidebar js-unpinned-left-sidebar" data-can-be="left-sidebar" data-is-here-when="sm"></div>
+            </div>
+            <a href="{% url 'profile:home' %}" class="-logo">
+                <span class="-img _glyph">Stack Overflow - Clone</span>
+            </a>
+        </div>
+
+<ol class="overflow-x-auto ml-auto -secondary d-flex ai-center list-reset h100 user-logged-in" role="presentation">
+        <li class="-item searchbar-trigger"><a href="#" class="-link js-searchbar-trigger" role="button" aria-label="Search" aria-haspopup="true" aria-controls="search" title="Click to show search"><svg aria-hidden="true" class="svg-icon iconSearch" width="18" height="18" viewBox="0 0 18 18"><path d="m18 16.5-5.14-5.18h-.35a7 7 0 10-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 112 7a5 5 0 0110 0Z"/></svg></a></li>
+
+
+
+            <li class="-item">
+                <a href="{% url 'profile:ActivityTabSummary' user.id user.username %}" class="my-profile " >
+<div class="gravatar-wrapper-24" title="Van"><img src="{% if request.user.profile.profile_photo %}{{request.user.profile.profile_photo.url}}{% endif %}" alt="" width="24" height="24" class="bar-sm -avatar js-avatar-me"></div><span class="v-visible-sr">{{request.user.username}}</span>
+
+                        <div class="-rep js-header-rep" title="your reputation: {{request.user|calculate_reputation}}" aria-hidden="true">{{request.user|calculate_reputation}}</div>
+                        <span class="v-visible-sr">, {{request.user|calculate_reputation}} reputation</span>
+                            <div class="-badges">
+                                    <span title="{{request.user|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                        <span class="badge1">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculateGoldBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculateGoldBadges}} gold badges</span>                                
+                                    <span title="{{request.user|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                        <span class="badge2">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculatSilvereBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculatSilvereBadges}} silver badges</span> 
+
+                                    <span title="{{request.user|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                        <span class="badge3">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculateBronzeBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculateBronzeBadges}} bronze badges</span> 
+                            </div>
+                </a>
+            </li>
+
+        <li class="-item inbox-button-item myInboxSVGOuter thisIsOuter">
+            <a class="-link myInboxSVGLink readNotification" data-pk="{{ data.id }}" onClick="openInbox();">
+                {% if showAlert %}<span class="button__badge">{{countUnreadNotifications}}</span>{% endif %}
+                <i class="fa fa-inbox fa-2x iconInbox myInboxSVG" aria-hidden="true"></i>
+                
+                <span class="indicator-badge js-unread-count _important d-none">0</span>
+            </a>
+        </li>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+            $('.readNotification').on('click',function(e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url:"{% url 'notification:read_All_Notifications' %}",
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        if (response.action == 'readedAll') {
+                            $(`.button__badge`).text(``)
+                            $(`.button__badge`).removeClass("button__badge");
+                        }
+                    }
+                })
+            })
+        })
+    })
+</script>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+            $('.readPrivNotification').on('click',function(e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url:"{% url 'notification:read_All_Priv_Notifications' %}",
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        if (response.action == 'readedAllPrivNotifications') { // Accept Only
+                            $(`.unseen-reputation`).text(``)
+                            $(`.unseen-reputation`).removeClass("unseen-reputation");
+                            // $(`.unreadDot`).text(``)
+
+                            // $(`.button__badge`).text(`0`)
+                        }
+                    }
+                })
+            })
+        })
+    })
+</script>
+
+
+
+
+        <li class="-item achievements-button-item achieveSVGOuter achThisIsOuter">
+            <a href="#" class="-link readPrivNotification" onclick="openAchievementInbox();">
+                <i class="fa fa-trophy fa-2x iconAchievements achieveSVG" aria-hidden="true"></i>
+                {% if countUnreadPrivNotifications_1 %}<span class="unseen-reputation">+{{countUnreadPrivNotifications.countTheUnRead_Rep}}</span>{% endif %}
+                <span class="indicator-badge js-unread-count _positive d-none">+0</span>
+            </a>
+        </li>
+
+        {% if request.user.profile.access_review_queues %}
+        <li class="-item review-button-item reviewSVGOuter revThisIsOuter">
+            <a href="#" class="-link svg-icon iconReviewQueue" onclick="openReviewInbox();">
+                <i class="fa fa-tasks fa-2x iconReviewQueue reviewSVG" aria-hidden="true"></i>
+            </a>
+        </li>
+        {% endif %}
+
+
+</ol>
+
+    </div>
+</header>
+
+
+{% else %}
+
+<header class="top-bar js-top-bar top-bar__network">
+    <div class="wmx12 mx-auto d-flex ai-center h100" role="menubar">
+        <div class="-main flex--item">
+                <a href="#" class="left-sidebar-toggle p0 ai-center jc-center js-left-sidebar-toggle" role="menuitem" aria-haspopup="true" aria-controls="left-sidebar" aria-expanded="false"><span class="ps-relative"></span></a>
+                <div class="topbar-dialog leftnav-dialog js-leftnav-dialog dno">
+                    <div class="left-sidebar js-unpinned-left-sidebar" data-can-be="left-sidebar" data-is-here-when="sm"></div>
+                </div>
+                <a href="#" class="-logo">
+                    <span class="-img _glyph">Stack Overflow - Clone</span>
+                </a>
+        </div>
+
+        <ol class="overflow-x-auto ml-auto -secondary d-flex ai-center list-reset h100 user-logged-out" role="presentation">
+            <li class="-ctas">
+                <a href="{% url 'users:login_request' %}" class="login-link s-btn s-btn__filled py8" rel="nofollow" >Log in</a>
+                <a href="{% url 'users:signup_view' %}" class="login-link s-btn s-btn__primary py8">Sign up</a>
+            </li>
+            <li class="js-topbar-dialog-corral" role="presentation">
+            </li>
+        </ol>
+
+    </div>
+</header>
+
+{% endif %}
+
+
+
+
+    <div class="container">
+        <div id="content" class="d-flex flex__center snippet-hidden">
+
+            
+
+<div class="flex--item">
+
+        <div class="ta-center fs-title mx-auto mb24">
+                    <a href="/">
+                        <svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg> 
+                    </a>
+        </div>
+        
+
+
+
+
+
+<div id="formContainer" class="mx-auto mb24 p24 wmx3 bg-white bar-lg auth-shadow mb24">
+    <form method="POST" class="d-flex fd-column gs12 gsy" method="post" action="{% url 'users:login_request' %}">
+        {% csrf_token %}
+                <div class="d-flex fd-column gs4 gsy js-auth-item ">
+                    <label class="flex--item s-label" for="id_username">Username</label>
+                    <div class="d-flex ps-relative">
+                        <input class="s-input" autofocus="" autocapitalize="none" id="id_username"  name="username" autocomplete="username" maxlength="150" required="" />
+                        <svg aria-hidden="true" class="s-input-icon js-alert-icon d-none svg-icon iconAlertCircle" width="18" height="18" viewBox="0 0 18 18"><path d="M9 17c-4.36 0-8-3.64-8-8 0-4.36 3.64-8 8-8 4.36 0 8 3.64 8 8 0 4.36-3.64 8-8 8ZM8 4v6h2V4H8Zm0 8v2h2v-2H8Z"/></svg>
+                    </div>
+                            <p class="flex--item s-input-message js-error-message d-none">
+            
+        </p>
+
+                </div>
+                <div class="d-flex fd-column-reverse gs4 gsy js-auth-item ">
+                            <p class="flex--item s-input-message js-error-message d-none">
+            
+        </p>      
+
+                    <div class="d-flex ps-relative js-password">
+                        <input class="flex--item s-input" type="password" autocomplete="off" name="password" id="id_password" />
+                        <svg aria-hidden="true" class="s-input-icon js-alert-icon d-none svg-icon iconAlertCircle" width="18" height="18" viewBox="0 0 18 18"><path d="M9 17c-4.36 0-8-3.64-8-8 0-4.36 3.64-8 8-8 4.36 0 8 3.64 8 8 0 4.36-3.64 8-8 8ZM8 4v6h2V4H8Zm0 8v2h2v-2H8Z"/></svg>
+                    </div>
+                    <div class="d-flex ai-center ps-relative jc-space-between">
+                        <label class="flex--item s-label" for="id_password">Password</label>
+
+                            <a class="flex--item s-link fs-caption" href="/users/account-recovery">Forgot password?</a>
+                    </div>
+                </div>
+            <div class="d-flex gs4 gsy fd-column js-auth-item ">
+                <button class="flex--item s-btn s-btn__primary"  name="submit">Log in</button>
+                        <p class="flex--item s-input-message js-error-message d-none">
+            
+        </p>
+
+            </div>
+
+        <input type="hidden" id="oauth_version" name="oauth_version" />
+        <input type="hidden" id="oauth_server" name="oauth_server" />
+
+
+    </form>
+</div>
+
+
+            <div class="mx-auto ta-center fs-body1 p16 pb0 mb24 w100 wmx3">
+                Don’t have an account? <a href="{% url 'users:signup_view' %}">Sign up</a>
+
+                    <div class="mt12">
+                        Are you an employer? <a href='#'>Sign up on Talent <svg aria-hidden="true" class="va-text-bottom sm:d-none svg-icon iconShareSm" width="14" height="14" viewBox="0 0 14 14"><path d="M5 1H3a2 2 0 00-2 2v8c0 1.1.9 2 2 2h8a2 2 0 002-2V9h-2v2H3V3h2V1Zm2 0h6v6h-2V4.5L6.5 9 5 7.5 9.5 3H7V1Z"/></svg></a>
+                    </div>
+            </div>
+</div>
+
+
+        
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+    </html>
+
+
+
+{% endblock content %}
+
+ 

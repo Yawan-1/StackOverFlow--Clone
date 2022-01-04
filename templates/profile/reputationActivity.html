@@ -1,0 +1,2414 @@
+{% load review_tags %}
+{% load humanize %}
+{% load cache %}
+{% load qa_tags %}
+{% load static %}
+
+{% block content %}
+
+
+
+<!DOCTYPE html>
+
+
+    <html class=" ">
+
+
+    <head>
+        <link href="{% static 'stackoverflow-stacks/stacks.css' %}" type="text/css" media="all" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=753a90643fc4">
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/secondary.css?v=12f70c5b46fe">
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/Channels/channels.css?v=47a5e0f03c81">
+        <link href="{% static 'profile/css/reputation_profile.css' %}" type="text/css" media="all" rel="stylesheet" />
+        <link href="{% static 'notification/css/notification.css' %}" type="text/css" media="all" rel="stylesheet" />
+        <link href="{% static 'profile/css/badge.css' %}" type="text/css" media="all" rel="stylesheet" />
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body class="user-page unified-theme">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+{% if request.user.is_authenticated %}
+
+
+<header class="top-bar js-top-bar top-bar__network">
+    <div class="wmx12 mx-auto d-flex ai-center h100" role="menubar">
+        <div class="-main flex--item">
+            <a href="#" class="left-sidebar-toggle p0 ai-center jc-center" role="menuitem" aria-haspopup="true" aria-controls="left-sidebar" aria-expanded="false"><span class="ps-relative"></span></a>
+            <div class="topbar-dialog leftnav-dialog js-leftnav-dialog dno">
+                <div class="left-sidebar js-unpinned-left-sidebar" data-can-be="left-sidebar" data-is-here-when="sm"></div>
+            </div>
+            <a href="{% url 'profile:home' %}" class="-logo">
+                <span class="-img _glyph">Stack Overflow - Clone</span>
+            </a>
+        </div>
+
+<ol class="overflow-x-auto ml-auto -secondary d-flex ai-center list-reset h100 user-logged-in" role="presentation">
+        <li class="-item searchbar-trigger"><a href="#" class="-link js-searchbar-trigger" role="button" aria-label="Search" aria-haspopup="true" aria-controls="search" title="Click to show search"><svg aria-hidden="true" class="svg-icon iconSearch" width="18" height="18" viewBox="0 0 18 18"><path d="m18 16.5-5.14-5.18h-.35a7 7 0 10-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 112 7a5 5 0 0110 0Z"/></svg></a></li>
+
+
+
+            <li class="-item">
+                <a href="{% url 'profile:ActivityTabSummary' user.id user.username %}" class="my-profile " >
+<div class="gravatar-wrapper-24" title="Van"><img src="{% if request.user.profile.profile_photo %}{{request.user.profile.profile_photo.url}}{% endif %}" alt="" width="24" height="24" class="bar-sm -avatar js-avatar-me"></div><span class="v-visible-sr">{{request.user.username}}</span>
+
+                        <div class="-rep js-header-rep" title="your reputation: {{request.user|calculate_reputation}}" aria-hidden="true">{{request.user|calculate_reputation}}</div>
+                        <span class="v-visible-sr">, {{request.user|calculate_reputation}} reputation</span>
+                            <div class="-badges">
+                                    <span title="{{request.user|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                        <span class="badge1">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculateGoldBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculateGoldBadges}} gold badges</span>                                
+                                    <span title="{{request.user|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                        <span class="badge2">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculatSilvereBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculatSilvereBadges}} silver badges</span> 
+
+                                    <span title="{{request.user|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                        <span class="badge3">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculateBronzeBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculateBronzeBadges}} bronze badges</span> 
+                            </div>
+                </a>
+            </li>
+
+        <li class="-item inbox-button-item myInboxSVGOuter thisIsOuter">
+            <a class="-link myInboxSVGLink readNotification" data-pk="{{ data.id }}" onClick="openInbox();">
+                {% if showAlert %}<span class="button__badge">{{countUnreadNotifications}}</span>{% endif %}
+                <i class="fa fa-inbox fa-2x iconInbox myInboxSVG" aria-hidden="true"></i>
+                
+                <span class="indicator-badge js-unread-count _important d-none">0</span>
+            </a>
+        </li>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+            $('.readNotification').on('click',function(e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url:"{% url 'notification:read_All_Notifications' %}",
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        if (response.action == 'readedAll') {
+                            $(`.button__badge`).text(``)
+                            $(`.button__badge`).removeClass("button__badge");
+                        }
+                    }
+                })
+            })
+        })
+    })
+</script>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+            $('.readPrivNotification').on('click',function(e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url:"{% url 'notification:read_All_Priv_Notifications' %}",
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        if (response.action == 'readedAllPrivNotifications') { // Accept Only
+                            $(`.unseen-reputation`).text(``)
+                            $(`.unseen-reputation`).removeClass("unseen-reputation");
+                            // $(`.unreadDot`).text(``)
+
+                            // $(`.button__badge`).text(`0`)
+                        }
+                    }
+                })
+            })
+        })
+    })
+</script>
+
+
+
+
+        <li class="-item achievements-button-item achieveSVGOuter achThisIsOuter">
+            <a href="#" class="-link readPrivNotification" onclick="openAchievementInbox();">
+                <i class="fa fa-trophy fa-2x iconAchievements achieveSVG" aria-hidden="true"></i>
+                {% if countUnreadPrivNotifications_1 %}<span class="unseen-reputation">+{{countUnreadPrivNotifications.countTheUnRead_Rep}}</span>{% endif %}
+                <span class="indicator-badge js-unread-count _positive d-none">+0</span>
+            </a>
+        </li>
+
+        {% if request.user.profile.access_review_queues %}
+        <li class="-item review-button-item reviewSVGOuter revThisIsOuter">
+            <a href="#" class="-link svg-icon iconReviewQueue" onclick="openReviewInbox();">
+                <i class="fa fa-tasks fa-2x iconReviewQueue reviewSVG" aria-hidden="true"></i>
+            </a>
+        </li>
+        {% endif %}
+
+
+</ol>
+
+    </div>
+</header>
+
+
+{% else %}
+
+<header class="top-bar js-top-bar top-bar__network">
+    <div class="wmx12 mx-auto d-flex ai-center h100" role="menubar">
+        <div class="-main flex--item">
+                <a href="#" class="left-sidebar-toggle p0 ai-center jc-center js-left-sidebar-toggle" role="menuitem" aria-haspopup="true" aria-controls="left-sidebar" aria-expanded="false"><span class="ps-relative"></span></a>
+                <div class="topbar-dialog leftnav-dialog js-leftnav-dialog dno">
+                    <div class="left-sidebar js-unpinned-left-sidebar" data-can-be="left-sidebar" data-is-here-when="sm"></div>
+                </div>
+                <a href="#" class="-logo">
+                    <span class="-img _glyph">Stack Overflow</span>
+                </a>
+        </div>
+
+        <ol class="overflow-x-auto ml-auto -secondary d-flex ai-center list-reset h100 user-logged-out" role="presentation">
+            <li class="-ctas">
+                <a href="{% url 'users:login_request' %}" class="login-link s-btn s-btn__filled py8" rel="nofollow" >Log in</a>
+                <a href="{% url 'users:signup_view' %}" class="login-link s-btn s-btn__primary py8">Sign up</a>
+            </li>
+            <li class="js-topbar-dialog-corral" role="presentation">
+            </li>
+        </ol>
+
+    </div>
+</header>
+
+{% endif %}
+
+
+
+<!-- NOTIFICATION'S INBOX - START -->
+
+<div class="myNavbar">
+    <div class="navbar_right">
+        <myDiv class="myNotification" id="Notif">
+        <a class="icon_wrap" action=""></a>
+            <div class="notification_dd">
+                <div class="topbar-dialog inbox-dialog dno" role="menu" style="display: block;">
+                    <div class="header fw-wrap">
+                        <div class="flex--item fl1">
+                            <div class="ai-center d-flex jc-end">
+                                    <div class="-right">
+                                            <a href="#">all items</a>
+                                            • <a href="{% url 'users:logout_view' %}">Logout</a>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="modal-content">
+                        <ul>
+                            {% for notification in notifications %}
+                            <li class="inbox-item ">
+                                <a href="{{notification.url}}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item" title="Stack Overflow"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span class="v-visible-sr">Stack Overflow&nbsp;</span>
+                                            {% if notification.type_of_noti == "comment_answer" %}
+                                            Comment on Answer
+                                            {% elif notification.type_of_noti == "question_comment" %}
+                                            Comment on Question
+                                            {% elif notification.type_of_noti == "community_message" %}
+                                            Community Message
+                                            {% elif notification.type_of_noti == "question_edit" %}
+                                            Edit Suggessted
+                                            {% elif notification.type_of_noti == "question_reopen_voted" %}
+                                            Question ReOpen Vote Raises
+                                            {% elif notification.type_of_noti == "NEW_ANSWER" %}
+                                            New Answer to the Question
+                                            {% endif %}
+
+                                            {% if notification.is_read == False %}<b class="unreadDot" style="color: red">Unread</b>{% endif %}
+
+                                            </span>
+                                            <span class="item-creation"><span title="2021-10-12 04:36:58Z" class="relativetime">{{notification.date_created|naturaltime}}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            {% if notification.question_noti %}{{notification.question_noti.title}}{% else %}{{notification.answer_noti}}{% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div> 
+            </div>
+        </myDiv>
+    </div>
+</div>
+
+<!-- NOTIFICATION'S INBOX - END -->
+
+
+
+
+<!-- ACHIEVEMENT'S INBOX - START -->
+
+<style>
+
+.earned {
+    color: green;
+}
+
+</style>
+
+<div class="achievement_navbar">
+    <div class="achievement_bar_right">
+        <acvhieveDiv class="achievement_notification">
+            <a class="achieve_icon_wrap" action=""></a>
+
+            <div class="achievement_dd">
+                <div class="topbar-dialog achievements-dialog dno" role="menu" style="display: block;">
+                    <div class="header fw-wrap">
+                        <h3 class="flex--item">
+                            achievements
+                                <small class="utc-clock sm:d-none">utc time <span class="js-utc-time utc-time">Good Time</span></small>
+                        </h3>
+                    </div>
+
+                    <div class="modal-content">
+                            <div class="js-date-group date-group">
+                                {% for privNotification in privNotifications %}
+                                <ul class="js-items items">
+                                        <li class="">
+                                            <a href="
+
+                                                {% if privNotification.type_of_PrivNotify == 'ANSWER_ACCEPT_REP_P' %}
+                                                    {{privNotification.url}}#{{privNotification.answer_priv_noti.id}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'EDIT_GOT_APPROVED' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'BOUNTY_AWARDED_REP_P' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'MY_ANSWER_UPVOTE_REP_P' %}
+                                                    {{privNotification.url}}#{{privNotification.answer_priv_noti.id}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'MY_QUESTION_UPVOTE_REP_P' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'Privilege_Earned' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'BADGE_EARNED' %}
+                                                    {{privNotification.url}}
+
+                                                {% endif %}
+
+                                                " class="d-flex gs8 gsx" aria-label="2 reputation change: Pop-up-Notification-Panel box is not staying to the right, earned on Stack Overflow, 5 hours ago">
+                <div class="favicon favicon-stackoverflow site-icon flex--item" title="Stack Overflow - Clone"></div>
+
+
+
+                                                    {% if privNotification.type_of_PrivNotify == "ANSWER_ACCEPT_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_QUESTION_UPVOTE_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "EDIT_GOT_APPROVED" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "BOUNTY_AWARDED_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_ANSWER_UPVOTE_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "Privilege_Earned" %}
+                                                    <span class="js-faux-column  earned flex--item">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "BADGE_EARNED" %}
+                                                    <span class="js-faux-column earned flex--item">
+                                                        <i class="fas fa-ribbon"></i>
+                                                    </span>
+                                                    {% endif %}
+
+
+                                                <div class="message-text flex--item fl1">
+                                                    <h4 class="">
+
+                                                    {% if privNotification.type_of_PrivNotify == "ANSWER_ACCEPT_REP_P" %}
+
+                                                    Answer Accepted
+                                                    <br>
+                                                    {{privNotification.answer_priv_noti.body}}
+
+                                                    {% elif privNotification.type_of_PrivNotify == "EDIT_GOT_APPROVED" %}
+
+                                                    Edit Approved
+                                                    <br>
+                                                    {{privNotification.question_priv_noti.title}}
+
+                                                    {% elif privNotification.type_of_PrivNotify == "BOUNTY_AWARDED_REP_P" %}
+
+                                                    Bounty Awarded
+
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_ANSWER_UPVOTE_REP_P" %}
+
+                                                    Answer Upvote
+                                                    <br>
+                                                    <b> • {{privNotification.answer_priv_noti.body}}</b>
+
+                                                    <!-- Done -->
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_QUESTION_UPVOTE_REP_P" %}
+
+                                                    Question Upvote
+                                                    <br>
+                                                    <b> • {{privNotification.question_priv_noti.title}}</b>
+
+                                                    <!-- DONE -->
+                                                    {% elif privNotification.type_of_PrivNotify == "Privilege_Earned" %}
+
+                                                    Privilege Earned
+
+                                                    <b> • {{privNotification.for_if}}</b>
+
+                                                    <!-- DONE -->
+                                                    {% elif privNotification.type_of_PrivNotify == "BADGE_EARNED" %}
+
+                                                    Badge Earned - {{privNotification.for_if}}
+                                                    <br>
+                                                    <b> • {{privNotification.description}}</b>
+
+
+                                                    {% endif %}
+                                                    <br>
+                                                    {{privNotification.date_created_PrivNotify|naturaltime}}
+
+                                                    </h4>
+                                                </div>
+                                            </a>
+                                        </li>
+                                </ul>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </acvhieveDiv>
+        </div>
+    </div>
+
+<!-- ACHIEVEMENT'S INBOX - END -->
+
+
+<!-- REVIEW'S INBOX - START -->
+
+<div class="review_navbar">
+    <div class="review_bar_right">
+        <reviewDiv class="review_notification">
+        <a class="review_icon_wrap" action=""></a>
+
+            <div class="review_dd">
+                <div class="topbar-dialog inbox-dialog dno" role="menu" style="display: block;">
+
+                    <div class="header fw-wrap">
+                        <div class="flex--item fl1">
+                            <div class="ai-center d-flex jc-end">
+                                <div class="-right">
+                                    <a href="#">privileges</a>
+                                    {% if request.user.profile.accessTo_moderatorTools %}•
+                                    <a href="{% url 'tools:moderator_tools' %}">tools</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-content">
+                        <ul>
+                            <li class="inbox-item ">
+                                {% if can_show == True %}
+                                <a href="{% url 'review:review_FirstAns' next_blog.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span">&nbsp;</span>Review First Answers</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review First Answers</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if can_review == True %}
+                                <a href="{% url 'review:review_FirstQns' next_question.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review First Questions</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review First Questions</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if cal_LateRev == True %}
+                                <a href="{% url 'review:review_LateAnswers' questionIDS.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Late Answers</span>
+                                            <span class="item-creation"><span>{% if cal_LateRev == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Late Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Late Answers</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Late Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if areClosedQuestions_Available == True %}
+                                <a href="{% url 'review:reviewClosedQuestions' reviewCloseQuestionID.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type"><span>&nbsp;</span>Review Closed Questions</span>
+                                            <span class="item-creation"><span>{% if areClosedQuestions_Available == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location">
+                                            Review Closed Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon-stackoverflow flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type"><span>&nbsp;</span>Review Closed Questions</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location">
+                                            Review Closed Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if editQuestions_review_Available == True %}
+                                <a href="{% url 'review:reviewSuggesstedEdit' reviewEditedPts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type"><span>&nbsp;</span>Review Suggessted Edits</span>
+                                            <span class="item-creation"><span>{% if editQuestions_review_Available == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location">
+                                            Review Suggessted Edits
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Suggessted Edits</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Suggessted Edits
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if questionToReOpen_available == True %}
+                                <a href="{% url 'review:reOpen_Question_Review' reviewTo_ReOpenQuestionID.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Re-Open Votes Review</span>
+                                            <span class="item-creation"><span>{% if questionToReOpen_available == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Re-Open Votes Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Re-Open Votes Review</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Re-Open Votes Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if reviewLowPosts == True %}
+                                <a href="{% url 'review:reviewLowQualityPosts' reviewLowPts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Low-Quality Posts Review</span>
+                                            <span class="item-creation"><span>{% if reviewLowPosts == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Low-Quality Posts Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Low-Quality Posts Review</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Low-Quality Posts Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if is_available_FlagPosts == True %}
+                                <a href="{% url 'review:reviewFlagPosts' reviewFlagPts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Posts</span>
+                                            <span class="item-creation"><span>{% if is_available_FlagPosts == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Posts
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Posts</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Posts
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if is_available_FlagComments == True %}
+                                <a href="{% url 'review:reviewFlagComments' reviewFlagCmnts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Comments</span>
+                                            <span class="item-creation"><span>{% if is_available_FlagComments == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Comments
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Comments</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Comments
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </div> 
+            </div>
+        </reviewDiv>
+    </div>
+</div>
+
+<!-- REVIEW'S INBOX - END -->
+
+
+
+
+
+
+    <div class="container">
+            
+
+
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+    <div class="left-sidebar--sticky-container js-sticky-leftnav">
+        <nav role="navigation">
+            <ol class="nav-links">
+        <li class="">
+            <a
+               href="/"
+               class="pl8  nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Home
+                        </div>
+                    </div>
+            </a>
+        </li>
+                <li>
+                    <ol class="nav-links">
+                            <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+
+        <li class="">
+            <a id="nav-questions"
+               href="{% url 'qa:questions' %}"
+               class="pl8  nav-links--link -link__with-icon"
+               aria-controls="" data-controller="" data-s-popover-placement="right"
+               data-s-popover-auto-show="true" data-s-popover-hide-on-outside-click="never">
+<svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18"><path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/></svg>                    <span class="-link--channel-name">Questions</span>
+            </a>
+        </li>
+
+        <li class="">
+            <a id="nav-tags"
+               href="{% url 'profile:tagsPage' %}"
+               class="  nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Tags
+                        </div>
+                    </div>
+            </a>
+        </li>
+        <li class=" youarehere">
+            <a id="nav-users"
+               href="/usersPage"
+               class="  nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Users
+                        </div>
+                    </div>
+            </a>
+        </li>
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+    </div>
+ 
+
+
+</div>
+
+
+
+
+        <div id="content" class="snippet-hidden">
+
+            
+<div id="mainbar-full" class="user-show-new">
+    
+<div class="ps-relative mb16">
+        
+
+<div class="d-flex ai-center fw-wrap gs16 md:fd-column md:ai-start">
+    <a class="flex--item" href="{% url 'profile:activityPageTabProfile' profileData.user.id profileData.user.username %}">
+        <div class="md:d-none"><div class="bar-md bs-sm"><img src="{{profileData.profile_photo.url}}" alt="" width="128" height="128" class="bar-sm bar-md d-block"></div></div>
+        <div class="d-none md:d-block sm:d-none"><div class="bar-md bs-sm"><img src="{{profileData.profile_photo.url}}" alt="" width="96" height="96" class="bar-sm bar-md d-block"></div></div>
+        <div class="d-none sm:d-block"><div class="bar-md bs-sm"><img src="{{profileData.profile_photo.url}}" alt="" width="64" height="64" class="bar-sm bar-md d-block"></div></div>
+    </a>
+    <div class="flex--item">
+        <div class="d-flex ai-center fw-wrap gs8 wmx4">
+            <div class="flex--item mb12 fs-headline2 lh-xs">
+                {{profileData.user}}
+            </div>
+            <div class="flex--item">
+                <div class="d-flex ai-center fw-nowrap gs4">
+                </div>
+            </div>
+        </div>
+                <div class="mb8 fc-light fs-title lh-xs">{{profileData.title}}</div>
+
+        <ul class="list-reset s-anchors s-anchors__inherit d-flex fc-light gs8 mln4 fw-wrap">
+                    <li class="flex--item">
+            <div class="d-flex gs4 gsx ai-center">
+                <div class="flex--item fc-black-350">
+                    <i class="fas fa-birthday-cake fa-2x" aria-hidden="true"></i>
+                </div>
+                <div class="flex--item">
+Joined <span title="{{profileData.user.date_joined|naturaltime}}">{{profileData.user.date_joined|naturaltime}}</span>
+                </div>
+            </div>
+        </li>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css 
+    " crossorigin="anonymous">
+
+
+            {% if not profileData.is_high_moderator %} 
+                <li class="flex--item">
+                    <div class="d-flex gs4 gsx ai-center">
+                        <div class="flex--item fc-black-350"><i class="fa fa-clock-o fa-2x" aria-hidden="true"></i></div>
+                        <div class="flex--item">
+                            <b> Last Seen </b> {{ online_user_activity.last_activity|naturaltime }}
+                        </div>
+                    </div>
+                </li>
+            {% endif %}
+        </ul>
+
+            <ul class="list-reset s-anchors s-anchors__inherit d-flex fc-light gs8 mln4 fw-wrap">
+                    <li class="flex--item">
+                        <a href="{{profileData.twitter_link}}" title="{{profileData}}" rel="me">
+                            <svg aria-hidden="true" class="fc-black-350 svg-icon iconTwitter" width="18" height="18" viewBox="0 0 18 18"><path d="M17 4.04c-.59.26-1.22.44-1.88.52a3.3 3.3 0 001.44-1.82c-.64.37-1.34.64-2.09.79a3.28 3.28 0 00-5.6 2.99A9.3 9.3 0 012.12 3.1a3.28 3.28 0 001.02 4.38 3.28 3.28 0 01-1.49-.4v.03a3.29 3.29 0 002.64 3.22 3.34 3.34 0 01-1.48.06 3.29 3.29 0 003.07 2.28 6.58 6.58 0 01-4.85 1.36 9.33 9.33 0 005.04 1.47c6.04 0 9.34-5 9.34-9.33v-.42a6.63 6.63 0 001.63-1.7L17 4.04Z" fill="#2AA3EF"/></svg>
+                            <div class="v-visible-sr">Twitter</div>
+                        </a>
+                    </li>
+                        <li class="flex--item">
+                            <a href="{{profileData.github_link}}" title="{{profileData}}" rel="me">
+                                <svg aria-hidden="true" class="fc-black-350 svg-icon iconGitHub" width="18" height="18" viewBox="0 0 18 18"><path d="M9 1a8 8 0 00-2.53 15.59c.4.07.55-.17.55-.38l-.01-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.42 7.42 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 009 1Z" fill="#010101"/></svg>
+                                <div class="v-visible-sr">GitHub</div>
+                            </a>
+                        </li>
+
+                    <li class="flex--item">
+                        <div class="d-flex gs4 gsx ai-center">
+                            <div class="flex--item fc-black-350">
+                                <svg aria-hidden="true" class="svg-icon iconLink" width="18" height="18" viewBox="0 0 18 18"><path d="M7.22 11.83a6 6 0 001.62.85l.61-1.8a4.1 4.1 0 114.04-.8l1.26 1.42a6 6 0 10-7.53.33Zm3.43-5.6a6 6 0 00-1.6-.87L8.4 7.15a4.1 4.1 0 11-4.05.73L3.12 6.43a6 6 0 107.53-.2Z"/></svg>
+                            </div>
+                            <a href="{{profileData.website_link}}" class="flex--item">{{profileData.website_link}}</a>
+                        </div>
+                    </li>
+
+                    <li class="flex--item">
+                        <div class="d-flex gs4 gsx ai-center">
+                            <div class="flex--item fc-black-350">
+                                <svg aria-hidden="true" class="mrn2 svg-icon iconLocation" width="18" height="18" viewBox="0 0 18 18"><path d="M2 6.38C2 9.91 8.1 17.7 8.1 17.7c.22.29.58.29.8 0 0 0 6.1-7.8 6.1-11.32A6.44 6.44 0 008.5 0 6.44 6.44 0 002 6.38Zm9.25.12a2.75 2.75 0 11-5.5 0 2.75 2.75 0 015.5 0Z"/></svg>
+                            </div>
+                            <div class="flex--item">
+                                <div class="wmx2 truncate" title="{{profile.location}}">
+                                    {{profileData.location}}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+            </ul>
+    </div>
+</div>
+
+
+
+{% if request.user == profileData.user %}
+    <div class="ps-absolute t0 r0 d-flex gs6 fw-wrap">
+            <a class="flex--item s-btn s-btn__outlined s-btn__muted s-btn__icon s-btn__sm" href="{% url 'profile:userProfileEdit_Settings' profileData.id %}"><svg aria-hidden="true" class="svg-icon iconPencil" width="18" height="18" viewBox="0 0 18 18"><path d="m13.68 2.15 2.17 2.17c.2.2.2.51 0 .71L14.5 6.39l-2.88-2.88 1.35-1.36c.2-.2.51-.2.71 0ZM2 13.13l8.5-8.5 2.88 2.88-8.5 8.5H2v-2.88Z"/></svg> Edit profile</a>
+    </div>
+{% endif %}
+</div>
+
+
+
+<div class="d-flex ai-center jc-space-between fw-wrap mb16 js-user-header">
+    <div class="flex--item s-navigation">
+
+            <a href="{% url 'profile:activityPageTabProfile' profileData.user.id profileData.user.username %}" class="s-navigation--item" data-shortcut="P">Profile</a>
+            <a href="{% url 'profile:ActivityTabSummary' profileData.user.id profileData.user.username %}" class="s-navigation--item is-selected" data-shortcut="A">Activity</a>
+{% if request.user == profileData.user %}
+            <a href="{% url 'profile:userProfileEdit_Settings' profileData.user.id %}" class="s-navigation--item">Settings</a>
+{% endif %}
+    </div>
+    <div class="flex--item ml-auto">
+        <div class="s-navigation s-navigation__muted ai-center">
+        </div>
+    </div>
+</div>
+
+
+ 
+
+
+<script>
+
+SHOW_DATE_or_reputation_or_what = "date" // "date" or "reputation_on"
+
+
+
+if (SHOW_DATE_or_reputation_or_what == "reputation_on") {
+    show_this = [{%for data in reputation_graph%}'{% if data.reputation_on_what == "QUESTION" %}Question{% elif data.reputation_on_what == "ANSWER" %}Answer{% elif data.reputation_on_what == "EDIT" %}Edit{% elif data.reputation_on_what == "ANSWER_ACCEPT" %}Answer Accepted{% endif %} ',{%endfor%}]
+} else if (SHOW_DATE_or_reputation_or_what == "date") {
+    show_this = [{%for data in reputation_graph%}'{{data.date_earned|naturaltime}}',{%endfor%}]
+}
+
+
+$(document).ready(function(){
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: show_this,
+                datasets: [{
+                    label: "Reputation Chart",
+                    fill: false,
+                    data: [{%for data in reputation_graph%}{% if data.question_rep_C %}{{data.question_rep_C}}{% else %}{{data.answer_rep_C}}{% endif %},{%endfor%}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)', 
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: 'green',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+});
+    });
+</script>
+
+
+
+    <div class="mb32">
+        <div id="top-cards" class="d-flex gs16 profile-cards">
+                 <aside class="flex--item fl1 wmx4 s-card bg-black-025">
+        <div class="d-flex fd-column h100">
+            <h1 class="flex--item fs-category fs-fine fc-black-350">Reputation</h1>
+
+            <div class="d-flex fd-column flex__allcells6 h100">
+                <div class="d-flex flex__allcells6 gs8 mb16">
+<span class="flex--item "><h2>{{request.user|calculate_reputation}}</h2></span>
+    <div class="">
+        <a href="GRAPH">
+        </a>
+
+<canvas id="myChart"  style="width:-45%; max-width: -45%; height: 100%;" ></canvas>
+
+    </div>
+                </div>
+
+            </div>
+        </div>
+    </aside>
+
+
+
+
+
+                <aside class="flex--item fl1 wmx4 s-card bg-black-025 bc-black-075 c-auto js-highlight-box-badges">
+        <div class="d-flex fd-column h100">
+            <h1 class="flex--item fs-category fs-fine fc-black-350">Badges</h1>
+
+            <div class="d-flex fd-column flex__allitems6 h100">
+                <div class="flex--item mb4">
+                    <div class="d-flex gs4 flex__fl-equal">
+        <div class="flex--item">
+            <div class="d-flex ai-center s-badge s-badge__gold" title="{{profileData.user|calculateGoldBadges}} gold badges">
+                <span class="flex--item badge1"></span>
+                <span class="d-flex flex__center fl1">{{profileData.user|calculateGoldBadges}}</span>
+            </div>
+        </div>
+
+        <div class="flex--item">
+            <div class="d-flex ai-center s-badge s-badge__silver" title="{{profileData.user|calculatSilvereBadges}} silver badges">
+                <span class="flex--item badge2"></span>
+                <span class="d-flex flex__center fl1">{{profileData.user|calculatSilvereBadges}}</span>
+            </div>
+        </div>
+
+        <div class="flex--item">
+            <div class="d-flex ai-center s-badge s-badge__bronze" title="{{profileData.user|calculateBronzeBadges}} bronze badges">
+                <span class="flex--item badge3"></span>
+                <span class="d-flex flex__center fl1">{{profileData.user|calculateBronzeBadges}}</span>
+            </div>
+        </div>
+
+</div>
+
+                </div>
+
+
+
+                <div class="d-flex flex__allitems6 gs8 jc-end">
+                        <div class="flex--item">
+                            <h2 class="mb4 fs-caption">Newest</h2>
+                            <div id="badge-card-last">
+                                <a title="{{newestBadge.description}}" class="badge ">
+                                    {% if newestBadge.badge_type == "GOLD" %}
+                                    <span class="badge1"></span>
+                                    {% elif newestBadge.badge_type == "SILVER" %}
+                                    <span class="badge2"></span>
+                                    {% else %}
+                                    <span class="badge3"></span>
+                                    {% endif %} 
+                                {{newestBadge.tag_name}}</a>
+                            </div>
+                        </div>
+                        <div class="flex--item">
+                            <div class="d-flex fd-column">
+                                <div class="d-flex ai-center gs4 mb0">
+                                            <h4 class="flex--item ws-nowrap" >Next badge</h4>
+                                                {% if request.user == profileData.user %}
+                                                <div class="flex--item" id="open-popup">
+                                                    <a href="#" class="fc-black-350 js-select-badge"  data-controller="s-tooltip" aria-describedby="--stacks-s-tooltip-y6cw3gy3"><svg  aria-hidden="true" class="ps-relative tn1 svg-icon iconGearSm" width="14" height="14" viewBox="0 0 14 14"><path d="m8.17 11.42-.39 1.53a6.07 6.07 0 01-1.58 0l-.39-1.53c-.39-.1-.75-.26-1.1-.46l-1.35.8c-.42-.31-.8-.69-1.12-1.1l.8-1.37c-.2-.34-.35-.7-.46-1.1L1.05 7.8a6.06 6.06 0 010-1.57l1.53-.4c.1-.4.25-.76.45-1.11l-.8-1.36c.32-.42.7-.8 1.1-1.11l1.36.8c.35-.2.73-.36 1.13-.47l.4-1.53a6.06 6.06 0 011.55 0l.4 1.53c.4.1.78.26 1.13.47l1.36-.8c.41.31.78.68 1.1 1.1l-.8 1.36c.2.35.36.73.46 1.13l1.53.39a6.06 6.06 0 010 1.57l-1.53.39c-.1.4-.27.77-.47 1.11l.8 1.36c-.32.42-.7.8-1.11 1.11l-1.36-.8c-.34.2-.71.35-1.1.45ZM7 9a2 2 0 100-4 2 2 0 000 4Z"></path></svg></a><div id="--stacks-s-tooltip-y6cw3gy3" class="s-popover s-popover__tooltip pe-none" aria-hidden="true" role="tooltip" style="">Choose which badge to track<div class="s-popover--arrow" style=""></div></div>
+                                                </div>
+                                                {% endif %}
+                                </div>
+                                <div class="flex--item">
+                                    {% if profileData.targeted_tag == "Commenter" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Commenter</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{countComments|percentage}}" style="width: {{countComments|percentage}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Altruist" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Altruist</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Archaeologist" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__silver">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge2"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Archaeologist</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{profileData.post_edit_inactive_for_six_month|advanced_percentage:100}}" style="width: {{profileData.post_edit_inactive_for_six_month|advanced_percentage:100}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Benefactor" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Benefactor</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Citizen Patrol" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Citizen Patrol</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Civic Duty" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__silver">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge2"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Civic Duty</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{countVotes|advanced_percentage_without_profile}}" style="width: {{countVotes|advanced_percentage_without_profile}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Copy Editor" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__gold">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge1"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Copy Editor</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{profileData.posts_edited_counter|advanced_percentage:500}}" style="width: {{profileData.posts_edited_counter|advanced_percentage:500}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Critic" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Critic</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Custodian" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Custodian</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Deputy" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__silver">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge2"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Deputy</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{profileData.helpful_flags_counter|advanced_percentage:80}}" style="width: {{profileData.helpful_flags_counter|advanced_percentage:80}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Disciplined" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Disciplined</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Excavator" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Excavator</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Investor" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Investor</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Marshal" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__gold">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge1"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Marshal</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{profileData.helpful_flags_counter|advanced_percentage:500}}" style="width: {{profileData.helpful_flags_counter|advanced_percentage:500}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Necromancer" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Necromancer</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Peer Pressure" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Peer Pressure</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Promoter" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Promoter</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Proofreader" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Proofreader</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{profileData.suggested_Edit_counter}}" style="width: {{profileData.suggested_Edit_counter}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Refiner" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Refiner</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{profileData.Refiner_Illuminator_TagPostCounter|advanced_percentage:50}}" style="width: {{profileData.Refiner_Illuminator_TagPostCounter|advanced_percentage:50}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Revival" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Revival</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0 style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Self-learner" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Self-Learner</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Promoter" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Promoter</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{profileData.suggested_Edit_counter}}" style="width: {{profileData.suggested_Edit_counter}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Strunk-White" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__silver">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge2"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Strunk & White</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{profileData.posts_edited_counter|advanced_percentage:80}}" style="width: {{profileData.posts_edited_counter|advanced_percentage:80}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Suffrage" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Suffrage</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{totalVotes|advanced_percentage:30}}" style="width: {{totalVotes|advanced_percentage:30}}%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Teacher" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Teacher</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    {% elif profileData.targeted_tag == "Vox Populi" %}
+                                    <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
+                                        <div class="d-flex gs12 gsx m0 s-progress--label">
+                                            <div class="flex--item mr0 s-badge--image badge3"></div>
+                                            <div class="d-flex flex__center fl1 s-badge--label">Vox Populi</div>
+                                        </div>
+                                        <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{totalVotes|advanced_percentage:40}}" style="width: {{totalVotes|advanced_percentage:40}}%;"></div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+
+            </div>
+        </div>
+    </aside>
+
+                <aside class="flex--item wmn2 s-card bg-black-025 bc-black-075 c-auto">
+        <div class="d-flex fd-column h100">
+            <h1 class="flex--item fs-category fs-fine fc-black-350">Impact</h1>
+            <div class="d-flex fd-column gs2 css-tooltip" data-title="Estimated number of times people viewed helpful posts by this user&#xA;(based on page views of questions&#xA;and questions where they wrote highly-ranked answers)">
+                <div class="flex--item fs-body3 fc-dark lh-sm">
+                        <span class="tilde">~</span>{{getAllTheViewsOfAllTheQuestion.total_views__sum}}</div>
+                <div class="flex--item fs-caption fc-light">people reached</div>
+            </div>
+            <div class="flex--item mt-auto fc-black-350 fs-caption lh-sm">
+                <div class="d-flex fd-column gs4">
+                    <div class="flex--item">
+                        <div class="d-flex gs4 ai-center" title="Total number of edits made to improve existing posts">
+                            <div class="flex--item"><svg aria-hidden="true" class="svg-icon iconPencil" width="18" height="18" viewBox="0 0 18 18"><path d="m13.68 2.15 2.17 2.17c.2.2.2.51 0 .71L14.5 6.39l-2.88-2.88 1.35-1.36c.2-.2.51-.2.71 0ZM2 13.13l8.5-8.5 2.88 2.88-8.5 8.5H2v-2.88Z"/></svg></div>
+                            <div class="flex--item">{{profileData.posts_edited_counter}} posts edited</div>
+                        </div>
+                    </div>
+                            <div class="flex--item">
+                                <div class="d-flex gs4 ai-center" title="Total number of raised flags marked useful">
+                                    <div class="flex--item"><svg aria-hidden="true" class="svg-icon iconFlag" width="18" height="18" viewBox="0 0 18 18"><path d="M3 2v14h2v-6h3.6l.4 1h6V3H9.5L9 2H3Z"/></svg></div>
+                                    <div class="flex--item">
+                                        {% if request.user == profileData.user %}
+                                            <a href="{% url 'profile:flag_summary' profileData.user.id profileData.user.username %}" class="fc-medium">{{profileData.helpful_flags_counter}} helpful flags</a>
+                                        {% else %}
+                                        {{profileData.helpful_flags_counter}} helpful flag{{profileData.helpful_flags_counter|pluralize}}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="flex--item">
+                            <div class="d-flex gs4 ai-center" title="Total number of up and down votes cast">
+                                <div class="flex--item"><svg aria-hidden="true" class="svg-icon iconArrowUp" width="18" height="18" viewBox="0 0 18 18"><path d="M1 13h16L9 5l-8 8Z"/></svg></div>
+                                <div class="flex--item">
+                                    {% if request.user == profileData.user %}
+                                    <a href="{% url 'profile:Votes_castActivity' profileData.user.id profileData.user.username %}" class="fc-medium">{{getVotesCast_Final}} vote{{getVotesCast_Final|pluralize}} cast</a>
+                                    {% else %}
+                                    {{getVotesCast_Final}} vote{{getVotesCast_Final|pluralize}} cast
+                                    {% endif %}
+                            </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+        </div>
+    </div>
+
+
+
+    <div class="s-navigation s-navigation__muted s-navigation__sm">
+            <a class="s-navigation--item" href="{% url 'profile:ActivityTabSummary' profileData.user.id profileData.user.username %}" title="Your overall summary" data-shortcut="S">
+                Summary
+            </a>
+            <a class="s-navigation--item" href="{% url 'profile:activitAnswers' profileData.user.id profileData.user.username %}" title="Answers you provided" data-shortcut="A">
+                Answers
+            </a>
+            <a class="s-navigation--item" href="{% url 'profile:questionsActivity' profileData.user.id profileData.user.username %}" title="Questions you asked" data-shortcut="Q">
+                Questions
+            </a>
+            <a class="s-navigation--item" href="{% url 'profile:tagsActivity' profileData.user.id profileData.user.username %}" title="Tags you have posts in" data-shortcut="T">
+                Tags
+            </a>
+            <a class="s-navigation--item" href="{% url 'profile:badgesActivity' profileData.user.id profileData.user.username %}" title="Badges you have earned" data-shortcut="B">
+                Badges
+            </a>
+            <a class="s-navigation--item" href="{% url 'profile:bookmarksActivity' profileData.user.id profileData.user.username %}" title="Questions you have bookmarked" data-shortcut="F">
+                    <span class="s-badge s-badge__bounty s-badge__bounty s-badge__sm lh-xs mr2">{{profileData.user.id|count_all_bookmarkers}}</span>
+                Bookmarks
+            </a>
+            <a class="s-navigation--item" href="{% url 'profile:bountiesActivity' profileData.user.id profileData.user.username %}" title="Bounties you have participated in" data-shortcut="O">
+                Bounties
+            </a>
+            <a class="s-navigation--item is-selected" href="{% url 'profile:reputationActivity' profileData.user.id profileData.user.username %}" title="Reputation you have earned" data-shortcut="R">
+                Reputation
+            </a>
+            <a class="s-navigation--item" href="{% url 'profile:allActionsActivity' profileData.user.id profileData.user.username %}" title="Your recent actions" data-shortcut="L">
+                All actions
+            </a>
+<!--             <a class="s-navigation--item" href="#" title="Your recent responses" data-shortcut="E">
+                    <span class="s-badge s-badge__bounty s-badge__bounty s-badge__sm lh-xs mr2">54</span>
+                Responses
+            </a> -->
+            {% if profileData.user == request.user %}
+            <a class="s-navigation--item" href="{% url 'profile:Votes_castActivity' profileData.user.id profileData.user.username %}" title="Votes you have cast">
+                Votes
+            </a>
+            {% endif %}
+    </div>
+
+<!-- Votes Activity Newest -->
+
+
+
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+                $(`.js-post-expandable-control`).on('click', function(e) {
+                $(`.collapsable-bar-content`).html(`<img class="accept-loading-image" src="{% static 'preloader.gif' %}"></img>`)
+                // e.preventDefault();
+                let thisDiv = $(this);
+
+                $.ajax({
+                    url: thisDiv.attr('data-load-url'),
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        for (result of response.results) { 
+                        $(`.collapsable-bar-content`).html(`${result.title} <br><br><b>Asked at</b> ${result.date}`)
+                    }
+                    },
+                    // Refrence - Show Error if server is stopped for some reason or Internet
+                    // is Slow for User - https://www.edureka.co/community/72651/trigger-jquery-ajax-error-callback-based-server-response-http
+                     error: function(xhr, status, error){
+
+                        //Handle failure here
+                        // Want to Test? Stop the server and try to load the post's div.
+                    $(`.collapsable-bar-content`).html(`<div class="error-handling-ajax">Something Went Wrong while Loading the Div, Try to reload or Check your Internet Connection`)
+                    }
+                })
+            })
+        })
+    })
+
+</script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+                $(`.js-post-expandable-control-2`).on('click', function(e) {
+                $(`.collapsable-bar-content-2`).html(`<img class="accept-loading-image" src="{% static 'preloader.gif' %}"></img>`)
+                // e.preventDefault();
+                let thisDiv = $(this);
+
+                $.ajax({
+                    url: thisDiv.attr('data-load-url'),
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        for (result of response.answer_results) { 
+                        $(`.collapsable-bar-content-2`).html(`${result.body} <br><br><b>Answered at</b> ${result.date}`)
+                    }
+                    },
+                    // Refrence - Show Error if server is stopped for some reason or Internet
+                    // is Slow for User - https://www.edureka.co/community/72651/trigger-jquery-ajax-error-callback-based-server-response-http
+                     error: function(xhr, status, error){
+
+                        //Handle failure here
+                        // Want to Test? Stop the server and try to load the post's div.
+                    $(`.collapsable-bar-content-2`).html(`<div class="error-handling-ajax">Something Went Wrong while Loading the Div, Try to reload or Check your Internet Connection`)
+                    }
+                })
+            })
+        })
+    })
+
+</script>
+
+
+
+
+
+
+    <div id="user-tab-answers" class="user-tab">
+    <div class="subheader d-flex ai-center jc-space-between mb16 mt32 bb bc-black-100 pb4">
+
+        <h1 class="flex--item mb0"><span class='count'>{{profileData.user|calculate_reputation}}</span> Reputation</h1>
+
+        <div class="warpper-B">
+            <div class="tabs">
+                <label class="s-btn s-btn__muted s-btn__outlined s-btn__xs js-user-subtab First-B tab-selected active" onclick="First_B_Tab();"  id="one-tab-B" for="one-B">Post</label>
+                <label class="s-btn s-btn__muted s-btn__outlined s-btn__xs js-user-subtab Second-B tab-selected" onclick="Second_B_Tab();"  id="two-tab-B" for="two-B">Graph <small>(Not Available, but will available soon!)</small></label>
+            </div>
+        </div>
+    </div>
+
+
+
+  <input class="radio-B" id="one-B" name="group-B" type="radio" checked>
+  <input class="radio-B" id="two-B" name="group-B" type="radio">
+  <input class="radio-B" id="three-B" name="group-B" type="radio">
+
+
+  <div class="panels-B">
+
+<div class="panel-B" id="one-panel-B">
+    <div class="user-tab-content">
+        <div class="user-answers">
+{% for question in get_rep_data %}
+
+
+
+{% if question.question_O %}
+
+<div class="s-post-summary p12 js-post-expandable">
+
+
+        <div class="s-post-summary--stats">
+            <div class="s-post-summary--stats-item">
+                    {% if question.inc_dec == "Increased" %}
+                    Q - <span class="s-badge s-badge__rep">+ {{question.question_rep_C}}</span>
+                    {% else %}
+                    Q - <span class="s-badge s-badge__rep-down">- {{question.question_rep_C}}</span>
+                    {% endif %}
+            </div>
+        </div>
+
+        <div class="s-post-summary--content w100 as-start">
+
+            <button
+                class="collap-open-button s-btn s-btn__xs s-btn__icon p6 mr2 js-post-expandable-control"
+                data-load-url="{% url 'profile:loadQuestion_div' question.question_O.id %}"
+                onclick="toogleQuestion({{forloop.counter}});">
+                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+            </button>
+
+            <div class="s-post-summary--content-title fs-body2" title="2011-12-22">
+                    {{question.date_earned|naturaltime}} ({{question.date_earned}})
+            </div>
+            
+            <div class="collapsable-bar-content" id="collapse-model-question-{{forloop.counter}}"></div>
+
+            <div class="s-expandable" id="expandable-2011-12-22">
+                <div class="js-post-expandable-body s-expandable--content s-card p0 mt16">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% elif question.answer_O %}
+
+
+<div class="s-post-summary p12 js-post-expandable">
+
+
+        <div class="s-post-summary--stats">
+            <div class="s-post-summary--stats-item">
+                    {% if question.inc_dec == "Increased" %}
+                    A - <span class="s-badge s-badge__rep">{{question.answer_rep_C}}</span>
+                    {% else %}
+                    A - <span class="s-badge s-badge__rep-down">{{question.answer_rep_C}}</span>
+                    {% endif %}
+            </div>
+        </div>
+
+
+        <div class="s-post-summary--content w100 as-start">
+
+            <button
+                class="collap-open-button s-btn s-btn__xs s-btn__icon p6 mr2 js-post-expandable-control-2"
+                data-load-url="{% url 'profile:loadAnswer_div' question.answer_O.id %}"
+                onclick="toggleAnswer({{forloop.counter}});">
+                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+            </button>
+
+
+            <div class="s-post-summary--content-title fs-body2" title="2011-12-22">
+                    {{question.date_earned|naturaltime}} ({{question.date_earned }})
+            </div>
+            
+            <div class="collapsable-bar-content-2" id="collapse-model-answer-{{forloop.counter}}"></div>
+
+            <div class="s-expandable" id="expandable-2011-12-22">
+                <div class="js-post-expandable-body s-expandable--content s-card p0 mt16">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endif %}
+
+{% endfor %}
+        </div>
+      </div>
+</div>
+
+
+
+
+
+<div class="panel-B" id="two-panel-B">
+    <div class="user-tab-content">
+        <div class="user-answers">
+{% for question in earned_bounties %}
+            <div class="answer-summary">
+                
+                <div class="answer-votes {% if question.question_bounty.is_answer_accepted %}answered-accepted{% endif %} default" title="total number of votes for this answer, which was accepted as the correct answer by the question owner">
+                    {{question.question_bounty.qupvote_set.all.count}}
+                </div>
+
+                <div class="answer-link">
+                    <a href="{{question.question_bounty.get_absolute_url}}" class="answer-hyperlink ">{{question.question_bounty.title}}</a>
+                </div>
+
+                <span title="2017-06-10 08:29:19Z" class="relativetime">{{question.question_bounty.date}}</span>
+
+            </div>
+{% endfor %}
+        </div>
+    </div>
+</div>
+
+</div>
+
+</div>
+
+
+
+</aside></div></div>
+</div>
+</div>
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    
+                    <a href="#"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="#">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+
+{% if request.user.is_authenticated %}
+
+<div id="pop-Modal" class="modal-box">
+    <div class="modal-content">
+
+        <p>
+<div  class="d-flex fd-column gs32 gsy flex__center bs-sm bw0 bar-sm popup _badge-selection" id="Model2" style="z-index: 8951; position: absolute; top: 67px; left: calc(50% - 480px);" data-controller="se-draggable" >
+
+    <header class="d-flex jc-center ps-relative mt8 w100">
+        <h1 class="mb0 fc-dark fs-headline1 lh-sm">Select your next badge</h1>
+        <div class="ps-absolute tn12 rn4 popup-close">
+            <a class="d-flex flex__center -link" id="close-popup" title="Close this popup (or hit ESC)"><svg aria-hidden="true" class="m0 svg-icon iconClear" width="18" height="18" viewBox="0 0 18 18"><path d="M15 4.41 13.59 3 9 7.59 4.41 3 3 4.41 7.59 9 3 13.59 4.41 15 9 10.41 13.59 15 15 13.59 10.41 9 15 4.41Z"></path></svg></a>
+        </div>
+    </header>
+    <div class="d-flex flex__allcells4 fw-wrap bar-sm ba bc-black-100 overflow-x-hidden " style="height: 75%">
+
+
+
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Student">
+
+
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Student
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">First question with score of 1 or more</p>
+    </div>
+
+
+<!-- IMPLEMENTED - Leave Comments -->
+
+    {% if countComments <= 10 %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Commentator">
+            <span class="-flag-recommend">Recommended</span>
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">
+                Commentator - {{countComments}}/10</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" style="max-width: 100%; width: {{countComments|percentage}}%;"></div>
+        </div>
+    <form method="GET" class="Commentator" action="{% url 'profile:select_BadgeTarget'  user.id  %}" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Leave 10 comments"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Student">
+
+
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Commentator
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Leave 10 comments</p>
+    </div>
+    {% endif %}
+
+
+
+    {% if profileData.altruist %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Student">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Altruist
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">BountyAwardAnotherPerQuestion</p>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Altruist">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Altruist</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 100%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline altruist" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="BountyAwardAnotherPerQuestion"></h6></p>
+    </form>
+    </div>
+    {% endif %}
+
+
+    {% if profileData.post_edit_inactive_for_six_month <= 100 %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Archaeologist">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Archaeologist - {{profileData.post_edit_inactive_for_six_month}}/100</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.post_edit_inactive_for_six_month|advanced_percentage:100}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline archaeologist" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Edit100PostsInactive for 6 months"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Archaeologist">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Archaeologist
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Edit 100 Posts Inactive for 6 months</p>
+    </div>
+    {% endif %}
+
+
+    {% if completed == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Autobiographer">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Autobiographer</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline autobiographer" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="CompleteAboutSectionOfUserProfile"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Autobiographer">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Autobiographer
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Complete About Section of User Profile</p>
+    </div>
+    {% endif %}
+
+
+    {% if benefactor_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Benefactor">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Benefactor</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline benefactor" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="FirstBountyAwardOnOwnQ"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Benefactor">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Benefactor
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">First Bounty Award on Own Question</p>
+    </div>
+    {% endif %}
+
+
+    {% if ctzn_ptrl_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Citizen Patrol">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Citizen Patrol</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline citizen_duty" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="First flagged post"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Citizen Patrol">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Citizen Patrol
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">First flagged post</p>
+    </div>
+    {% endif %}
+
+
+    {% if civc_duty == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Civic Duty">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Civic Duty - {{countVotes}}/300</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{countVotes|advanced_percentage_without_profile}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline civic_duty" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Vote300OrMoreTimes"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Civic Duty">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Civic Duty
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Vote 300 or More Times</p>
+    </div>
+    {% endif %}
+
+
+    {% if profileData.posts_edited_counter <= 500 %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Gold" style="" data-badge-database-name="Copy Editor">
+        <div class="s-progress s-progress__badge s-progress__gold">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge1"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Copy Editor - {{profileData.posts_edited_counter}}/500</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.posts_edited_counter|advanced_percentage:500}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline copy_editor" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Edit 500 Posts"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Copy Editor">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge1"></span> Copy Editor
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Vote 300 or More Times</p>
+    </div>
+    {% endif %}
+
+
+    {% if critic_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Critic">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Critic</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline critic" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="FirstDownVote"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Critic">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Critic
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">First Down Vote</p>
+    </div>
+    {% endif %}
+
+
+<!-- UNFINISHED -->
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Custodian">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Custodian</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline custodian" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="CompleteAtLeastOneReviewTask"></h6></p>
+    </form>
+    </div>
+
+
+    {% if deputy_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Deputy">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Deputy - 0/80</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.helpful_flags_counter|advanced_percentage:80}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline deputy" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Raise80HelpfulFlags"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Deputy">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Deputy
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Raise 80 HelpfulFlags</p>
+    </div>
+    {% endif %}
+
+    {% if disclpned_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Disciplined">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Disciplined</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline disciplned" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="DeleteOwnPostWith>+3"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Disciplined">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Disciplined
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">DeleteOwnPostWith>+3</p>
+    </div>
+    {% endif %}
+
+
+    {% if excvter_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Excavator">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Excavator</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline excavator" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="EditFirstPostInactive6Months"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Excavator">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Excavator
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">EditFirstPostInactive6Months</p>
+    </div>
+    {% endif %}
+
+
+    {% if investor_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Investor">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Investor</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline investor" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="FirstBountyOfferOnAnotherPQ"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Investor">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Investor
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">FirstBountyOfferOnAnotherPQ</p>
+    </div>
+    {% endif %}
+
+
+    {% if marshal_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Gold" style="" data-badge-database-name="Marshal">
+        <div class="s-progress s-progress__badge s-progress__gold">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge1"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Marshal - {{profileData.helpful_flags_counter}}/500</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.helpful_flags_counter|advanced_percentage:500}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline marshal" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Raise500HelpFulFlags"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Marshal">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge1"></span> Marshal
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Raise 500 HelpFulFlags</p>
+    </div>
+    {% endif %}
+
+
+    {% if necromancer_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Necromancer">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Necromancer</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline necromancer" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="AnswerQuestionMoreThan60Days"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Necromancer">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Necromancer
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">AnswerQuestionMoreThan60Days</p>
+    </div>
+    {% endif %}
+
+    {% if pr_pressre_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Peer Pressure">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Peer Pressure</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline peer_pressure" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="DeleteOwnPostWithScore<-3"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Peer Pressure">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Peer Pressure
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">DeleteOwnPostWithScore<-3</p>
+    </div>
+    {% endif %}
+
+    {% if promoter_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Promoter">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Promoter</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline promoter" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="FirstBountyOfferOnOwnQ"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Promoter">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Promoter
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">FirstBountyOfferOnOwnQ</p>
+    </div>
+    {% endif %}
+
+
+    {% if proffreader_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Proofreader">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Proofreader - {{profileData.suggested_Edit_counter}}/100</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.suggested_Edit_counter}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline proofreader" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="ApprAndReje100SuggeEdit"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Proofreader">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Proofreader
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">ApprAndReje100SuggeEdit</p>
+    </div>
+    {% endif %}
+
+    {% if refiner_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Refiner">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Refiner - {{profileData.Refiner_Illuminator_TagPostCounter}}/50</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.Refiner_Illuminator_TagPostCounter|advanced_percentage:50}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline refiner" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="EditAndAnswer50QIn12H"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Refiner">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Refiner
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">EditAndAnswer50QIn12H</p>
+    </div>
+    {% endif %}
+
+
+    {% if reviv_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Revival">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Revival</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline revival" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="AnswerMoreThan30DaysFstAns>2"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Revival">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Revival
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">AnswerMoreThan30DaysFstAns>2</p>
+    </div>
+    {% endif %}
+
+
+    {% if slf_lrnr_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Self-Learner">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Self-Learner</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline self_learner" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="AnswerOwnQuestionWith>2"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Self-Learner">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Self-Learner
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">AnswerOwnQuestionWith>2</p>
+    </div>
+    {% endif %}
+
+
+    {% if stnk_whte_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Strunk &amp; White">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Strunk &amp; White - {{profileData.posts_edited_counter}}/80</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.posts_edited_counter|advanced_percentage:80}}%; max-width: 100%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline strunk_white" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Edit80Posts"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Strunk &amp; White">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Strunk &amp; White
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Edit 80 Posts</p>
+    </div>
+    {% endif %}
+
+    {% if suffrage_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Suffrage">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Suffrage - {{totalVotes}}/30</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{totalVotes|advanced_percentage:30}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline suffrage" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Use30VotesInADay"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Suffrage">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Suffrage
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Use30VotesInADay</p>
+    </div>
+    {% endif %}
+
+
+    {% if teacher_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Teacher">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Teacher</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline teacher" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="AnsaQwithScore>1"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Teacher">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Teacher
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">AnsaQwithScore>1</p>
+    </div>
+    {% endif %}
+
+    {% if vx_pop_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Vox Populi">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Vox Populi - {{totalVotes}}/40</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{totalVotes|advanced_percentage:40}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline vox_populi" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="UseMaximum40VotesInADay"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Vox Populi">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Vox Populi
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Use30VotesInADay</p>
+    </div>
+    {% endif %}
+
+</div>
+    </div>
+
+
+</div>
+        </p>
+      </div>
+    </div>
+{% endif %}
+<script type="text/javascript" src="{% static 'notification/js/notification.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/badge.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/reputation_profile.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+        
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+    </html>
+
+
+{% endblock content %}

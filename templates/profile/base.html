@@ -1,0 +1,1080 @@
+{% load static %}
+{% load qa_tags %}
+{% load humanize %}
+
+<!DOCTYPE html>
+
+
+    <html class="html__responsive"></html>
+
+    <head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script async src="https://cdn.sstatic.net/Js/third-party/stacks/stacks.min.js?v=4c00f8ce1b14"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/stacks.css?v=556e4333f24c">
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=753a90643fc4">
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/secondary.css?v=12f70c5b46fe">    
+
+
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/Channels/channels.css?v=47a5e0f03c81">
+        
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="{% static 'plugins/css/bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css 
+    " crossorigin="anonymous">
+
+
+<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
+
+
+        
+
+    </head>
+
+{% if request.user.is_authenticated %}
+
+
+<header class="top-bar js-top-bar top-bar__network">
+    <div class="wmx12 mx-auto d-flex ai-center h100" role="menubar">
+        <div class="-main flex--item">
+            <a href="#" class="left-sidebar-toggle p0 ai-center jc-center" role="menuitem" aria-haspopup="true" aria-controls="left-sidebar" aria-expanded="false"><span class="ps-relative"></span></a>
+            <div class="topbar-dialog leftnav-dialog js-leftnav-dialog dno">
+                <div class="left-sidebar js-unpinned-left-sidebar" data-can-be="left-sidebar" data-is-here-when="sm"></div>
+            </div>
+            <a href="{% url 'profile:home' %}" class="-logo">
+                <span class="-img _glyph">Stack Overflow - Clone</span>
+            </a>
+        </div>
+
+<ol class="overflow-x-auto ml-auto -secondary d-flex ai-center list-reset h100 user-logged-in" role="presentation">
+        <li class="-item searchbar-trigger"><a href="#" class="-link js-searchbar-trigger" role="button" aria-label="Search" aria-haspopup="true" aria-controls="search" title="Click to show search"><svg aria-hidden="true" class="svg-icon iconSearch" width="18" height="18" viewBox="0 0 18 18"><path d="m18 16.5-5.14-5.18h-.35a7 7 0 10-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 112 7a5 5 0 0110 0Z"/></svg></a></li>
+
+
+
+            <li class="-item">
+                <a href="{% url 'profile:ActivityTabSummary' user.id user.username %}" class="my-profile " >
+<div class="gravatar-wrapper-24" title="{{request.user.username}}"><img src="{% if request.user.profile.profile_photo %}{{request.user.profile.profile_photo.url}}{% endif %}" alt="" width="24" height="24" class="bar-sm -avatar js-avatar-me"></div><span class="v-visible-sr">{{request.user.username}}</span>
+
+                        <div class="-rep js-header-rep" title="your reputation: {{request.user|calculate_reputation}}" aria-hidden="true">{{request.user|calculate_reputation}}</div>
+                        <span class="v-visible-sr">, {{request.user|calculate_reputation}} reputation</span>
+                            <div class="-badges">
+                                    <span title="{{request.user|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                        <span class="badge1">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculateGoldBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculateGoldBadges}} gold badges</span>                                
+                                    <span title="{{request.user|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                        <span class="badge2">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculatSilvereBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculatSilvereBadges}} silver badges</span> 
+
+                                    <span title="{{request.user|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                        <span class="badge3">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculateBronzeBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculateBronzeBadges}} bronze badges</span> 
+                            </div>
+                </a>
+            </li>
+
+        <li class="-item inbox-button-item myInboxSVGOuter thisIsOuter">
+            <a class="-link myInboxSVGLink readNotification" data-pk="{{ data.id }}" onClick="openInbox();">
+                {% if showAlert %}<span class="button__badge">{{countUnreadNotifications}}</span>{% endif %}
+                <i class="fa fa-inbox fa-2x iconInbox myInboxSVG" aria-hidden="true"></i>
+                
+                <span class="indicator-badge js-unread-count _important d-none">0</span>
+            </a>
+        </li>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+            $('.readNotification').on('click',function(e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url:"{% url 'notification:read_All_Notifications' %}",
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        if (response.action == 'readedAll') {
+                            $(`.button__badge`).text(``)
+                            $(`.button__badge`).removeClass("button__badge");
+                        }
+                    }
+                })
+            })
+        })
+    })
+</script>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+            $('.readPrivNotification').on('click',function(e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url:"{% url 'notification:read_All_Priv_Notifications' %}",
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        if (response.action == 'readedAllPrivNotifications') { // Accept Only
+                            $(`.unseen-reputation`).text(``)
+                            $(`.unseen-reputation`).removeClass("unseen-reputation");
+                            // $(`.unreadDot`).text(``)
+
+                            // $(`.button__badge`).text(`0`)
+                        }
+                    }
+                })
+            })
+        })
+    })
+</script>
+
+
+
+
+        <li class="-item achievements-button-item achieveSVGOuter achThisIsOuter">
+            <a href="#" class="-link readPrivNotification" onclick="openAchievementInbox();">
+                <i class="fa fa-trophy fa-2x iconAchievements achieveSVG" aria-hidden="true"></i>
+                {% if countUnreadPrivNotifications_1 %}<span class="unseen-reputation">+{{countUnreadPrivNotifications.countTheUnRead_Rep}}</span>{% endif %}
+                <span class="indicator-badge js-unread-count _positive d-none">+0</span>
+            </a>
+        </li>
+
+        {% if request.user.profile.access_review_queues %}
+        <li class="-item review-button-item reviewSVGOuter revThisIsOuter">
+            <a href="#" class="-link svg-icon iconReviewQueue" onclick="openReviewInbox();">
+                <i class="fa fa-tasks fa-2x iconReviewQueue reviewSVG" aria-hidden="true"></i>
+            </a>
+        </li>
+        {% endif %}
+
+
+</ol>
+
+    </div>
+</header>
+
+
+{% else %}
+
+<header class="top-bar js-top-bar top-bar__network">
+    <div class="wmx12 mx-auto d-flex ai-center h100" role="menubar">
+        <div class="-main flex--item">
+                <a href="#" class="left-sidebar-toggle p0 ai-center jc-center js-left-sidebar-toggle" role="menuitem" aria-haspopup="true" aria-controls="left-sidebar" aria-expanded="false"><span class="ps-relative"></span></a>
+                <div class="topbar-dialog leftnav-dialog js-leftnav-dialog dno">
+                    <div class="left-sidebar js-unpinned-left-sidebar" data-can-be="left-sidebar" data-is-here-when="sm"></div>
+                </div>
+                <a href="#" class="-logo">
+                    <span class="-img _glyph">Stack Overflow</span>
+                </a>
+        </div>
+
+        <ol class="overflow-x-auto ml-auto -secondary d-flex ai-center list-reset h100 user-logged-out" role="presentation">
+            <li class="-ctas">
+                <a href="{% url 'users:login_request' %}" class="login-link s-btn s-btn__filled py8" rel="nofollow" >Log in</a>
+                <a href="{% url 'users:signup_view' %}" class="login-link s-btn s-btn__primary py8">Sign up</a>
+            </li>
+            <li class="js-topbar-dialog-corral" role="presentation">
+            </li>
+        </ol>
+
+    </div>
+</header>
+
+{% endif %}
+
+
+
+
+
+
+<!-- NOTIFICATION'S INBOX - START -->
+
+<div class="myNavbar">
+    <div class="navbar_right">
+        <myDiv class="myNotification" id="Notif">
+        <a class="icon_wrap" action=""></a>
+            <div class="notification_dd">
+                <div class="topbar-dialog inbox-dialog dno" role="menu" style="display: block;">
+                    <div class="header fw-wrap">
+                        <div class="flex--item fl1">
+                            <div class="ai-center d-flex jc-end">
+                                    <div class="-right">
+                                            <a href="#">all items</a>
+                                            • <a href="{% url 'users:logout_view' %}">Logout</a>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="modal-content">
+                        <ul>
+                            {% for notification in notifications %}
+                            <li class="inbox-item ">
+                                <a href="{{notification.url}}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item" title="Stack Overflow"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span class="v-visible-sr">Stack Overflow&nbsp;</span>
+                                            {% if notification.type_of_noti == "comment_answer" %}
+                                            Comment on Answer
+                                            {% elif notification.type_of_noti == "question_comment" %}
+                                            Comment on Question
+                                            {% elif notification.type_of_noti == "community_message" %}
+                                            Community Message
+                                            {% elif notification.type_of_noti == "question_edit" %}
+                                            Edit Suggessted
+                                            {% elif notification.type_of_noti == "question_reopen_voted" %}
+                                            Question ReOpen Vote Raises
+                                            {% elif notification.type_of_noti == "NEW_ANSWER" %}
+                                            New Answer to the Question
+                                            {% endif %}
+
+                                            {% if notification.is_read == False %}<b class="unreadDot" style="color: red">Unread</b>{% endif %}
+
+                                            </span>
+                                            <span class="item-creation"><span title="2021-10-12 04:36:58Z" class="relativetime">{{notification.date_created|naturaltime}}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            {% if notification.question_noti %}{{notification.question_noti.title}}{% else %}{{notification.answer_noti}}{% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div> 
+            </div>
+        </myDiv>
+    </div>
+</div>
+
+<!-- NOTIFICATION'S INBOX - END -->
+
+
+
+
+<!-- ACHIEVEMENT'S INBOX - START -->
+
+<style>
+
+.earned {
+    color: green;
+}
+
+</style>
+
+<div class="achievement_navbar">
+    <div class="achievement_bar_right">
+        <acvhieveDiv class="achievement_notification">
+            <a class="achieve_icon_wrap" action=""></a>
+
+            <div class="achievement_dd">
+                <div class="topbar-dialog achievements-dialog dno" role="menu" style="display: block;">
+                    <div class="header fw-wrap">
+                        <h3 class="flex--item">
+                            achievements
+                                <small class="utc-clock sm:d-none">utc time <span class="js-utc-time utc-time">Good Time</span></small>
+                        </h3>
+                    </div>
+
+                    <div class="modal-content">
+                            <div class="js-date-group date-group">
+                                {% for privNotification in privNotifications %}
+                                <ul class="js-items items">
+                                        <li class="">
+                                            <a href="
+
+                                                {% if privNotification.type_of_PrivNotify == 'ANSWER_ACCEPT_REP_P' %}
+                                                    {{privNotification.url}}#{{privNotification.answer_priv_noti.id}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'EDIT_GOT_APPROVED' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'BOUNTY_AWARDED_REP_P' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'MY_ANSWER_UPVOTE_REP_P' %}
+                                                    {{privNotification.url}}#{{privNotification.answer_priv_noti.id}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'MY_QUESTION_UPVOTE_REP_P' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'Privilege_Earned' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'BADGE_EARNED' %}
+                                                    {{privNotification.url}}
+
+                                                {% endif %}
+
+                                                " class="d-flex gs8 gsx" aria-label="2 reputation change: Pop-up-Notification-Panel box is not staying to the right, earned on Stack Overflow, 5 hours ago">
+                <div class="favicon favicon-stackoverflow site-icon flex--item" title="Stack Overflow - Clone"></div>
+
+
+
+                                                    {% if privNotification.type_of_PrivNotify == "ANSWER_ACCEPT_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_QUESTION_UPVOTE_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "EDIT_GOT_APPROVED" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "BOUNTY_AWARDED_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_ANSWER_UPVOTE_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "Privilege_Earned" %}
+                                                    <span class="js-faux-column  earned flex--item">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "BADGE_EARNED" %}
+                                                    <span class="js-faux-column earned flex--item">
+                                                        <i class="fas fa-ribbon"></i>
+                                                    </span>
+                                                    {% endif %}
+
+
+                                                <div class="message-text flex--item fl1">
+                                                    <h4 class="">
+
+                                                    {% if privNotification.type_of_PrivNotify == "ANSWER_ACCEPT_REP_P" %}
+
+                                                    Answer Accepted
+                                                    <br>
+                                                    {{privNotification.answer_priv_noti.body}}
+
+                                                    {% elif privNotification.type_of_PrivNotify == "EDIT_GOT_APPROVED" %}
+
+                                                    Edit Approved
+                                                    <br>
+                                                    {{privNotification.question_priv_noti.title}}
+
+                                                    {% elif privNotification.type_of_PrivNotify == "BOUNTY_AWARDED_REP_P" %}
+
+                                                    Bounty Awarded
+
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_ANSWER_UPVOTE_REP_P" %}
+
+                                                    Answer Upvote
+                                                    <br>
+                                                    <b> • {{privNotification.answer_priv_noti.body}}</b>
+
+                                                    <!-- Done -->
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_QUESTION_UPVOTE_REP_P" %}
+
+                                                    Question Upvote
+                                                    <br>
+                                                    <b> • {{privNotification.question_priv_noti.title}}</b>
+
+                                                    <!-- DONE -->
+                                                    {% elif privNotification.type_of_PrivNotify == "Privilege_Earned" %}
+
+                                                    Privilege Earned
+
+                                                    <b> • {{privNotification.for_if}}</b>
+
+                                                    <!-- DONE -->
+                                                    {% elif privNotification.type_of_PrivNotify == "BADGE_EARNED" %}
+
+                                                    Badge Earned - {{privNotification.for_if}}
+                                                    <br>
+                                                    <b> • {{privNotification.description}}</b>
+
+
+                                                    {% endif %}
+                                                    <br>
+                                                    {{privNotification.date_created_PrivNotify|naturaltime}}
+
+                                                    </h4>
+                                                </div>
+                                            </a>
+                                        </li>
+                                </ul>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </acvhieveDiv>
+        </div>
+    </div>
+
+<!-- ACHIEVEMENT'S INBOX - END -->
+
+
+<!-- REVIEW'S INBOX - START -->
+
+<div class="review_navbar">
+    <div class="review_bar_right">
+        <reviewDiv class="review_notification">
+        <a class="review_icon_wrap" action=""></a>
+
+            <div class="review_dd">
+                <div class="topbar-dialog inbox-dialog dno" role="menu" style="display: block;">
+
+                    <div class="header fw-wrap">
+                        <div class="flex--item fl1">
+                            <div class="ai-center d-flex jc-end">
+                                <div class="-right">
+                                    <a href="{% url 'help:privileges' %}">privileges</a>
+                                    {% if request.user.profile.accessTo_moderatorTools %}•
+                                    <a href="{% url 'tools:moderator_tools' %}">tools</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-content">
+                        <ul>
+                            <li class="inbox-item ">
+                                {% if can_show == True %}
+                                <a href="{% url 'review:review_FirstAns' next_blog.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span">&nbsp;</span>Review First Answers</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review First Answers</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if can_review == True %}
+                                <a href="{% url 'review:review_FirstQns' next_question.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review First Questions</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review First Questions</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if cal_LateRev == True %}
+                                <a href="{% url 'review:review_LateAnswers' questionIDS.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Late Answers</span>
+                                            <span class="item-creation"><span>{% if cal_LateRev == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Late Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Late Answers</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Late Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if areClosedQuestions_Available == True %}
+                                <a href="{% url 'review:reviewClosedQuestions' reviewCloseQuestionID.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type"><span>&nbsp;</span>Review Closed Questions</span>
+                                            <span class="item-creation"><span>{% if areClosedQuestions_Available == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location">
+                                            Review Closed Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon-stackoverflow flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type"><span>&nbsp;</span>Review Closed Questions</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location">
+                                            Review Closed Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if editQuestions_review_Available == True %}
+                                <a href="{% url 'review:reviewSuggesstedEdit' reviewEditedPts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type"><span>&nbsp;</span>Review Suggessted Edits</span>
+                                            <span class="item-creation"><span>{% if editQuestions_review_Available == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location">
+                                            Review Suggessted Edits
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Suggessted Edits</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Suggessted Edits
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if questionToReOpen_available == True %}
+                                <a href="{% url 'review:reOpen_Question_Review' reviewTo_ReOpenQuestionID.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Re-Open Votes Review</span>
+                                            <span class="item-creation"><span>{% if questionToReOpen_available == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Re-Open Votes Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Re-Open Votes Review</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Re-Open Votes Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if reviewLowPosts == True %}
+                                <a href="{% url 'review:reviewLowQualityPosts' reviewLowPts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Low-Quality Posts Review</span>
+                                            <span class="item-creation"><span>{% if reviewLowPosts == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Low-Quality Posts Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Low-Quality Posts Review</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Low-Quality Posts Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if is_available_FlagPosts == True %}
+                                <a href="{% url 'review:reviewFlagPosts' reviewFlagPts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Posts</span>
+                                            <span class="item-creation"><span>{% if is_available_FlagPosts == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Posts
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Posts</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Posts
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if is_available_FlagComments == True %}
+                                <a href="{% url 'review:reviewFlagComments' reviewFlagCmnts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Comments</span>
+                                            <span class="item-creation"><span>{% if is_available_FlagComments == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Comments
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Comments</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Comments
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </div> 
+            </div>
+        </reviewDiv>
+    </div>
+</div>
+
+<!-- REVIEW'S INBOX - END -->
+
+<div class="toast-container">
+</div>
+
+
+  <span id="message_area">
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'error' %}
+    <div class="alert alert-danger">{{message|safe}}</div>
+    {% else %}
+    <div class="alert alert-{{message.tags}}">
+    {{message|safe}}</div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+  </span>
+
+
+<style>
+.myClass{
+    color: hsl(210,8%,15%);
+}
+
+.myNavbar .profile_dd,
+.notification_dd{
+  right: 40px;
+  width: 350px;
+  height: auto;
+  display: none;
+  position: absolute;
+}
+
+.myNavbar .navbar_right{
+   display: flex;
+}
+
+.myNavbar .navbar_right img{
+  width: 35px;
+}
+
+.myNavbar .navbar_right .icon_wrap{
+  cursor: pointer;
+}
+
+.myNavbar .navbar_right .myNotification{
+  margin-left: 600px;
+  width: 50%;
+}
+
+.myNavbar .navbar_right .myNotification{
+  position: relative;
+}
+
+.myNavbar .myProfile .profile_dd ul li .btn{
+    height: 32px;
+    padding: 7px 10px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    background: #3b80f9;
+    width: 125px;
+    margin: 5px auto 15px;
+}
+
+.myNavbar .myProfile .profile_dd ul li .btn:hover{
+  background: #6593e4;
+}
+
+
+.myNavbar .myProfile.active .profile_dd,
+.myNavbar .myNotification.active .notification_dd{
+  display: block;
+}
+
+
+
+
+
+
+.achievement_navbar .profile_dd,
+.achievement_dd {
+  right: 25px;
+  width: 350px;
+  height: auto;
+  display: none;
+  position: absolute;
+}
+
+.achievement_navbar .achievement_bar_right {
+    display: flex;
+}
+
+.achievement_navbar .achievement_bar_right img{
+    width: 35px;
+}
+
+.achievement_navbar .achievement_bar_right .achieve_icon_wrap {
+    cursor: pointer;
+}
+
+.achievement_navbar .achievement_bar_right .achievement_notification {
+  margin-left: 600px;
+  width: 50%;
+}
+
+.achievement_navbar .achievement_bar_right .achievement_notification {
+    position: relative;
+}
+
+.achievement_navbar ul li .btn{
+    height: 32px;
+    padding: 7px 10px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    background: #3b80f9;
+    width: 125px;
+    margin: 5px auto 15px;
+}
+
+.achievement_navbar ul li .btn:hover{
+  background: #6593e4;
+}
+
+.achievement_navbar .achievement_notification.active .achievement_dd{
+  display: block;
+}
+
+
+
+
+
+.review_navbar .profile_dd,
+.review_dd {
+  right: 45px;
+  width: 350px;
+  height: auto;
+  display: none;
+  position: absolute;
+}
+
+.review_navbar .review_bar_right {
+    display: flex;
+}
+
+.review_navbar .review_bar_right img{
+    width: 35px;
+}
+
+.review_navbar .review_bar_right .review_icon_wrap {
+    cursor: pointer;
+}
+
+.review_navbar .review_bar_right .review_notification {
+  margin-left: 600px;
+  width: 50%;
+}
+
+.review_navbar .review_bar_right .review_notification {
+    position: relative;
+}
+
+.review_navbar ul li .btn{
+    height: 32px;
+    padding: 7px 10px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    background: #3b80f9;
+    width: 125px;
+    margin: 5px auto 15px;
+}
+
+.review_navbar ul li .btn:hover{
+  background: #6593e4;
+}
+
+.review_navbar .review_notification.active .review_dd{
+  display: block;
+}
+
+.fillTheSVG {
+    color: hsl(210,8%,15%);
+}
+
+.blue {
+    color: hsl(210,8%,15%);
+}
+
+.forBackgroundClass {
+    background-color: hsl(210,8%,85%);;
+}
+
+</style>
+
+
+
+<script>
+
+function openInbox() {
+    gettingOpen = document.getElementsByTagName("myDiv");
+    gettingOpen[0].classList.toggle("active");
+
+    gettingAchieveOpen = document.getElementsByTagName("acvhieveDiv");
+    if (gettingAchieveOpen[0].classList.contains("active")) {
+        gettingAchieveOpen[0].classList.toggle("active");
+    }
+
+    gettingAchieveOpen = document.getElementsByTagName("reviewDiv");
+    if (gettingAchieveOpen[0].classList.contains("active")) {
+        gettingAchieveOpen[0].classList.toggle("active");
+    }
+
+    var $this = $('.achieveSVG');
+    var forBackground = $('.achieveSVGOuter');
+
+    if ($this.hasClass('fillTheSVG')) {
+        $this.removeClass('fillTheSVG');
+        forBackground.removeClass('forBackgroundClass');
+    }
+
+    var $this = $('.reviewSVG');
+    var forBackground = $('.reviewSVGOuter');
+
+    if ($this.hasClass('fillTheSVG')) {
+        $this.removeClass('fillTheSVG');
+        forBackground.removeClass('forBackgroundClass');
+    }
+}
+
+
+function openAchievementInbox() {
+    gettingAchieveOpen = document.getElementsByTagName("acvhieveDiv");
+    gettingAchieveOpen[0].classList.toggle("active");
+
+    gettingAchieveOpen = document.getElementsByTagName("myDiv");
+    if (gettingAchieveOpen[0].classList.contains("active")) {
+        gettingAchieveOpen[0].classList.toggle("active");
+    }
+
+    gettingAchieveOpen = document.getElementsByTagName("reviewDiv");
+    if (gettingAchieveOpen[0].classList.contains("active")) {
+        gettingAchieveOpen[0].classList.toggle("active");
+    }
+
+    var $this = $('.myInboxSVG');
+    var forBackground = $('.myInboxSVGOuter');
+
+    if ($this.hasClass('fillTheSVG')) {
+        $this.removeClass('fillTheSVG');
+        forBackground.removeClass('forBackgroundClass');
+    }
+
+    var $this = $('.reviewSVG');
+    var forBackground = $('.reviewSVGOuter');
+
+    if ($this.hasClass('fillTheSVG')) {
+        $this.removeClass('fillTheSVG');
+        forBackground.removeClass('forBackgroundClass');
+    }
+}
+
+
+function openReviewInbox() {
+    gettingReviewOpen = document.getElementsByTagName("reviewDiv");
+    gettingReviewOpen[0].classList.toggle("active");
+
+
+    gettingAchieveOpen = document.getElementsByTagName("acvhieveDiv");
+    if (gettingAchieveOpen[0].classList.contains("active")) {
+        gettingAchieveOpen[0].classList.toggle("active");
+    }
+
+    gettingAchieveOpen = document.getElementsByTagName("myDiv");
+    if (gettingAchieveOpen[0].classList.contains("active")) {
+        gettingAchieveOpen[0].classList.toggle("active");
+    }
+
+
+    var $this = $('.myInboxSVG');
+    var forBackground = $('.myInboxSVGOuter');
+
+    if ($this.hasClass('fillTheSVG')) {
+        $this.removeClass('fillTheSVG');
+        forBackground.removeClass('forBackgroundClass');
+    }
+
+    var $this = $('.achieveSVG');
+    var forBackground = $('.achieveSVGOuter');
+
+    if ($this.hasClass('fillTheSVG')) {
+        $this.removeClass('fillTheSVG');
+        forBackground.removeClass('forBackgroundClass');
+    }
+
+}
+
+
+    $('._important, .myInboxSVGOuter').click(function() {
+    var $this = $('.myInboxSVG');
+    var forBackground = $('.myInboxSVGOuter');
+
+    if ($this.hasClass('fillTheSVG')) {
+        $this.removeClass('fillTheSVG');
+        forBackground.removeClass('forBackgroundClass');
+    } else {
+        $this.addClass('fillTheSVG');
+        forBackground.addClass('forBackgroundClass');
+    }
+});
+
+
+    $('._positive, .achieveSVGOuter').click(function() {
+    var $this = $('.achieveSVG');
+    var forBackground = $('.achieveSVGOuter');
+
+    if ($this.hasClass('fillTheSVG')) {
+        $this.removeClass('fillTheSVG');
+        forBackground.removeClass('forBackgroundClass');
+    } else {
+        $this.addClass('fillTheSVG');
+        forBackground.addClass('forBackgroundClass');
+    }
+});
+
+
+    $('._review, .reviewSVGOuter').click(function() {
+    var $this = $('.reviewSVG');
+    var forBackground = $('.reviewSVGOuter');
+
+    if ($this.hasClass('fillTheSVG')) {
+        $this.removeClass('fillTheSVG');
+        forBackground.removeClass('forBackgroundClass');
+    } else {
+        $this.addClass('fillTheSVG');
+        forBackground.addClass('forBackgroundClass');
+    }
+});
+
+
+</script>
+
+
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+
+{% block content %}{% endblock content %} {% block js %}{% endblock js%} {% block css %}{% endblock css %}
+

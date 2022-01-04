@@ -1,0 +1,787 @@
+{% extends 'profile/base.html' %}
+{% load humanize %}
+{% load qa_tags %}
+
+{% block content %}
+
+<!DOCTYPE html>
+
+
+    <html class="html__responsive ">
+
+    <head>
+
+        <title>User {{profileData.user}} - Stack Overflow</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script async src="https://cdn.sstatic.net/Js/third-party/stacks/stacks.min.js?v=4c00f8ce1b14"></script>
+    <script src="https://cdn.sstatic.net/Js/stub.en.js?v=02d19f44eb4e"></script>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/stacks.css?v=556e4333f24c">
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=34c234f84be8">
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/secondary.css?v=bbf1061b903d">
+
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/DevStory/story.css?v=2afdf441843b">
+
+
+
+        <!-- <i class="far fa-medal fa-6x"></i> -->
+        <style>
+            .goldBadge {
+                color: gold;
+                font-weight: 200;
+            }
+
+            .silverBadge {
+                color: silver;
+                font-weight: 200;
+            }
+
+            .bronzeBadge {
+                color: #CD7F32;
+                font-weight: 200;
+            }
+        </style>
+
+
+<style>
+
+.warpper-Q{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+.panels-Q{
+  background:#fffffff6;
+  width:100%;
+  /*max-width:500px;*/
+  border-radius:3px;
+  overflow:hidden;
+}
+.panel-Q{
+  display:none;
+  animation: fadein .5s;
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+.panel-title-Q{
+  font-size:1.5em;
+  font-weight:bold
+}
+.radio-Q{
+  display:none;
+}
+#one-Q:checked ~ .panels-Q #one-panel-Q,
+#two-Q:checked ~ .panels-Q #two-panel-Q,
+#three-Q:checked ~ .panels-Q #three-panel-Q,
+#four-Q:checked ~ .panels-Q #four-panel-Q{
+  display:block
+}
+
+.tab-selected {
+    background-color: white;
+    /*color: white;*/
+}
+.tab-selected.active {
+    background-color: grey;
+    color: white;
+}
+
+
+</style>
+
+<script>
+
+    function FirstTab_Q() {
+    gettingOpen = document.getElementsByClassName("First-Q")
+    gettingOpen[0].classList.add("active");
+
+    gettingOpen = document.getElementsByClassName("Second-Q");
+    gettingOpen[0].classList.remove("active");
+
+
+    gettingOpen = document.getElementsByClassName("Third-Q");
+    gettingOpen[0].classList.remove("active");
+
+    gettingOpen = document.getElementsByClassName("Fourth-Q");
+    gettingOpen[0].classList.remove("active");
+
+
+}
+
+function SecondTab_Q() {
+
+    gettingOpen = document.getElementsByClassName("Second-Q");
+    gettingOpen[0].classList.add("active");
+
+    gettingOpen = document.getElementsByClassName("First-Q");
+    gettingOpen[0].classList.remove("active");
+
+    gettingOpen = document.getElementsByClassName("Third-Q");
+    gettingOpen[0].classList.remove("active");
+
+    gettingOpen = document.getElementsByClassName("Fourth-Q");
+    gettingOpen[0].classList.remove("active");
+
+}
+
+function ThirdTab_Q() {
+
+    gettingOpen = document.getElementsByClassName("Third-Q");
+    gettingOpen[0].classList.add("active");
+
+    gettingOpen = document.getElementsByClassName("First-Q");
+    gettingOpen[0].classList.remove("active");
+
+    gettingOpen = document.getElementsByClassName("Second-Q");
+    gettingOpen[0].classList.remove("active");
+
+    gettingOpen = document.getElementsByClassName("Fourth-Q");
+    gettingOpen[0].classList.remove("active");
+
+
+}
+
+</script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/Channels/channels.css?v=47a5e0f03c81">
+
+
+    <noscript id="noscript-css"><style>body,.top-bar{margin-top:1.9em}</style></noscript>
+    </head>
+    <body class="user-page unified-theme">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+
+
+    <script>
+        StackExchange.ready(function () { StackExchange.topbar.init(); });
+        StackExchange.scrollPadding.setPaddingTop(50, 10); 
+    </script>
+
+
+
+
+
+    <div class="container">
+            
+
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+    <div class="left-sidebar--sticky-container js-sticky-leftnav">
+        <nav role="navigation">
+            <ol class="nav-links">
+        <li class="">
+            <a
+               href="/"
+               class="pl8 nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Home
+                        </div>
+                    </div>
+            </a>
+        </li>
+                <li>
+                    <ol class="nav-links">
+                            <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+
+        <li class="">
+            <a id="nav-questions"
+               href="/questions"
+               class="pl8 nav-links--link -link__with-icon">
+<svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18"><path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/></svg>                    <span class="-link--channel-name">Questions</span>
+            </a>
+        </li>
+
+
+
+        <li class="">
+            <a id="nav-tags"
+               href="{% url 'profile:tagsPage' %}"
+               class="nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Tags
+                        </div>
+                    </div>
+            </a>
+        </li>
+        <li class=" youarehere">
+            <a id="nav-users"
+               href="{% url 'profile:usersPage' %}"
+               class="nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Users
+                        </div>
+                    </div>
+            </a>
+        </li>
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+        <div id="content" class="snippet-hidden">
+
+
+
+<div id="mainbar-full" class="user-show-new">
+    
+<div class="ps-relative mb16">
+        
+
+<div class="d-flex ai-center fw-wrap gs16 md:fd-column md:ai-start">
+    <a class="flex--item" href="{% url 'profile:activityPageTabProfile' profileData.user.id profileData.user.username %}">
+        <div class="md:d-none"><div class="bar-md bs-sm"><img src="{% if profileData.profile_photo %}{{profileData.profile_photo.url}}{% endif %}" alt="" width="128" height="128" class="bar-sm bar-md d-block"></div></div>
+        <div class="d-none md:d-block sm:d-none"><div class="bar-md bs-sm"><img src="{% if profileData.profile_photo %}{{profileData.profile_photo.url}}{% endif %}" alt="" width="96" height="96" class="bar-sm bar-md d-block"></div></div>
+        <div class="d-none sm:d-block"><div class="bar-md bs-sm"><img src="{% if profileData.profile_photo %}{{profileData.profile_photo.url}}{% endif %}" alt="" width="64" height="64" class="bar-sm bar-md d-block"></div></div>
+    </a>
+    <div class="flex--item">
+        <div class="d-flex ai-center fw-wrap gs8 wmx4">
+            <div class="flex--item mb12 fs-headline2 lh-xs">
+                {{profileData.user}}
+            </div>
+            <div class="flex--item">
+                <div class="d-flex ai-center fw-nowrap gs4">
+                </div>
+            </div>
+        </div>
+        <div class="mb8 fc-light fs-title lh-xs">{{profileData.title}}</div>
+        <ul class="list-reset s-anchors s-anchors__inherit d-flex fc-light gs8 mln4 fw-wrap">
+
+                    <li class="flex--item">
+            <div class="d-flex gs4 gsx ai-center">
+                <div class="flex--item fc-black-350">
+                    <i class="fas fa-birthday-cake fa-2x" aria-hidden="true"></i>
+                </div>
+                <div class="flex--item">
+Joined <span title="2021-07-25 23:41:40Z">{{profileData.user.date_joined|naturaltime}}</span>
+                </div>
+            </div>
+        </li>
+
+
+
+            {% if not profileData.is_high_moderator %} 
+                <li class="flex--item">
+                    <div class="d-flex gs4 gsx ai-center">
+                        <div class="flex--item fc-black-350"><i class="fa fa-clock-o fa-2x" aria-hidden="true"></i></div>
+                        <div class="flex--item">
+                            <b> Last Seen </b> {{ online_user_activity.last_activity|naturaltime }}
+                        </div>
+                    </div>
+                </li>
+                {% endif %}
+
+        </ul>
+
+            <ul class="list-reset s-anchors s-anchors__inherit d-flex fc-light gs8 mln4 fw-wrap">
+
+
+                    <li class="flex--item">
+                        <div class="d-flex gs4 gsx ai-center">
+                            <div class="flex--item fc-black-350">
+                                <svg aria-hidden="true" class="mrn2 svg-icon iconLocation" width="18" height="18" viewBox="0 0 18 18"><path d="M2 6.38C2 9.91 8.1 17.7 8.1 17.7c.22.29.58.29.8 0 0 0 6.1-7.8 6.1-11.32A6.44 6.44 0 008.5 0 6.44 6.44 0 002 6.38Zm9.25.12a2.75 2.75 0 11-5.5 0 2.75 2.75 0 015.5 0Z"/></svg>
+                            </div>
+                            <div class="flex--item">
+                                <div class="wmx2 truncate" title="Bosnia and Herzegovina">
+                                    {{profileData.location}}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+            </ul>
+    </div>
+</div>
+
+
+
+</div>
+
+
+
+
+<div class="d-flex ai-center jc-space-between fw-wrap mb16 js-user-header">
+    <div class="flex--item s-navigation">
+
+            <a href="{% url 'profile:activityPageTabProfile' profileData.user.id profileData.user.username %}" class="s-navigation--item is-selected" data-shortcut="P">Profile</a>
+            <a href="{% url 'profile:ActivityTabSummary' profileData.user.id profileData.user.username %}" class="s-navigation--item" data-shortcut="A">Activity</a>
+            {% if request.user.is_authenticated %}
+            {% if request.user == profileData.user %}
+            <a href="{% url 'profile:userProfileEdit_Settings' profileData.user.id %}" class="s-navigation--item">Settings</a>
+            {% endif %}
+            {% endif %}
+    </div>
+    <div class="flex--item ml-auto">
+        <div class="s-navigation s-navigation__muted ai-center">
+        </div>
+    </div>
+</div>
+
+    <div id="main-content">
+        
+
+        <div class="d-flex gs24 md:fd-column">
+            <div class="flex--item3 fl-shrink0 md:order-last">
+                <div class="d-grid g24">
+                    <div class="grid--item" id="stats" data-is-here-when="lg">
+                        <div class="fs-title mb8">Stats</div>
+                        <div class="s-card fc-light bar-md">
+                            <div class="d-flex flex__allcells6 gs16 fw-wrap md:jc-space-between">
+                                <div class="flex--item md:fl-auto">
+                                <div class="fs-body3 fc-dark">{{profileData.user|calculate_reputation}}</div>reputation
+        </div>
+            <div class="flex--item md:fl-auto" title="Estimated number of times people viewed helpful posts by this user&#xA;(based on page views of questions&#xA;and questions where they wrote highly-ranked answers)">
+                <div class="fs-body3 fc-dark">{{getAllTheViewsOfAllTheQuestion.total_views__sum}}</div>
+                reached
+            </div>
+        <div class="flex--item md:fl-auto">
+            <div class="fs-body3 fc-dark">{{profileData.user|count_answers_by_user}}</div>
+            answer{{profileData.user|count_answers_by_user|pluralize}}
+        </div>
+        <div class="flex--item md:fl-auto">
+            <div class="fs-body3 fc-dark">{{profileData.user|count_questions_by_user}}</div>
+            question{{profileData.user|count_questions_by_user|pluralize}}
+        </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                            <div class="grid--item">
+        <div class="d-flex ai-center jc-space-between mb8">
+            <div class="flex--item fs-title">
+                Communities
+            </div>
+
+        </div>
+        <div class="s-card bar-md">
+            <ul class="list-reset d-flex fd-column gs12 gsy">
+                        <li class="flex--item">
+                            <a class="d-flex gs4 gsx ai-center" href="#" title="Stack Overflow">
+                                <div class="favicon favicon-stackoverflow flex--item fl-shrink0 favicon" title="Stack Overflow"></div>
+                                <div class="flex--item fl-grow1 wmn0 pr4">
+                                    <div class="truncate">Stack Overflow - Clone</div>
+                                </div>
+                                <div class="flex--item fl-shrink0 ml-auto fc-light">
+                                    
+                                    {{profileData.user|calculate_reputation}}
+                                </div>
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+                </div>
+            </div>
+
+            <div class="flex--item fl-grow1">
+                <div class="d-grid g24">
+                    <div data-can-be="stats" data-is-here-when="sm md"></div>
+                        <div class="grid--item overflow-x-auto">
+                            <div class="fs-title mb8">About</div>
+                            <div class="js-expandable-overflow hmx3 overflow-hidden v-truncate-fade">
+                                <div class="s-prose fc-medium js-about-me-content">
+                                    <p>
+                                        {% if profileData.about_me == None %}
+                                            About me is Blank
+                                        {% else %}
+                                            {{profileData.about_me}}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex jc-center">
+                                <button class="s-btn s-btn__outlined s-btn__muted s-btn__xs v-hidden js-expandable-overflow-btn">
+                                    Read more
+                                </button>
+                            </div>
+                        </div>
+
+                    <div id="badges" class="grid--item">
+    <div class="d-flex ai-center jc-space-between mb8">
+        <div class="flex--item fs-title">
+            Badges
+        </div>
+            <a href="{% url 'profile:badgesActivity' profileData.user.id profileData.user.username %}" class="s-link s-link__muted flex--item">View all badges</a>
+    </div>
+        <div class="d-flex flex__fl-equal fw-wrap gs24">
+        <div class="flex--item s-card bar-md">
+            <div class="d-flex fd-column jc-space-between h100">
+                {% if goldBadges %}
+                    <div class="d-flex ai-center mb12">
+                        <div class="flex--item mr12">
+                            <i class="far fa-medal goldBadge fa-4x"></i>
+                        </div>
+                        <div class="flex--item fl1">
+                            <div class="fs-title fw-bold fc-black-800">
+                                {{goldBadges.count}}
+                            </div>
+                            <div class="fs-caption">
+                                gold badges
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex--item mt-auto">
+                        <ul class="list-reset d-grid g8">
+                            {% for badge in goldBadges %}
+                            <li class="d-flex ai-center">
+                                <a href="{% url 'profile:tagPage' profileData.user.id badge.id %}" title="gold badge: Earn at least 1000 total score for at least 200 non-community wiki answers in the django-views tag" class="badge-tag d-flex ai-center m0 mr4 lh-md fs-fine"><span class="badge1"></span>&nbsp;<div class="d-inline-block truncate wmx1">{{badge.tag_name}}</div></a>
+                                <div class="flex--item ml-auto fc-medium fs-fine ws-nowrap">{{badge.date}}</div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% else %}
+                    <div class="d-flex fd-column gsy gs8 my-auto">
+                        <div class="flex--item mx-auto">
+                            <i class="far fa-medal goldBadge fa-6x"></i>
+                        </div>
+                        <div class="flex--item ta-center fc-black-700">
+                            This user doesn&#x2019;t have any gold badges yet.
+                        </div>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+
+        <div class="flex--item s-card bar-md">
+            <div class="d-flex fd-column jc-space-between h100">
+                {% if silverBadges %}
+                    <div class="d-flex ai-center mb12">
+                        <div class="flex--item mr12">
+                            <!-- If badge is earned then decrease the size of Badge Icon -->
+                            <i class="far fa-medal silverBadge fa-4x"></i>
+                        </div>
+                        <div class="flex--item fl1">
+                            <div class="fs-title fw-bold fc-black-800">
+                                {{silverBadges.count}}
+                            </div>
+                            <div class="fs-caption">
+                                silver badge
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex--item mt-auto">
+                        <ul class="list-reset d-grid g8">
+                        {% for badge in silverBadges %}
+                            <li class="d-flex ai-center">
+                                <a href="{% url 'profile:tagPage' profileData.user.id badge.id %}" title="silver badge: Visit the site each day for 30 consecutive days. (Days are counted in UTC.)" class="badge d-flex ai-center m0 mr4 lh-md fs-fine"><span class="badge2"></span>&nbsp;<div class="d-inline-block truncate wmx1">{{badge.tag_name}}</div></a>
+                                <div class="flex--item ml-auto fc-medium fs-fine ws-nowrap">{{badge.date|date:"D d M Y"}}</div>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    {% else %}
+                    <div class="d-flex fd-column gsy gs8 my-auto">
+                        <div class="flex--item mx-auto">
+                            <i class="far fa-medal silverBadge fa-6x"></i>
+                        </div>
+                        <div class="flex--item ta-center fc-black-700">
+                            This user doesn&#x2019;t have any gold badges yet.
+                        </div>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+
+        <div class="flex--item s-card bar-md">
+            <div class="d-flex fd-column jc-space-between h100">
+                {% if bronzeBadges %}
+                    <div class="d-flex ai-center mb12">
+                        <div class="flex--item mr12">
+                            <i class="far fa-medal bronzeBadge fa-4x"></i>
+                        </div>
+                        <div class="flex--item fl1">
+                            <div class="fs-title fw-bold fc-black-800">
+                                {{bronzeBadges.count}}
+                            </div>
+                            <div class="fs-caption">
+                                bronze badges
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex--item mt-auto">
+                        <ul class="list-reset d-grid g8">
+                            {% for badge in bronzeBadges %}
+                            <li class="d-flex ai-center">
+                                <a href="{% url 'profile:tagPage' profileData.user.id badge.id %}" title="bronze badge: First bounty you manually award on your own question" class="badge d-flex ai-center m0 mr4 lh-md fs-fine"><span class="badge3"></span>&nbsp;<div class="d-inline-block truncate wmx1">{{badge.tag_name}}</div></a>
+                                <div class="flex--item ml-auto fc-medium fs-fine ws-nowrap">{{badge.date|date:"D d M Y"}}</div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+            </div>
+        </div>
+            {% else %}
+                    <div class="d-flex fd-column gsy gs8 my-auto">
+                        <div class="flex--item mx-auto">
+                            <i class="far fa-medal bronzeBadge fa-6x"></i>
+                        </div>
+                        <div class="flex--item ta-center fc-black-700">
+                            This user doesn&#x2019;t have any gold badges yet.
+                        </div>
+                    </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+{% if topTags %}              
+<div id="top-tags" class="top-tags grid--item">
+    <div class="d-flex ai-center jc-space-between mb8">
+        <div class="flex--item fs-title">
+            Top tags
+        </div>
+
+            <a href="{% url 'profile:tagsActivity' profileData.user.id profileData.user.username %}" class="s-link s-link__muted">
+                View all tags
+            </a>
+    </div>
+
+        <div class="s-card bar-md p0">
+            {% for topTag in topTags %}
+                <div class="p12 bb bc-black-075" title="Asked 51 non-wiki questions with a total score of 28. Gave 2 non-wiki answers with a total score of 0.">
+                    <div class="d-flex ai-center gs12 fw-wrap">
+                        <div class="flex--item ws-nowrap">
+                            <a href="{% url 'tagbadge:taggedItems' topTag.id profileData.user.id %}" class="s-tag" title="show questions tagged &#39;python&#39;" rel="tag">{{topTag}}</a>
+                        </div>
+                        <div class="flex--item ml-auto"> 
+                            <div class="d-flex gsx gs16">
+                                <div class="flex--item d-flex ai-center">
+                                    <div class="fs-body3 mr4"></div>
+                                    <div class="fc-light tt-lowercase">Score</div>
+                                </div>
+                                <div class="flex--item d-flex ai-center">
+                                    <div class="fs-body3 mr4"></div>
+                                    <div class="fc-light tt-lowercase">Posts</div>
+                                </div>
+                                <div class="flex--item d-flex ai-center">
+                                    <div class="fs-body3 mr4"></div>
+                                    <div class="fc-light tt-lowercase">Posts</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>
+</div>
+{% else %}
+
+<div id="top-tags" class="top-tags grid--item">
+    <div class="d-flex ai-center jc-space-between mb8">
+        <div class="flex--item fs-title">
+            Top tags
+        </div>
+
+            <a href="{% url 'profile:tagsActivity' profileData.user.id profileData.user.username %}" class="s-link s-link__muted">
+                View all tags
+            </a>
+    </div>
+
+        <div class="s-card bar-md p0">
+                <div class="p12 bb bc-black-075" title="Asked 51 non-wiki questions with a total score of 28. Gave 2 non-wiki answers with a total score of 0.">
+                    This user has not participated in any tags.
+                </div>
+        </div>
+</div>
+
+{% endif %}
+
+
+<div id="js-top-posts" class="grid--item">
+    <div class="d-flex ai-end jc-space-between fw-wrap">
+        <div class="flex--item mb8">
+            <div class="fs-title">Top posts</div>
+                <div class="fc-light s-anchors">
+                    View all <a href="{% url 'profile:questionsActivity' profileData.user.id profileData.user.username %}" >questions</a>, <a href="{% url 'profile:activitAnswers' profileData.user.id profileData.user.username %}"> and answers</a>
+                </div>
+        </div>
+        <div class="d-flex jc-end mb8">
+            <div class="tabs-Q s-btn-group js-post-filters">
+                <label class="s-btn s-btn__muted s-btn__outlined s-btn__xs First-Q tab-selected active" id="one-tab-Q" onclick="FirstTab_Q();" for="one-Q">All</label>
+                <label class="s-btn s-btn__muted s-btn__outlined s-btn__xs Second-Q tab-selected" id="two-tab-Q" onclick="SecondTab_Q();" for="two-Q">Questions</label>
+                <label class="s-btn s-btn__muted s-btn__outlined s-btn__xs Third-Q tab-selected" id="three-tab-Q" onclick="ThirdTab_Q();" for="three-Q">Answers</label>
+            </div>
+        </div>
+   </div>
+
+    <input class="radio-Q" id="one-Q" name="group-Q" type="radio" checked>
+    <input class="radio-Q" id="two-Q" name="group-Q" type="radio">
+    <input class="radio-Q" id="three-Q" name="group-Q" type="radio">
+
+        <div class="panels-Q">
+
+            <div class="panel-Q" id="one-panel-Q">
+                {% for post in results %}
+                <div class="s-card bar-md p0">
+                    <div class="p12 bb bc-black-075">
+                        <div class="d-flex gs12 gsx ai-center">
+                            <div class="flex--item fc-green-400 fl-shrink0">
+                                {% if post.post_owner %}
+                                <svg aria-hidden="true" class="svg-icon iconQuestion" width="18" height="18" viewBox="0 0 18 18">
+                                    <path d="m4 14-3 3V3c0-1.1.9-2 2-2h12c1.09 0 2 .91 2 2v9c0 1.09-.91 2-2 2H4Zm7.75-3.97c.72-.83.98-1.86.98-2.94 0-1.65-.7-3.22-2.3-3.83a4.41 4.41 0 00-3.02 0 3.8 3.8 0 00-2.32 3.83c0 1.29.35 2.29 1.03 3a3.8 3.8 0 002.85 1.07c.62 0 1.2-.11 1.71-.34.65.44 1 .68 1.06.7.23.13.46.23.7.3l.59-1.13a5.2 5.2 0 01-1.28-.66Zm-1.27-.9a5.4 5.4 0 00-1.5-.8l-.45.9c.33.12.66.29.98.5-.2.07-.42.11-.65.11-.61 0-1.12-.23-1.52-.68-.86-1-.86-3.12 0-4.11.8-.9 2.35-.9 3.15 0 .9 1.01.86 3.03-.01 4.08Z"/>
+                                </svg>
+                                {% else %}
+                                <svg aria-hidden="true" class="svg-icon iconAnswer" width="18" height="18" viewBox="0 0 18 18"><path d="M14 14H3c-1.09 0-2-.91-2-2V3c0-1.1.9-2 2-2h12c1.09 0 2 .91 2 2v14l-3-3Zm-1.02-3L9.82 3H8.14l-3.06 8h1.68l.65-1.79h3.15l.69 1.79h1.73Zm-2.93-3.12H7.9l1.06-2.92 1.09 2.92Z"></path></svg>
+                                {% endif %}
+                            </div>
+                            <div class="flex--item s-badge s-badge__votes {% if post.accepted %}s-badge__answered{% elif post.is_answer_accepted %}s-badge__answered{% endif %}" style="min-width: 38px;">{% if post.post_owner %}{{post.calculate_UpVote_DownVote}}{% else %}{{post.countAllTheVotes}}{% endif %}</div>
+                            <div class="flex--item fl-grow1 pr12">
+                                <a href="{% if post.post_owner %}{{post.get_absolute_url}}{% else %}{{post.questionans.get_absolute_url}}#{{post.id}}{% endif %}" class="question-hyperlink d-table tl-fixed w100 m0 ow-break-word">{% if post.post_owner %}{{post.title|truncatechars:50}}{% else %}{{post.body|truncatechars:50}}{% endif %}</a>
+                            </div>
+                            <div class="flex--item ml-auto fc-light ws-nowrap"><span title="2021-09-01 11:57:12Z" class="relativetime">{{post.date}}</span></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="panel-Q" id="two-panel-Q">
+                {% for question in questions %}
+                <div class="s-card bar-md p0">
+                    <div class="p12 bb bc-black-075">
+                        <div class="d-flex gs12 gsx ai-center">
+                            <div class="flex--item fc-green-400 fl-shrink0">
+                                <svg aria-hidden="true" class="svg-icon iconQuestion" width="18" height="18" viewBox="0 0 18 18">
+                                    <path d="m4 14-3 3V3c0-1.1.9-2 2-2h12c1.09 0 2 .91 2 2v9c0 1.09-.91 2-2 2H4Zm7.75-3.97c.72-.83.98-1.86.98-2.94 0-1.65-.7-3.22-2.3-3.83a4.41 4.41 0 00-3.02 0 3.8 3.8 0 00-2.32 3.83c0 1.29.35 2.29 1.03 3a3.8 3.8 0 002.85 1.07c.62 0 1.2-.11 1.71-.34.65.44 1 .68 1.06.7.23.13.46.23.7.3l.59-1.13a5.2 5.2 0 01-1.28-.66Zm-1.27-.9a5.4 5.4 0 00-1.5-.8l-.45.9c.33.12.66.29.98.5-.2.07-.42.11-.65.11-.61 0-1.12-.23-1.52-.68-.86-1-.86-3.12 0-4.11.8-.9 2.35-.9 3.15 0 .9 1.01.86 3.03-.01 4.08Z"/>
+                                </svg>
+                            </div>
+                            <div class="flex--item s-badge s-badge__votes {% if question.is_answer_accepted %}s-badge__answered{% endif %}" style="min-width: 38px;">{{question.calculate_UpVote_DownVote}}</div>
+                            <div class="flex--item fl-grow1 pr12">
+                                <a href="{{question.get_absolute_url}}" class="question-hyperlink d-table tl-fixed w100 m0 ow-break-word">{{question.title|truncatechars:50}}</a>
+                            </div>
+                            <div class="flex--item ml-auto fc-light ws-nowrap"><span title="2021-09-01 11:57:12Z" class="relativetime">{{question.date}}</span></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="panel-Q" id="three-panel-Q">
+                {% for answer in answers %}
+                <div class="s-card bar-md p0">
+                    <div class="p12 bb bc-black-075">
+                        <div class="d-flex gs12 gsx ai-center">
+                            <div class="flex--item fc-green-400 fl-shrink0">
+                            <svg aria-hidden="true" class="svg-icon iconAnswer" width="18" height="18" viewBox="0 0 18 18"><path d="M14 14H3c-1.09 0-2-.91-2-2V3c0-1.1.9-2 2-2h12c1.09 0 2 .91 2 2v14l-3-3Zm-1.02-3L9.82 3H8.14l-3.06 8h1.68l.65-1.79h3.15l.69 1.79h1.73Zm-2.93-3.12H7.9l1.06-2.92 1.09 2.92Z"></path></svg>
+                            </div>
+                            <div class="flex--item s-badge s-badge__votes {% if answer.accepted %}s-badge__answered{% endif %}" style="min-width: 38px;">{{answer.countAllTheVotes}}</div>
+                            <div class="flex--item fl-grow1 pr12">
+                                <a href="{{answer.questionans.get_absolute_url}}#{{answer.id}}" class="question-hyperlink d-table tl-fixed w100 m0 ow-break-word">{{answer.body|truncatechars:50}}</a>
+                            </div>
+                            <div class="flex--item ml-auto fc-light ws-nowrap"><span title="2021-09-01 11:57:12Z" class="relativetime">{{answer.date}}</span></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div></div>
+
+        </div>
+    </div>
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    
+                    <a href="#"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow - Clone</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="#">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+
+        
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+    </html>
+
+{% endblock content %}

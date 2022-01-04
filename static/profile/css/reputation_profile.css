@@ -1,0 +1,119 @@
+.reputation-increase {
+    float: left;
+    color: green;
+    font-size: 11px;
+    padding: 0.2em 0.5em 0.25em;
+    line-height: 1.3;
+    background-color: transparent;
+    margin-right: 5px;
+    border-radius: 2px;
+}
+
+
+
+.reputation-decrease {
+    float: left;
+    color: white;
+    font-size: 11px;
+    padding: 0.2em 0.5em 0.25em;
+    line-height: 1.3;
+    background-color: transparent;
+    margin-right: 5px;
+    border-radius: 2px;
+}
+
+    .collapsable-bar-content {
+        padding: 10px 20px;
+        display: none;
+        overflow: hidden;
+        background-color: #f1f1f1;
+    }
+
+
+
+    .collapsable-bar-content.active {
+        padding: 10px 20px;
+        display: block;
+        overflow: hidden;
+        background-color: #f1f1f1;
+    }
+
+
+    .collapsable-bar-content-2 {
+        padding: 10px 20px;
+        display: none;
+        overflow: hidden;
+        background-color: #f1f1f1;
+    }
+
+
+
+    .collapsable-bar-content-2.active {
+        padding: 10px 20px;
+        display: block;
+        overflow: hidden;
+        background-color: #f1f1f1;
+    }
+
+.error-handling-ajax {
+    padding: 10px;
+    color: white;
+    background-color: red;
+}
+
+
+.warpper-B{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+/*.tab{
+  cursor: pointer;
+  padding:10px 20px;
+  margin:0px 2px;
+  background:#000;
+  display:inline-block;
+  color:#fff;
+  border-radius:3px 3px 0px 0px;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+}*/
+.panels-B{
+  background:#fffffff6;
+  /*width:100%;*/
+  /*max-width:500px;*/
+  border-radius:3px;
+  overflow:hidden;
+}
+.panel-B{
+  display:none;
+  animation: fadein .5s;
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+.panel-title-B{
+  font-size:1.5em;
+  font-weight:bold
+}
+.radio-B{
+  display:none;
+}
+#one-B:checked ~ .panels-B #one-panel-B,
+#two-B:checked ~ .panels-B #two-panel-B,
+#three-B:checked ~ .panels-B #three-panel-B{
+  display:block
+}
+
+.tab-selected {
+    background-color: white;
+    /*color: white;*/
+}
+.tab-selected.active {
+    background-color: grey;
+    color: white;
+}

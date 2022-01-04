@@ -1,0 +1,82 @@
+{% extends 'profile/base.html' %}
+{% load qa_tags %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+
+<link href="{% static 'css/tools.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+
+<div class="heading"><h2>Answers with Extreme Votes</h2></div>
+
+{% if answers %}
+
+    {% for result in answers %}
+
+	<div class="question-summary narrow" id="question-summary-{{result.id}}">
+		<div class="w48">&nbsp;</div>
+		<div class="question-counts cp">
+			<div class="votes">
+				<div class="mini-counts {% if result.is_answer_accepted %}is_answer_accepted{% endif %}">{{result.countAllTheVotes}}</div>
+			</div>
+		<div class="views">
+			<div class="mini-counts">{{result.count_ViewsOf_Q}}</div>
+		</div>
+	</div>
+	<div class="summary">
+		<h3><a href="{{result.questionans.get_absolute_url}}#{{result.id}}" target="_blank" class="question-hyperlink">{{result.body|truncatechars:30}}</a></h3>
+		{% for tag in result.questionans.tags.all %}
+		<div class="tags t-python t-django t-django-models t-django-views t-django-queryset">
+			<a href="{% url 'tagbadge:taggedItemsFrom_All' tag.id %}" class="post-tag" title="show questions tagged &#39;{{tag}}&#39;" rel="tag">{{tag}}
+			</a> 
+        </div>
+        {% endfor %}
+        <div class="started">
+        		<span class="answered">
+        			<b>Answered by</b> - <a href="{{result.answer_owner.profile.get_absolute_url}}">{{result.answer_owner}}</a>
+        		</span>
+        			<div title="{{result.answer_owner}}">
+        				<img src="{% if result.answer_owner.profile.profile_photo %} {{result.answer_owner.profile.profile_photo.url}}{% endif %}" alt="" width="24" height="24" class="bar-sm">
+        			</div>
+                           <div class="-flair">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{result.answer_owner|calculate_reputation}}</span>
+                                {% if result.answer_owner|calculateGoldBadges %}
+                                <span title="{{result.answer_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{result.answer_owner|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{result.answer_owner|calculateGoldBadges}} gold badges</span>
+                                {% endif %}
+                                {% if result.answer_owner|calculatSilvereBadges %}
+
+                                <span title="{{result.answer_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{result.answer_owner|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{result.answer_owner|calculatSilvereBadges}} silver badges</span>
+                                {% endif %}
+                                {% if result.answer_owner|calculateBronzeBadges %}
+                                <span title="{{result.answer_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{result.answer_owner|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{result.answer_owner|calculateBronzeBadges}} bronze badges</span>
+                                {% endif %}
+                            </div>
+            <span class="reputation-score">
+            		Answered {{result.date}}
+            </span>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% else %}
+
+<b class="no-post">No Answers</b>
+
+{% endif %}
+
+
+{% endblock content %}

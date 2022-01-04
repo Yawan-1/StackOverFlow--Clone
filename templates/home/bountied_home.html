@@ -1,0 +1,289 @@
+{% extends 'profile/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load qa_tags %}
+
+{% block content %}
+
+<!DOCTYPE html>
+
+    <html class="html__responsive">
+
+    <head>
+      <title>Stack Overflow - Clone</title>
+      <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/stacks.css?v=15473555f232">
+      <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=de9fb8b74f61">
+    </head>
+
+
+    <body class="home-page unified-theme">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+
+    <div class="container">
+            
+
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+    <div class="left-sidebar--sticky-container js-sticky-leftnav">
+        <nav role="navigation">
+            <ol class="nav-links">
+        <li class="youarehere">
+            <a
+               href="/"
+               class="pl8 nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Home
+                        </div>
+                    </div>
+            </a>
+        </li>
+                <li>
+                    <ol class="nav-links">
+                            <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+
+        <li class="">
+            <a id="nav-questions" href="{% url 'qa:questions' %}" class="pl8 nav-links--link -link__with-icon">
+               <svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18">
+                <path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/>
+              </svg>
+               <span class="-link--channel-name">Questions</span>
+            </a>
+        </li>
+                        
+
+        <li class="">
+            <a id="nav-tags" href="{% url 'profile:tagsPage' %}" class="nav-links--link">
+              <div class="d-flex ai-center">
+                <div class="flex--item truncate">Tags</div>
+              </div>
+            </a>
+        </li>
+
+
+        <li class="">
+          <a id="nav-users" href="{% url 'profile:usersPage' %}" class="nav-links--link">
+            <div class="d-flex ai-center"><div class="flex--item truncate">Users</div></div>
+          </a>
+        </li>
+
+
+
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+</div>
+
+
+
+
+        <div id="content" class="snippet-hidden">
+
+            
+<div id="mainbar">
+    
+    
+
+            <div class="d-flex">
+                <h1 class="flex--item fl1 fs-headline1">Bountied Questions</h1>
+                <div class="ml12 aside-cta flex--item print:d-none">
+                  <a href="{% url 'qa:new_question' %}" class="ws-nowrap s-btn s-btn__primary">Ask Question</a>
+                </div>
+            </div>
+
+
+        <div class="d-flex ai-center mb16">
+            <div class="flex--item fl1 fs-body3"></div>
+            <div class="flex--item">
+                <div class=" d-flex s-btn-group js-filter-btn">
+                  <a class="youarehere  flex--item s-btn s-btn__muted s-btn__outlined" href="/" title="Questions that may be of interest to you based on your history and tag preference">Interesting</a>
+
+
+                  <a class="flex--item is-selected s-btn s-btn__muted s-btn__outlined" href="{% url 'profile:bountied_home' %}" title="Questions with an active bounty" data-value="bounties"><span class="bounty-indicator-tab">{{questions.all.count}}</span>Bountied</a>
+
+
+                  <a class="flex--item s-btn s-btn__muted s-btn__outlined" href="{% url 'profile:hot_q_day_home' %}" title="Questions with the most views, answers, and votes over the last few days">Hot</a>
+
+
+                  <a class="flex--item s-btn s-btn__muted s-btn__outlined" href="{% url 'profile:hot_q_week_home' %}" title="Questions with the most views, answers, and votes this week">Week</a>
+
+
+                  <a class="flex--item s-btn s-btn__muted s-btn__outlined" href="{% url 'profile:hot_q_month_home' %}" title="Questions with the most views, answers, and votes this month">Month</a>
+                </div>
+            </div>
+        </div>
+
+
+<div id="qlist-wrapper" class="flush-left">
+    {% for question in questions %}
+    <div id="question-mini-list">
+        <div>
+          <div class="question-summary narrow" id="question-summary-{{question.id}}">
+              <div onclick="window.location.href='{{question.get_absolute_url}}'" class="cp">
+                <div class="votes {% if question.is_answer_accepted %}answered-accepted{% endif %}">
+                  <div class="mini-counts"><span title="{{question.calculate_UpVote_DownVote}} votes">{{question.calculate_UpVote_DownVote}}</span></div>
+                  <div>vote{{question.calculate_UpVote_DownVote|pluralize}}</div>
+                </div>
+
+                <div class="status unanswered">
+                  <div class="mini-counts"><span title="{{question.count_answers}} answers">{{question.count_answers}}</span></div>
+                  <div>answer{{question.count_answers|pluralize}}</div>
+                </div>
+
+                <div class="views">
+                  <div class="mini-counts"><span title="{{question.calculate_viewers}} views">{{question.calculate_viewers}}</span></div>
+                  <div>view{{question.calculate_viewers|pluralize}}</div>
+                </div>
+              </div>
+
+      <div class="summary">
+        <h3><a href="{{question.get_absolute_url}}" class="question-hyperlink">{{question.title}}</a></h3>
+        <div class="tags d-flex gs4 fw-wrap mt2 float-none lh-unset t-node&#xFB;js t-docker t-environment-variables">
+            
+            {% for tag in question.tags.all %}
+            <a href="{% url 'tagbadge:taggedItemsFrom_All' tag.id %}" class="post-tag flex--item" title="show questions tagged &#39;node.js&#39;" rel="tag">{{tag}}</a>
+            {% endfor %}
+            
+            <div class="flex--item started ml-auto mt0 as-center">
+                <a href="/questions/70486092/cant-set-ubuntu-docker-environment-variables" class="started-link">asked
+                  <span title="2021-12-26 11:29:38Z" class="relativetime">{{question.date|naturaltime}}</span>
+                </a>
+                <a href="#">{{question.post_owner}}</a> <span class="reputation-score" title="reputation score " dir="ltr">{{question.post_owner|calculate_reputation}}</span>
+            </div>
+        </div>
+    </div>
+    
+
+
+</div>
+
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+    <br class="cbt"/>
+    <h2 class="bottom-notice" data-loc="2">Looking for more? Browse the <a href="{% url 'qa:questions' %}">complete list of questions</a>, or <a href="{% url 'profile:tagsPage' %}">popular tags</a>. Help us answer <a href="/unanswered">unanswered questions</a>.</h2>
+
+</div>
+    <div id="sidebar">
+
+<div class="s-sidebarwidget s-sidebarwidget__yellow s-anchors s-anchors__grayscale mb16">
+    <ul class="d-block p0 m0">
+                    <div class="s-sidebarwidget--header s-sidebarwidget__small-bold-text fc-light d:fc-black-900 bb bbw1">
+                        The Overflow Blog
+                    </div>
+        <li class="s-sidebarwidget--item d-flex px16">
+            <div class="flex--item1 fl-shrink0">
+<svg aria-hidden="true" class="va-text-top svg-icon iconPencilSm" width="14" height="14" viewBox="0 0 14 14"><path d="m11.1 1.71 1.13 1.12c.2.2.2.51 0 .71L11.1 4.7 9.21 2.86l1.17-1.15c.2-.2.51-.2.71 0ZM2 10.12l6.37-6.43 1.88 1.88L3.88 12H2v-1.88Z"/></svg>            </div>
+            <div class="flex--item wmn0 ow-break-word">
+                <a href="#" data-ga="[&quot;community bulletin board&quot;,&quot;The Overflow Blog&quot;,&quot;https://stackoverflow.blog/2021/12/23/best-practices-for-writing-code-comments/&quot;,null,null]">Best practices for writing code comments</a>
+            </div>
+        </li>
+                    <div class="s-sidebarwidget--header s-sidebarwidget__small-bold-text fc-light d:fc-black-900 bb bbw1">
+                        Featured on Meta
+                    </div>
+        <li class="s-sidebarwidget--item d-flex px16">
+            <div class="flex--item1 fl-shrink0">
+<div class="favicon favicon-stackexchangemeta" title="Meta Stack Exchange"></div>            </div>
+            <div class="flex--item wmn0 ow-break-word">
+                <a href="#">Providing a JavaScript API for userscripts</a>
+            </div>
+        </li>
+                    <div class="s-sidebarwidget--header s-sidebarwidget__small-bold-text fc-light d:fc-black-900 bb bbw1">
+                        Hot Meta Posts
+                    </div>
+        <li class="s-sidebarwidget--item d-flex px16">
+            <div class="flex--item1 fl-shrink0">
+                        <span class="fc-black-500" title="Vote score (upvotes - downvotes)">18</span>
+            </div>
+            <div class="flex--item wmn0 ow-break-word">
+                <a href="#">How much effort looking for plagiarism is expected of a reviewer of a tag...</a>
+            </div>
+        </li>
+    </ul>
+</div>
+
+
+    </div>
+
+        </div>
+    </div>
+
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    
+                    <a href="#"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="https://stackoverflow.com/help/licensing">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+    </html>
+
+{% endblock content %}

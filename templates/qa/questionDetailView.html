@@ -1,0 +1,2254 @@
+{% extends 'profile/base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load qa_tags %}
+{% load martortags %}
+
+{% block content %}
+
+<!DOCTYPE html>
+
+    <html itemscope itemtype="https://schema.org/QAPage" class="html__responsive ">
+
+    <head>
+        <title>{{data.title}}- Stack Overflow</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script async src="https://cdn.sstatic.net/Js/third-party/stacks/stacks.min.js?v=587378ef592b"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/stacks.css?v=1600cb081e8c">
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=8758134482da">
+        <link href="{% static 'qa/css/question-detail.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'MarkDown-Editor/plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'MarkDown-Editor/martor/css/martor.semantic.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+    <link href="{% static 'notification/css/notification.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+
+<link href="{% static 'css/tailwind.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+    </head>
+
+
+    <body class="question-page unified-theme">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+
+
+
+<div class="container">
+    <div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+        <div class="left-sidebar--sticky-container js-sticky-leftnav">
+            <nav role="navigation">
+                <ol class="nav-links">
+                    <li class="">
+                        <a href="/" class="pl8 nav-links--link">
+                            <div class="d-flex ai-center">
+                                <div class="flex--item truncate">
+                                    Home
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <ol class="nav-links">
+                            <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+
+                            <li class="youarehere">
+                                <a id="nav-questions" href="{% url 'qa:questions' %}" class="pl8 nav-links--link -link__with-icon">
+                                    <svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18">
+                                        <path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/>
+                                    </svg>
+                                    <span class="-link--channel-name">Questions</span>
+                                </a>
+                            </li>
+
+                            <li class="">
+                                <a id="nav-tags" href="{% url 'profile:tagsPage' %}" class="nav-links--link">
+                                    <div class="d-flex ai-center">
+                                        <div class="flex--item truncate">Tags</div>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li class="">
+                                <a id="nav-users" href="{% url 'profile:usersPage' %}" class=" nav-links--link">
+                                    <div class="d-flex ai-center">
+                                    <div class="flex--item truncate">Users</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+
+
+    <div id="content" class="snippet-hidden">
+        <div itemprop="mainEntity" itemscope itemtype="https://schema.org/Question">
+        <link itemprop="image" href="#">
+
+        <div class="inner-content clearfix">
+
+            <div id="question-header" class="d-flex sm:fd-column">
+                <h1 itemprop="name" class="fs-headline1 ow-break-word mb8 flex--item fl1">
+                    <a href="#" class="question-hyperlink">{{data.title}}</a></h1>
+                <div class="ml12 aside-cta flex--item print:d-none sm:ml0">
+                    <a href="{% url 'qa:new_question' %}" class="ws-nowrap s-btn s-btn__primary">Ask Question</a>
+                </div>
+            </div>
+
+            <div class="d-flex fw-wrap pb8 mb16 bb bc-black-075">
+                <div class="flex--item ws-nowrap mr16 mb8" title="2021-12-08 09:31:57Z">
+                    <span class="fc-light mr2">Asked</span>
+                    <time itemprop="dateCreated" datetime="2021-12-08T09:31:57">{{data.date|naturaltime}}</time>
+                </div>
+                <div class="flex--item ws-nowrap mr16 mb8">
+                    <span class="fc-light mr2">Active</span>
+                    <a href="?lastactivity" class="s-link s-link__inherit" title="2021-12-08 09:53:01Z">{{data.q_edited_time|naturaltime}}</a>
+                </div>
+                <div class="flex--item ws-nowrap mb8" title="Viewed 11 times">
+                    <span class="fc-light mr2">Viewed</span>
+                    {{data.viewers.all.count}} times
+                </div>
+            </div>
+
+
+
+
+
+        <div id="mainbar" role="main" aria-label="question and answers">
+            <div class="question {% if data.is_deleted %}deleted-answer{% endif %}" data-questionid="{{data.id}}" data-position-on-page="0" data-score="1"  id="question">
+
+    <div class="post-layout">
+        <div class="votecell post-layout--left">
+            <div class="js-voting-container d-flex jc-center fd-column ai-stretch gs4 fc-black-200" data-post-id="{{data.id}}">
+                <form method="GET" class="likeForm d-inline" action="{% url 'qa:question_upvote_downvote' data.id %}" data-pk="{{ data.id }}">
+                    <div id="id_likes{{data.id}}">
+                        {% if request.user == likepost.upvote_by_q %}
+                        <button name='submit' type='submit' value="like"><i  class="fas active fa-sort-up fa-4x" ></i></button>
+                        {% else %}
+                        <button name='submit' type='submit' value="like"><i  class="fas inactive fa-sort-up fa-4x"></i></button>
+                        {% endif %}
+                        {% if request.user.profile.established_user_Priv %}
+                        <div class="flex--item d-flex fd-column ai-center color-black fs-title">
+                            <div class="showVotesDiv" data-load-url="{% url 'qa:load_question_upvotes_downvotes' data.id %}">
+                                <div class="hideThisDiv">{{data.calculate_UpVote_DownVote}}</div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="flex--item d-flex fd-column ai-center color-black fs-title">
+                                {{data.calculate_UpVote_DownVote}}
+                        </div>
+                        {% endif %}
+                    </div>
+                </form>
+
+                <div class="result-div"></div>
+
+                <form action="{% url 'qa:question_upvote_downvote' data.id %}" method="GET" class="d-inline dislikeForm" data-pk="{{ data.id }}">
+                    <div id="id_dislikes{{data.id}}">
+                        {% if request.user == likeDownpost.downvote_by_q %}
+                        <button name='submit' type='submit' value="dislike"><i class="fas voteDownActive fa-sort-down fa-4x"></i></button> 
+                        {% else %}
+                        <button name='submit' type='submit' value="dislike"><i class="fas voteDownInActive fa-sort-down fa-4x"></i></button> 
+                        {% endif %}
+                    </div>
+                </form>
+
+                <form method="GET" class="bookmarkQuestionForm s-btn s-btn__unset c-pointer py4" action="{% url 'qa:bookmarkQuestion' data.id %}" data-pk="{{ data.id }}">
+                    <span id="id_bookMark{{data.id}}">
+                            {% if request.user == bookmarked_by_user.bookmarked_by %}
+                            <button name='submit' type='submit' value="bookIt" data-controller="s-tooltip" data-s-tooltip-placement="right" title="Remove this question from bookmark."><i  class="fas fa-bookmark fa-1x" ></i></button>
+                            {% else %}
+                            <button name='submit' type='submit' value="bookIt" data-controller="s-tooltip" data-s-tooltip-placement="right" title="Bookmark this question."><i  class="far fa-bookmark fa-1x"></i></button>
+                            {% endif %}
+                        </span>
+                </form>
+
+                <a class="js-post-issue flex--item s-btn s-btn__unset c-pointer py6 mx-auto" href="{% url 'qa:questionTimeline' data.id %}" data-shortcut="T" data-ks-title="timeline" data-controller="s-tooltip" data-s-tooltip-placement="right" title="Show activity on this post." aria-label="Timeline">
+                    <svg aria-hidden="true" class="mln2 mr0 svg-icon iconHistory" width="19" height="18" viewBox="0 0 19 18">
+                        <path d="M3 9a8 8 0 113.73 6.77L8.2 14.3A6 6 0 105 9l3.01-.01-4 4-4-4h3L3 9Zm7-4h1.01L11 9.36l3.22 2.1-.6.93L10 10V5Z"/>
+                    </svg>
+                    <br>
+                    <a href="{% url 'qa:getQuestionEditHistory' data.id %}"><i class=" flex--item c-pointer py6 mx-auto fas fa-file-medical-alt fa-2x"></i></a>
+                </a>
+            </div>
+        </div>
+
+
+    <div class="postcell post-layout--right">
+    
+        {% if data.is_deleted %}
+        <aside class="s-notice s-notice__info post-notice js-post-notice mb16" role="status">
+                <div class="d-flex fd-column fw-nowrap">
+                    <div class="d-flex fw-nowrap">
+                            <div class="flex--item mr8">
+                                <svg aria-hidden="true" class="svg-icon iconEyeOff" width="18" height="18" viewBox="0 0 18 18"><path d="m5.02 9.44-2.22 2.2C1.63 10.25 1 9 1 9s3-6 8.06-6c.75 0 1.46.14 2.12.38L9.5 5.03a4.01 4.01 0 00-4.48 4.41Zm2.03 3.05A3.99 3.99 0 0013 9c0-.73-.2-1.41-.54-2l-1.51 1.54a2 2 0 01-2.38 2.42l-1.52 1.53Zm7.11-7.22A14.8 14.8 0 0117 9s-3 6-7.94 6c-1.31 0-2.48-.4-3.5-1l-1.97 2L2 14.41 14.59 2 16 3.41l-1.84 1.86Z"></path></svg>
+                            </div>
+                        <div class="flex--item wmn0 fl1 lh-lg">
+                            <div class="flex--item fl1 lh-lg">
+                                <b>This post is hidden</b>. {{date.post_owner}} deleted this post <span dir="ltr" title="{{answer.deleted_time|naturaltime}}"><span class="relativetime">{{data.deleted_time|naturaltime}}</span></span>.
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </aside>
+        {% endif %}
+
+        {% if data.is_bountied %}
+        <aside class="s-notice s-notice__info post-notice js-post-notice mb16 js-bounty-notification" role="status">
+            <div class="d-flex fd-column fw-nowrap">
+                <div class="d-flex fw-nowrap">
+                        <div class="flex--item mr8">
+                            <svg aria-hidden="true" class="svg-icon iconClock" width="18" height="18" viewBox="0 0 18 18"><path d="M9 17c-4.36 0-8-3.64-8-8 0-4.36 3.64-8 8-8 4.36 0 8 3.64 8 8 0 4.36-3.64 8-8 8Zm0-2c3.27 0 6-2.73 6-6s-2.73-6-6-6-6 2.73-6 6 2.73 6 6 6ZM8 5h1.01L9 9.36l3.22 2.1-.6.93L8 10V5Z"></path></svg>
+                        </div>
+                    <div class="flex--item wmn0 fl1 lh-lg">
+                        <div class="flex--item fl1 lh-lg">
+                            <b>The bounty expires <span title="2022-01-02 11:53:53Z">in {{is_bountied.date|calculate_remaining_time}}</span></b>. Answers to this question are eligible for a <span class="s-badge__bounty d-inline px4 py2 ba bc-transparent bar-sm fs-caption va-middle">+{{is_bountied.bounty_value}}</span> reputation bounty.
+                            <a href="/users/1655410/user1655410">{{is_bountied.by_user}}</a> applied because {{is_bountied.why_bounting}}</b>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        {% endif %}
+
+
+    
+        {% if data.is_closed %}
+        <aside class="s-notice s-notice__info post-notice js-post-notice mb16" role="status">
+                <div class="d-flex fd-column fw-nowrap">
+                    <div class="d-flex fw-nowrap">
+                            <div class="flex--item mr8">
+                                <svg aria-hidden="true" class="svg-icon iconEyeOff" width="18" height="18" viewBox="0 0 18 18"><path d="m5.02 9.44-2.22 2.2C1.63 10.25 1 9 1 9s3-6 8.06-6c.75 0 1.46.14 2.12.38L9.5 5.03a4.01 4.01 0 00-4.48 4.41Zm2.03 3.05A3.99 3.99 0 0013 9c0-.73-.2-1.41-.54-2l-1.51 1.54a2 2 0 01-2.38 2.42l-1.52 1.53Zm7.11-7.22A14.8 14.8 0 0117 9s-3 6-7.94 6c-1.31 0-2.48-.4-3.5-1l-1.97 2L2 14.41 14.59 2 16 3.41l-1.84 1.86Z"></path></svg>
+                            </div>
+                        <div class="flex--item wmn0 fl1 lh-lg">
+                            <div class="flex--item fl1 lh-lg">
+                                <b>This post is closed because it is </b>. {{getCreateClose_object.why_closing}} {% if getCreateClose_object.why_closing == "DUPLICATE" %}duplicate of <a href="{{getCreateClose_object.duplicate_of}}">{{getCreateClose_object.duplicate_of}}</a>{% endif %} <span dir="ltr" title="{{answer.deleted_time|naturaltime}}"><span class="relativetime">
+                                <br>Closed {{getCreateClose_object.date|naturaltime}}</span></span>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </aside>
+        {% endif %}
+
+
+
+
+
+        <div class="s-prose js-post-body" itemprop="text">      
+            <p>{{data.body}}</p>
+        </div>
+
+        <div class="mt24 mb12">
+            <div class="post-taglist d-flex gs4 gsy fd-column">
+                <div class="d-flex ps-relative">
+                    {% for tag in data.tags.all %}
+                    <a href="{% url 'tagbadge:taggedItemsFrom_All' tag.id %}" class="post-tag" title="show questions tagged &#39;{{tag}}&#39;" rel="tag">{{tag}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="mb0 ">
+            <div class="mt16 d-flex gs8 gsy fw-wrap jc-end ai-start pt4 mb16">
+                <div class="flex--item mr16 fl1 w96">
+                <div class="js-post-menu pt2" data-post-id="{{data.id}}">
+                    <div class="d-flex gs8 s-anchors s-anchors__muted fw-wrap">
+
+                        <div class="flex--item">
+                            <a href="#" class="js-share-link" title="Short permalink to this question">Share</a>
+                        </div>
+
+                        {% if canMakeAnotherEdit == True %}
+
+                            <div class="flex--item">
+                                <a href="{% url 'qa:edit_question' data.id %}" class="js-suggest-edit-post" title="Revise and improve this post">Edit</a>
+                            </div>
+
+                        {% else %}
+                        <script>
+                            $(function () {
+                          $('[data-toggle="popover"]').popover()
+                        })
+                        </script>
+
+
+                            <div class="flex--item">
+                                <a href="#" data-toggle="popover" title="Previous Edit Waiting for Review" data-content="Previous Edit is Waiting for Review. Come Back Later" onclick="return false;">Edit Question</a>
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if request.user.profile.accessTo_moderatorTools %}
+                        <div class="flex--item">
+                            <a class="js-suggest-edit-post" onclick="openTagEdit();">Edit-Tag</a>
+                        </div>
+                        {% endif %}
+
+                        {% if request.user.profile.protect_questions %}
+                        {% if data.is_protected == False %}
+                        <div class="flex--item">
+                            <button data-modal-trigger aria-controls="modal-name" aria-expanded="false" type="button">Protect Question</button>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+
+                        {% if request.user.profile.set_bounties %}
+                        {% if data.is_bountied == False %}
+                        <div class="flex--item">
+                            <a id="bounty-model-open-button" title="Offer Some of Reputation">Offer Bounty</a>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+
+                        {% if request.user.profile.flag_posts %}
+                        <div class="flex--item">
+                            <a data-bs-toggle="modal" title="Flag this post for serious problems or moderator attention" href="#myModal" class="s-flag-post-link s-btn s-btn__link">Flag</a>
+                        </div>
+                        {% endif %}
+
+                        {% if request.user.profile.cast_close_AND_Reopen_votes %}
+                            {% if data.is_closed == False %}
+                                <div class="flex--item">
+                                    <button id="questionCloseButton" title="Offer Some of Reputation">{% if showClose_Votes %}<em>({{getHow_many_vote_on_close}})</em>{% endif %} Close Question</button>
+                                </div>
+                            {% else %}
+                                <div class="flex--item">
+                                    <button id="reOpenModelButton" title="Offer Some of Reputation">ReOpen</button>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if request.user == data.post_owner %}
+                        {% if data.is_deleted %}
+                        <div class="flex--item">
+                            <a href="{% url 'qa:undeleteQuestion' data.id %}">Undelete</a>
+                        </div>
+                        {% else %}
+                        <div class="flex--item">
+                            <a onclick="return confirm('You really want to delete this Question - {{data.title}}');" href="{% url 'qa:deleteQuestion' data.id %}">Delete</a>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+
+                        <div class="inline-tag-editing" id="tag-edit-id">
+                            <form method="post" enctype="multipart/form-data" id="inlne-tag-edit" action="{% url 'qa:InlineTagEditingForm' data.id %}">
+                            {% csrf_token %}
+                                <input type="text" name="tags" value="{% for tag in data.tags.all %}{{ tag }},{% endfor %}" required="" id="id_tags">
+                                <button type="submit">Save Changes</button>
+                        </form>
+                        <div class="successMessage-inline-tag-edit"></div>
+                        </div>
+                    </div>
+                    <div class="js-menu-popup-container"></div>
+                </div>
+                </div>
+
+            
+                <div class="post-signature owner flex--item">
+                    <div class="user-info ">
+                        <div class="user-action-time">asked <span title="2021-12-08 09:31:57Z" class="relativetime">{{data.date|naturaltime}}</span></div>
+
+                        <div class="user-gravatar32">
+                            <a href="{% url 'profile:activityPageTabProfile' data.post_owner.id data.post_owner.username %}">
+                                <div class="gravatar-wrapper-32">
+                                    <img src="{% if data.post_owner.profile.profile_photo %}{{data.post_owner.profile.profile_photo.url}}{% endif %}" alt="" width="32" height="32" class="bar-sm">
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="user-details" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                            <a href="{% url 'profile:activityPageTabProfile' data.post_owner.id data.post_owner.username %}">{{data.post_owner}}</a><span class="d-none" itemprop="name">{{data.post_owner}}</span>
+
+                            <div class="-flair">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{data.post_owner|calculate_reputation}}</span>
+                                <span title="{{data.post_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{data.post_owner|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.post_owner|calculateGoldBadges}} gold badges</span>
+
+                                <span title="{{data.post_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{data.post_owner|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.post_owner|calculatSilvereBadges}} silver badges</span>
+
+                                <span title="{{data.post_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{data.post_owner|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.post_owner|calculateBronzeBadges}} bronze badges</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if show_new_contributer_message %}
+                    <div class="js-new-contributor-indicator ps-relative">
+
+                        <div class="new-contributor-indicator fc-medium py6 px8 bbr-sm">
+                            <span class="js-new-contributor-label">
+                                <svg aria-hidden="true" class="svg-icon iconWave" width="18" height="18" viewBox="0 0 18 18">
+                                    <path d="M10.7 17c-2.3 0-3.9-2.05-5.07-3.54l-.49-.6c-.67-.8-1.59-1.63-2.4-2.36A10.91 10.91 0 011.1 8.87a.79.79 0 01-.09-.56c.04-.19.14-.34.27-.4.14-.07.29-.1.45-.1.35 0 .67.18.87.34l3.5 2.75c.04.03.1.03.13 0a.09.09 0 00.02-.13l-.02-.02c-.57-.8-3.42-4.77-3.71-5.15-.21-.27-.3-.58-.24-.84.05-.2.2-.37.4-.48.18-.09.35-.13.52-.13.44 0 .76.28.96.51l3.6 4.42c.04.04.07.06.14.02.05-.02.06-.07.03-.12L4.41 2.96a.94.94 0 01-.1-.73.92.92 0 01.47-.57 1.06 1.06 0 011.4.39l3.8 6.14c.03.04.07.07.14.04.04-.03.06-.07.04-.13A153.8 153.8 0 008.1 2.54c-.31-.68-.2-1.14.36-1.42.52-.27 1.14-.07 1.47.48l3.69 8.3c.02.04.05.05.1.06a.1.1 0 00.09-.07l.66-2.28c.1-.3.31-.56.62-.72.3-.15.65-.18.98-.1.7.2 1.09.87.89 1.52-.1.37-.46 1.73-.99 3.43l-.1.33c-.58 1.86-1.03 3.33-3.11 4.4-.7.35-1.38.53-2.05.53Z" fill="#FFC166"/>
+                                    <path d="M14 .37a.5.5 0 00-.88.45l1.96 3.9a.5.5 0 00.9-.45L14 .37Zm-1.17 2.17a.5.5 0 00-.91.42l.84 1.87a.5.5 0 10.91-.41l-.84-1.88Zm-10.6 9.74a.5.5 0 01.7-.02l1.7 1.6a.5.5 0 01-.7.72l-1.68-1.6a.5.5 0 01-.02-.7Zm-1.39.98a.5.5 0 10-.68.73l3.03 2.84a.5.5 0 00.68-.73L.84 13.26Z" opacity=".4"/>
+                                </svg>
+                                New contributor
+                            </span>
+                        </div>
+
+                        <div class="js-new-contributor-popover s-popover fs-caption">
+                            <div class="s-popover--arrow s-popover--arrow__tc"></div>
+                            <a href="">{{data.post_owner}}</a> is a new contributor <a href="/conduct">Code of Conduct</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>    
+    </div>
+
+
+    <span class="d-none" itemprop="commentCount">1</span>
+
+
+
+
+    <div class="post-layout--right js-post-comments-component">
+        <div id="comments-{{data.id}}" class="comments js-comments-container bt bc-black-075 mt12 " data-post-id="{{data.id}}" data-min-length="15">
+        <ul class="comments-list js-comments-list">
+            {% for comment in getAllTheComments %}
+            <li id="comment-{{comment.id}}" class="comment js-comment " data-comment-id="{{comment.id}}" data-comment-owner-id="{{comment.commented_by.id}}" data-comment-score="0">
+                <div class="js-comment-actions comment-actions">
+                    <div class="comment-score js-comment-edit-hide"></div>
+
+                        <form method="GET" class="commentVoteForm" action="{% url 'qa:upvote_comment' comment.id %}" data-pk="{{ comment.id }}">
+                            <span id="id_commentVote{{comment.id}}">
+                                <div class="move-to-left">{{comment.count_upvote}}</div>
+                                    {% if request.user in comment.com_upvote.all %}
+                                    <button name='submit' type='submit' value="upVoteCommentIt"><i class="fas upvote-comment-active fa-sort-up fa-2x"></i></button>
+                                    {% else %}
+                                    <button name='submit' type='submit' value="upVoteCommentIt"><i class="fas upvote-comment-inactive fa-sort-up fa-2x"></i></button>
+                                    {% endif %}
+                                </span>
+                        </form>
+
+                        <div class="comment-flagging js-comment-edit-hide">
+                            <button class="js-comment-flag s-btn s-btn__unset bg-transparent c-pointer fc-black-300 o40 h:fc-red-500 h:o100"
+                                    aria-label="Flag Comment"
+                                    aria-pressed="false"
+                                    title="Flag this comment for serious problems or moderator attention">
+                                <svg aria-hidden="true" class="svg-icon iconFlag" onclick="openCommentModel({{forloop.counter}})" width="18" height="18" viewBox="0 0 18 18">
+                                    <path d="M3 2v14h2v-6h3.6l.4 1h6V3H9.5L9 2H3Z"/>
+                                </svg>
+                            </button>
+
+                            <div id="FlagCommentModel-{{forloop.counter}}" class="flag-comment-model">
+                                <div class="modal-content-space">
+                                    <div class="modal-header">
+                                        <span id="closeId-{{forloop.counter}}" >&times;</span>
+                                    </div>
+                                    <div class="modal-flagQuestion">
+                                        <div class="container-fluid">
+                                            <form method="post" enctype="multipart/form-data" action="{% url 'qa:flagComment' commentq_id=comment.pk %}">
+                                                {% csrf_token %} 
+                                                    {{FlagCommentForm}}
+                                                    <input type="submit">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="comment-text  js-comment-text-and-form">
+                    <div class="comment-body js-comment-edit-hide">
+                        <span class="comment-copy">{{comment.comment}}</span>
+                        <div class="d-inline-flex ai-center">&ndash;&nbsp;
+                            <a href="{% url 'profile:activityPageTabProfile' data.post_owner.id data.post_owner.username %}" title="{{comment.commented_by|calculate_reputation}} reputation" class="comment-user">{{comment.commented_by}}</a>
+                        </div>
+                        <span class="comment-date" dir="ltr">
+                            <span title="2021-12-08 10:40:00Z, License: CC BY-SA 4.0" class="relativetime-clean">{{comment.date|naturaltime}}</span>
+                        </span>
+                        <span title="this comment was edited 2 times">
+                            <svg aria-hidden="true" class="va-text-bottom o50 svg-icon iconPencilSm" width="14" height="14" viewBox="0 0 14 14">
+                                <path d="m11.1 1.71 1.13 1.12c.2.2.2.51 0 .71L11.1 4.7 9.21 2.86l1.17-1.15c.2-.2.51-.2.71 0ZM2 10.12l6.37-6.43 1.88 1.88L3.88 12H2v-1.88Z"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+    <div class="comment-wrapper-{{data.id}}"></div>
+{% if request.user.is_authenticated %}
+
+    <button onclick="myFunction()"><a href="" class="showForm">Add Comment</a></button>
+{% endif %}
+    <div id="myDIV">
+
+        <div class="card my-3">
+            <h6 class="card-header">Add Comment</h6>
+            <div class="card-body">
+                <textarea class="form-control comment-text-{{data.id}}"></textarea>
+                <div class="contain"></div>
+                <button type="button" data-data="{{data.id}}" class="btn btn-dark my-3 save-comment">Submit</button>
+            </div>
+        </div>
+
+    </div>
+
+
+
+        <script>
+        function myFunction() {
+          var x = document.getElementById("myDIV");
+          if (x.style.display == "block") {
+            x.style.display = "none";
+          }else {
+            x.style.display = "block";
+          }
+        }
+        </script>
+
+
+    </div>
+  
+    </div>
+</div>
+
+
+<div class="js-zone-container zone-container-responsive">
+    <div id="dfp-isb" class="everyonelovesstackoverflow everyoneloves__inline-sidebar mx-auto"></div>
+    <div class="js-report-ad-button-container mx-auto" style="width: 300px"></div>
+</div>
+
+        <div id="answers">
+
+            <a name="tab-top"></a>
+                <div id="answers-header">
+                    <div class="answers-subheader d-flex ai-center mb8">
+                        <div class="flex--item fl1">
+                            <h2 class="mb0" data-answercount="1">
+                                {{data.answer_set.all.count}} Answer{{data.answer_set.all|pluralize}}
+                                <span style="display:none;" itemprop="answerCount">1</span>
+                            </h2>
+                        </div>
+                        <div class="flex--item">
+                            <div class=" d-flex s-btn-group js-filter-btn">
+                                <a class="flex--item s-btn s-btn__muted s-btn__outlined" href="/questions/70272684/etl-tool-snowflake?answertab=active#tab-top" data-nav-xhref="" title="Answers with the latest activity first" data-value="active" data-shortcut="A">Active</a>
+                                <a class="flex--item s-btn s-btn__muted s-btn__outlined" href="/questions/70272684/etl-tool-snowflake?answertab=oldest#tab-top" data-nav-xhref="" title="Answers in the order they were provided" data-value="oldest" data-shortcut="O">Oldest</a>
+                                <a class="youarehere is-selected flex--item s-btn s-btn__muted s-btn__outlined" href="/questions/70272684/etl-tool-snowflake?answertab=votes#tab-top" data-nav-xhref="" title="Answers with the highest score first" data-value="votes" data-shortcut="V">Votes</a>
+                            </div>
+                        </div>
+                    </div>            
+                </div>
+
+
+{% for answer in answers %}
+
+
+
+<a name="{{answer.id}}"></a>
+<div id="answer-{{answer.id}}" class="answer js-answer {% if answer.is_deleted %}deleted-answer{% endif %}" data-answerid="{{answer.id}}">
+
+
+
+    <div class="post-layout">
+        <div class="votecell post-layout--left">
+            <div class="js-voting-container d-flex jc-center fd-column ai-stretch gs4 color-black" data-post-id="{{answer.id}}">
+
+                <!-- UPVOTE - DOWNVOTE HERE - START -->
+                <form method="GET" class="ansLikeForm" action="{% url 'qa:answer_upvote_downvote' answer.id %}" data-pk="{{ answer.id }}">
+                    <div id="id_Ans_UpVote{{answer.id}}">
+                        {% if user in answer.a_vote_ups.all %}
+                        <button name='submit' type='submit' value="voteAns"><i class="fas active fa-sort-up fa-4x"></i></button> 
+                        {% else %}
+                        <button name='submit' type='submit' value="voteAns"><i class="fas inactive fa-sort-up fa-4x"></i></button> 
+                        {% endif %}
+                        <div class="flex--item d-flex fd-column ai-center color-black fs-title">
+                            <div class="showanswer-VotesDiv" data-load-url="{% url 'qa:load_answer_upvotes_downvotes' answer.id %}">
+                                <div class="hideThis-answer-Div">{{answer.countAllTheVotes}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="result-answer-div"></div>
+
+                <form action="{% url 'qa:answer_upvote_downvote' answer.id  %}" method="GET" class="ansDislikeForm" data-pk="{{ answer.id }}">
+                    <div id="id_Ans_DownVote{{answer.id}}">
+                        {% if user in answer.a_vote_downs.all %}
+                        <button name='submit' type='submit' value="downVoteAns"><i class="fas voteDownActive fa-sort-down fa-4x"></i></button> 
+                        {% else %}
+                        <button name='submit' type='submit' value="downVoteAns"><i class="fas voteDownInActive fa-sort-down fa-4x"></i></button> 
+                        {% endif %}
+                    </div>
+                </form>
+                <!-- UPVOTE - DOWNVOTE HERE - END -->
+                {% if request.user == data.post_owner %}
+                <!-- Accept Answer - START -->
+                <form method="GET" class="AcceptForm fc-green-500 py6 mtn8" action="{% url 'qa:mark_accepted'  data.id answer.id %}" data-pk="{{ answer.id }}">
+                    <span id="id_accept{{answer.id}}">
+                    <div id="answerTime{{answer.date}}"></div>
+                        {% if answer.accepted %}
+                        <button name='submit' type='submit' value="mark"><i  class="correct far fa-check fa-3x"></i></button>
+                        {% else %}
+                        <button name='submit' type='submit' value="mark"><i  class="wrong far fa-check fa-3x"></i></button>
+                        {% endif %}
+                    </span>
+                </form>
+                <!-- Accept Answer - END -->
+                {% endif %}
+
+{% if data.is_bountied %}
+{% if request.user == answer.answer_owner %}
+
+
+<form method="GET" class="AwardForm" action="{% url 'qa:awardBounty'  data.id answer.id %}" data-pk="{{ answer.id }}">
+    <span id="id_award{{answer.id}}">
+        {% if answer.is_bountied_awarded %}
+            <button name='submit' type='submit'  value="Award"><i  class="awarded fad fa-award fa-3x" ></i></button>
+        {% else %}
+            <button name='submit' type='submit' title="Click to Award Bounty" value="Award"><i  class="notAwarded fas fa-award fa-3x"></i></button>
+        {% endif %}
+    </span>
+</form>
+
+{% else %}
+
+    {% if answer.is_bountied_awarded %}
+        <i  class="awarded fad fa-award fa-3x" ></i>
+    {% else %}
+        <i  class="notAwarded fas fa-award fa-3x"></i>
+    {% endif %}
+
+{% endif %}
+{% endif %}
+<br>
+
+
+                <a class="flex--item s-btn__unset c-pointer py6 mx-auto" href="{% url 'qa:answerTimeline' answer.id %}" data-shortcut="T" data-ks-title="timeline" data-controller="s-tooltip" data-s-tooltip-placement="right" title="Show activity on this post." aria-label="Timeline">
+                    <svg aria-hidden="true" class="mln2 mr0 svg-icon iconHistory" width="19" height="18" viewBox="0 0 19 18">
+                        <path d="M3 9a8 8 0 113.73 6.77L8.2 14.3A6 6 0 105 9l3.01-.01-4 4-4-4h3L3 9Zm7-4h1.01L11 9.36l3.22 2.1-.6.93L10 10V5Z"/>
+                    </svg>
+                </a>
+                <br>
+                <a href="{% url 'qa:answer_edit_history' answer.id %}"><i class=" flex--item c-pointer py6 mx-auto fas fa-file-medical-alt fa-2x"></i></a>
+            </div>
+        </div>
+
+        <div class="answercell post-layout--right">
+
+{% if answer.is_deleted %}
+<aside class="s-notice s-notice__info post-notice js-post-notice mb16" role="status">
+        <div class="d-flex fd-column fw-nowrap">
+            <div class="d-flex fw-nowrap">
+                    <div class="flex--item mr8">
+                        <svg aria-hidden="true" class="svg-icon iconEyeOff" width="18" height="18" viewBox="0 0 18 18"><path d="m5.02 9.44-2.22 2.2C1.63 10.25 1 9 1 9s3-6 8.06-6c.75 0 1.46.14 2.12.38L9.5 5.03a4.01 4.01 0 00-4.48 4.41Zm2.03 3.05A3.99 3.99 0 0013 9c0-.73-.2-1.41-.54-2l-1.51 1.54a2 2 0 01-2.38 2.42l-1.52 1.53Zm7.11-7.22A14.8 14.8 0 0117 9s-3 6-7.94 6c-1.31 0-2.48-.4-3.5-1l-1.97 2L2 14.41 14.59 2 16 3.41l-1.84 1.86Z"></path></svg>
+                    </div>
+                <div class="flex--item wmn0 fl1 lh-lg">
+                    <div class="flex--item fl1 lh-lg">
+                        <b>This post is hidden</b>. {{answer.answer_owner}} deleted this post <span dir="ltr" title="{{answer.deleted_time|naturaltime}}"><span class="relativetime">{{answer.deleted_time|naturaltime}}</span></span>.
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+</aside>
+{% endif %}
+
+            <div class="s-prose js-post-body" itemprop="text"><p>{{answer.body|safe_markdown}}</p></div>
+            <div class="mt24">
+                <div class="d-flex fw-wrap ai-start jc-end gs8 gsy">
+                    <time itemprop="dateCreated" datetime="2021-12-08T09:53:01"></time>
+                    <div class="flex--item mr16" style="flex: 1 1 100px;">
+                        <div class="js-post-menu pt2" data-post-id="{{answer.id}}">
+                            <div class="d-flex gs8 s-anchors s-anchors__muted fw-wrap">
+                                <div class="flex--item">
+                                    <a href="" class="js-share-link">Share</a>
+                                </div>
+
+                                <div class="flex--item">
+                                    <a href="{% url 'qa:edit_answer' answer.id %}" class="js-suggest-edit-post" title="Revise and improve this post">Edit</a>
+                                </div>
+
+                                {% if request.user == answer.answer_owner %}
+                                {% if answer.is_deleted %}
+                                <div class="flex--item">
+                                    <a href="{% url 'qa:undelete_answer' answer.id %}">Undelete</a>
+                                </div>
+                                {% else %}
+                                <div class="flex--item">
+                                    <a onclick="return confirm('You really want to delete answer - {{answer.body|truncatechars:20}}')" href="{% url 'qa:delete_answer' answer.id %}">Delete</a>
+                                </div>
+                                {% endif %}
+                                {% endif %}
+
+                                <div class="flex--item">
+                                    <button type="button"
+                                            class="js-flag-post-link s-btn s-btn__link"
+                                            onclick="answerFlagOpenModel({{forloop.counter}})"
+                                            title="Flag this post for serious problems or moderator attention">
+                                        Flag
+                                    </button>
+                                </div>
+                            </div>
+
+    <!-- The Modal -->
+    <div id="AnswerFlagForm-{{forloop.counter}}" class="answer-flag-model">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="flagAnswerID-{{forloop.counter}}" onclick="closeModel({{forloop.counter}})" >&times;</span>
+            </div>
+            <div class="modal-flagAnswer">
+                <div class="container-fluid">
+                    <form method="GET" enctype="multipart/form-data" action="{% url 'qa:flag_answer_ajax' answer.id %}" id="answer-flag-ajax-form">
+                        {% csrf_token %} 
+                        <label for="id_actions_Flag_Q_0">Actions Flag Q:</label>
+                        <ul id="id_actions_Flag_Q">
+                            <li>
+                                <label for="id_actions_Flag_Q_1">
+                                    <input type="radio" name="actions_Flag_Q" value="SPAM" required="" id="id_actions_Flag_Q_1">Spam</label>
+                            </li>
+                            <li>
+                                <label for="id_actions_Flag_Q_2">
+                                    <input type="radio" name="actions_Flag_Q" value="RUDE_OR_ABUSIVE" required="" id="id_actions_Flag_Q_2">Rude or Abusive</label>
+                            </li>
+                            <li>
+                                <label for="id_actions_Flag_Q_3">
+                                    <input type="radio" name="actions_Flag_Q" value="NOT_AN_ANSWER" required="" id="id_actions_Flag_Q_3">Not an Answer</label>
+                            </li>
+                            <li>
+                                <label for="id_actions_Flag_Q_4">
+                                    <input type="radio" name="actions_Flag_Q" value="IN_NEED_OF_MODERATOR_INTERVATION" required="" id="id_actions_Flag_Q_4">In Need of Moderator Intervation</label>
+                            </li>
+                        </ul>
+                        <input type="submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+                            <div class="js-menu-popup-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="post-signature flex--item fl0">
+                        <div class="user-info user-hover">
+                            <div class="user-action-time">
+                                answered <span title="2021-12-08 09:53:01Z" class="relativetime">{{answer.date|naturaltime}}</span>
+                            </div>
+
+                            <div class="user-gravatar32">
+                                <a href="{{answer.answer_owner.profile.get_absolute_url}}"><div class="gravatar-wrapper-32"><img src="{% if answer.answer_owner.profile.profile_photo %}{{answer.answer_owner.profile.profile_photo.url}}{% endif %}" alt="" width="32" height="32" class="bar-sm"></div></a>
+                            </div>
+
+                            <div class="user-details" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                                    <a href="{{answer.answer_owner.profile.get_absolute_url}}">{{answer.answer_owner}}</a>
+                                    <span class="d-none" itemprop="name">{{answer.answer_owner}}</span>
+
+                                <div class="-flair">
+                                    <span class="reputation-score" title="reputation score " dir="ltr">{{answer.answer_owner|calculate_reputation}}</span>
+
+                                    {% if answer.answer_owner|calculateGoldBadges %}
+                                    <span title="{{answer.answer_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                        <span class="badge1"></span>
+                                        <span class="badgecount">{{answer.answer_owner|calculateGoldBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{answer.answer_owner|calculateGoldBadges}} gold badges</span>
+                                    {% endif %}
+
+                                    {% if answer.answer_owner|calculatSilvereBadges %}
+                                    <span title="{{answer.answer_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                        <span class="badge2"></span>
+                                        <span class="badgecount">{{answer.answer_owner|calculatSilvereBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{answer.answer_owner|calculatSilvereBadges}} silver badges</span>
+                                    {% endif %}
+
+                                    {% if answer.answer_owner|calculateBronzeBadges %}
+                                    <span title="{{answer.answer_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                        <span class="badge3"></span>
+                                        <span class="badgecount">{{answer.answer_owner|calculateBronzeBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{answer.answer_owner|calculateBronzeBadges}} bronze badges</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+            <span class="d-none" itemprop="commentCount">5</span> 
+    <div class="post-layout--right js-post-comments-component">
+        <div id="comments-12816528" class="comments js-comments-container bt bc-black-075 mt12 " data-post-id="12816528" data-min-length="15">
+            <ul class="comments-list js-comments-list">
+            {% for comment in answer.commentq_set.all %}  
+                <li id="comment-{{comment.id}}" class="comment js-comment " data-comment-id="{{comment.id}}" data-comment-owner-id="{{comment.commented_by.id}}" data-comment-score="1">
+                    <div class="js-comment-actions comment-actions">
+
+                        <form method="GET" class="commentAnswerVoteForm" action="{% url 'qa:upvote_comment' comment.id %}" data-pk="{{comment.id}}">
+                            <div id="id_AnswerCommentVote{{comment.id}}">
+                                <div class="move-to-left">{{comment.count_upvote}}</div>
+                                    {% if request.user in comment.com_upvote.all %}
+                                    <button name='submit' type='submit' value="upVoteCommentIt"><i class="fas upvote-comment-active fa-sort-up fa-2x"></i></button>
+                                    {% else %}
+                                    <button name='submit' type='submit' value="upVoteCommentIt"><i class="fas upvote-comment-inactive fa-sort-up fa-2x"></i></button>
+                                    {% endif %}
+                            </div>
+                        </form>
+
+                        <br><br>
+                        <div class="comment-flagging js-comment-edit-hide">
+                            <button class="js-comment-flag s-btn s-btn__unset bg-transparent c-pointer fc-black-300 o40 h:fc-red-500 h:o100"
+                                    aria-label="Flag Comment"
+                                    aria-pressed="false"
+                                    title="Flag this comment for serious problems or moderator attention">
+                                <svg aria-hidden="true" class="svg-icon iconFlag" width="18" height="18" viewBox="0 0 18 18"><path d="M3 2v14h2v-6h3.6l.4 1h6V3H9.5L9 2H3Z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+
+
+                    <div class="comment-text  js-comment-text-and-form">
+                        <div class="comment-body js-comment-edit-hide">
+                            
+                            <span class="comment-copy">{{comment.comment}}</span>
+                            <span class="comment-date" dir="ltr"><span title="2015-04-10 21:15:50Z, License: CC BY-SA 3.0" class="relativetime-clean">{{comment.date}} ({{comment.date|naturaltime}})</span></span>
+                        </div>
+                    </div>
+
+                </li>
+
+
+                {% endfor %}
+            </ul>
+        </div>
+
+<div class="answer-comment-wrapper-{{answer.id}}"></div>
+{% if request.user.is_authenticated %}
+
+<button onclick="showTextBox(({{forloop.counter}}))"><a href="" class="showAnswerCommentBox">Add Comment</a></button>
+{% endif %}
+<div id="answer-comment-div-{{forloop.counter}}" class="this-div">
+    <form method="GET" class="commentForm" action="{% url 'qa:save_comment_answer' answer.id  %}" data-pk="{{ answer.id }}">
+        <div class="card my-3">
+            <h6 class="card-header">Add Comment</h6>
+            <div class="card-body">
+                <textarea class="form-control comment-answer-text-{{answer.id}}"></textarea>
+                <div class="contain"></div>
+                <button type="button" data-data="{{answer.id}}" class="btn btn-dark my-3 save-answer-comment">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+$(function() {
+  $(".showAnswerCommentBox").on("click",function(e) {
+    e.preventDefault();
+  });
+});
+function showTextBox(e) {
+    var x = document.getElementById(`answer-comment-div-${e}`);
+    if (x.style.display == "block") {
+        x.style.display = "none";
+    }else {
+        x.style.display = "block";
+    }
+}
+</script>
+
+
+
+
+</div>
+
+
+        </div>
+    </div>
+{% endfor %}
+
+<script>
+$(document).ready(function () {
+    $("#answer-flag-ajax-form").submit(function (e) {
+        e.preventDefault();
+        var a = $(this).serialize();
+        var thisElementFlagAnswer = $(this);
+        $.ajax({
+            type: "POST",
+            url: thisElementFlagAnswer.attr('action'),
+            data: a,
+            success: function (e) {
+                "saved" == e.action ? ((modelFlagQuestion.style.display = "none"), $("#questionFlagButton").prop("hidden", !0)) : "lackOfPrivelege" == e.action && alert("Lack of Privilege");
+            },
+            error: function (e) {
+                alert(e.responseJSON.error);
+            },
+        });
+    });
+});
+
+</script>
+
+
+
+<div class="s-pagination site1 themed pager float-left">
+    {% if answers.has_other_pages %}
+      <ul class="pagination">
+        {% if answers.has_previous %}
+          <li><a href="?page={{ answers.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in answers.paginator.page_range %}
+          {% if answers.number == i %}
+        <div class="s-pagination--item is-selected">{{ i }}</div>
+          {% else %}
+        <a class="s-pagination--item" href="?page={{ i }}" rel="" title="Go to page 2">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if users.has_next %}
+          <li><a href="?page={{ answers.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+</div>
+
+
+<div class="js-zone-container zone-container-main">
+    <div id="dfp-bmlb" class="everyonelovesstackoverflow everyoneloves__bot-mid-leaderboard everyoneloves__leaderboard"></div>
+    <div class="js-report-ad-button-container " style="width: 728px"></div>
+</div>
+
+
+
+{% if request.user.is_authenticated %}
+
+<h2 class="space">Your Answer</h2>
+                                    
+<div id="post-editor" class="post-editor js-post-editor">
+    <form class="form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.body }}
+            {% if request.user.profile.create_wiki_posts %}
+            <fieldset class="mb8">
+                <div class="d-flex gs4 jc-end">
+                    <div class="flex--item">
+                        <input id="id_is_wiki_answer" class="s-checkbox" type="checkbox" name="is_wiki_answer"  />
+                    </div>
+                    <label class="flex--item s-label fw-normal" for="is_wiki_answer" title="Marking an answer community wiki encourages others to edit it by lowering the reputation barrier required to edit. However, you will not gain any upvote reputation from it. This cannot be undone.">Community wiki</label>
+                </div>
+            </fieldset>
+            {% endif %}
+        </div>
+        <div class="cbt d-flex gsx gs4">
+            <button class="flex--item s-btn s-btn__primary" type="submit">Post Your Answer</button>
+        </div>
+    </form>
+</div>
+{% endif %}
+
+
+
+    </div>
+</div>
+
+    </div>
+
+
+</div>
+
+
+
+        </div>
+    </div>
+
+
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    <a href="#"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="#">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+
+        
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
+
+
+
+<style>
+    .color-black {color: hsl(210,8%,45%);;}
+</style>
+
+
+
+<div class="modal flag-model" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">I am flagging to report this question as...</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="container"></div>
+            <div class="modal-body">
+
+        <form method="GET" id="flag-form-ajax" action="{% url 'qa:AjaxFlagForm' data.id %}">
+        {% csrf_token %}
+
+            <div class="form-check"> 
+                <input type="radio" class="form-check-input" name="actions_Flag_Q" value="SPAM"  id="id_actions_Flag_Q_1" required > 
+                    <label class="form-check-label" for="id_actions_Flag_Q_1">
+                        <b>Spam</b>
+                        <br>
+                        <h6 class="flag-description">Exists only to promote a product or service, does not disclose the author's affiliation.</h6>
+                    </label>
+            </div>
+    <br>
+             <div class="form-check">
+                <input type="radio" class="form-check-input" name="actions_Flag_Q" value="RUDE_OR_ABUSIVE"  id="id_actions_Flag_Q_2" required >
+                    <label class="form-check-label" for="id_actions_Flag_Q_2">
+                        <b>Rude or Abusive</b>
+                        <h6 class="flag-description">A reasonable person would find this content inappropriate for respectful discourse.</h6>
+                    </label> 
+            </div>
+    <br>
+             <div class="form-check">
+                <input type="radio" class="form-check-input" data-bs-toggle="modal" href="#myModal2" name="actions_Flag_Q" value="NEEDS_IMPROVEMENT"  id="id_actions_Flag_Q_6" required > 
+                    <label class="form-check-label" for="id_actions_Flag_Q_6">
+                        <b>Needs Improvement</b>
+                        <h6 class="flag-description">This question needs updates from the author in order to be answered well or belongs on another Stack Exchange site.</h6>
+                    </label> 
+            </div>
+    <br>
+             <div class="form-check">
+                    <input type="radio" class="form-check-input" name="actions_Flag_Q" value="IN_NEED_OF_MODERATOR_INTERVATION"  id="id_actions_Flag_Q_4" required > 
+                    <label class="form-check-label" for="id_actions_Flag_Q_4">In Need of Moderator Intervation</label> 
+            </div>
+
+             <div class="form-check">
+                <input type="radio" class="form-check-input" name="actions_Flag_Q" value="DUPLICATE"  id="id_actions_Flag_Q_7" required > 
+                <label class="form-check-label" for="id_actions_Flag_Q_7">Duplicate</label> 
+            </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-bs-dismiss="modal" class="btn btn-outline-dark">Close</a>
+                <button type="submit" class="btn btn-primary">Save changes</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" id="myModal2" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><h6>Flagging</h6></h4>
+                    <br>
+                    What kind of improvement does this question need?
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="container"></div>
+            <div class="modal-body">
+
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="actions_Flag_Q" value="OPINION_BASED"  id="id_actions_Flag_Q_8" required > 
+                            <label class="form-check-label" for="id_actions_Flag_Q_8">Opinion Based</label>
+                        </div>
+
+                        <div class="form-check"> 
+                            <input type="radio" class="form-check-input" name="actions_Flag_Q" value="NEED_MORE_FOCUS"  id="id_actions_Flag_Q_9" required > 
+                            <label class="form-check-label" for="id_actions_Flag_Q_9">Need More Focus# = QUESTION</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="radio" data-bs-toggle="modal" href="#myModal3" class="form-check-input" name="actions_Flag_Q" value="A_COMMUNITY_SPECIFIC_REASON"  id="id_actions_Flag_Q_11" required > 
+                            <label class="form-check-label" for="id_actions_Flag_Q_11">A Community specific reason</label> 
+                        </div>
+
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="actions_Flag_Q" value="DUPLICATE"  id="id_actions_Flag_Q_7" required > 
+                            <label class="form-check-label" for="id_actions_Flag_Q_7">Duplicate</label> 
+                        </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-bs-dismiss="modal" class="btn btn-outline-dark">Close</a>
+                <a data-bs-toggle="modal" href="#myModal" class="btn btn-primary">Back</a>
+                <button type="submit" class="btn btn-primary">Save changes</a></button>
+            </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" id="myModal3" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                Why isn’t this question suited for Stack Overflow?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="container"></div>
+            <div class="modal-body">
+
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="actions_Flag_Q" value="ABOUT_GENERAL_COMPUTING_HAR"  id="id_actions_Flag_Q_12" required >
+            <label class="form-check-label" for="id_actions_Flag_Q_12">About General</label>
+        </div>
+
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="actions_Flag_Q" value="ABOUT_PROFESSIONAL"  id="id_actions_Flag_Q_13" required>
+            <label class="form-check-label" for="id_actions_Flag_Q_13">About Professional</label>
+        </div>
+
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="actions_Flag_Q" value="SEEKING_RECCOMENDATIONS"  id="id_actions_Flag_Q_14" required >
+            <label class="form-check-label" for="id_actions_Flag_Q_14">Seeking Reccomendations</label>
+        </div>
+
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="actions_Flag_Q" value="NEED_DEBUGGING"  id="id_actions_Flag_Q_15" required >
+            <label class="form-check-label" for="id_actions_Flag_Q_15">Need Debugging Details</label>
+        </div>
+
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="actions_Flag_Q" value="NOT_REPRODUCIBLE"  id="id_actions_Flag_Q_16" required >
+            <label class="form-check-label" for="id_actions_Flag_Q_16">Not Reproducible</label>
+        </div>
+
+         <div class="form-check">
+            <input type="radio" class="form-check-input" name="actions_Flag_Q" value="BLANTANLTY_OR_CLARITY"  id="id_actions_Flag_Q_17" required>
+            <label class="form-check-label" for="id_actions_Flag_Q_17">Blantanlity or Clarity</label>
+        </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-bs-dismiss="modal" class="btn btn-outline-dark">Close</a>
+                <a data-bs-toggle="modal" href="#myModal2" class="btn btn-primary">Back</a>
+                <button type="submit" class="btn btn-primary">Save changes</a></button>
+            </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<script type="text/javascript">
+  $('#openBtn').click(function(){
+  $('#myModal').modal({show:true});
+})
+</script>
+
+<script>
+    function openTagEdit(id) {
+        let tagEditModel = document.getElementById(`tag-edit-id`);
+        tagEditModel.classList.toggle("active")
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div
+    id="modal-name"
+    data-modal-target
+    class="hidden">
+    <div class="flex items-center justify-center fixed inset-0 z-50">
+      <div
+        data-modal-close
+        data-modal-overlay
+        tabindex="-1"
+        data-class-in="opacity-50"
+        data-class-out="opacity-0"
+        class="opacity-0 fixed inset-0 w-full z-40 transition-opacity duration-300 bg-black select-none"></div>
+      <div
+        data-modal-wrapper
+        data-class-in="opacity-100 translate-y-0"
+        data-class-out="opacity-0 translate-y-5"
+        class="opacity-0 translate-y-5 w-full z-50 overflow-auto max-w-md max-h-screen scrolling-touch transition-all duration-300 bg-white flex flex-col transform shadow-xl rounded-md m-5">
+        <div class="flex items-center justify-between border-b p-6">
+          <h3>
+            Protect Question
+          </h3>
+
+          <button
+            data-modal-close
+            aria-label="Close"
+            type="button"
+            class="text-gray-700 hover:text-black focus:text-black transition ease-in-out duration-150 ml-auto">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="relative overflow-x-hidden overflow-y-auto h-full flex-grow p-5">
+            <form method="post" id="protect-form" enctype="multipart/form-data">
+                {% csrf_token %} 
+                        {{protectForm|crispy}}
+                        <input class="button" type="submit">
+            </form>
+          <div class="text-right">
+            <button
+              data-modal-close
+              type="button"
+              class="underline">
+              Close Modal
+            </button>
+            or [esc] key
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+      takeModel.init()
+    });
+
+  </script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+{% if data.is_question_bountied == False %}
+
+
+    <!-- The Modal -->
+    <div id="bounty-model-content" class="bounty-model-popup">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form method="post" enctype="multipart/form-data" id="bounty-form" action="{% url 'qa:AjaxBountyForm' data.id %}">
+                        {% csrf_token %} {% if data.is_bountied %}
+                        <b>This question with title - "{{data.title}}" already have a Active Bounty</b>
+                        <br> {% elif cannot_create %}
+                        <b>You can only create 3 bounties at a Time. If you really want start bounty then Award one of your previous Bounties</b> {% else %}
+                        <table>
+                            <div id="svg_wrapping"></div>
+                            <h4>Start a bounty</h4>
+
+                            <section class="sectionBounty">
+                                <p>Bounty Value</p>
+                                offer {{ bounty_form.bounty_value}} of my own reputation for an answer to this question
+                                <small>(this reputation is deducted immediately and cannot be refunded)</small>
+                                <br> You can start a total of 3 simultaneous bounties
+                            </section>
+
+                            <section class="sectionBounty">
+                                <p>Why are you Setting Bounty ?</p>
+                                {{ bounty_form.why_bounting}}
+                            </section>
+
+                            <section class="sectionBounty">
+                                <p>General condtitions</p>
+                                <p></p>
+                                <input class="button" type="submit">
+                            </section>
+                            
+                            <div class="button" id="previous">&larr; Previous</div>
+                            <div class="button" id="nextSection">Next &rarr;</div>
+                            {% endif %}
+
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endif %}
+
+
+
+
+
+
+
+<script>
+$( document ).ready(function () {
+        $(".moreBox").slice(0, 3).show();
+        if ($(".blogBox:hidden").length != 0) {
+            $("#loadMore").show();
+        }       
+        $("#loadMore").on('click', function (e) {
+            e.preventDefault();
+            $(".moreBox:hidden").slice(0, 10).slideDown();
+            if ($(".moreBox:hidden").length == 0) {
+                $("#loadMore").fadeOut('slow');
+            }
+        });
+    });
+</script>
+
+
+
+</div>
+<script>
+$(function() {
+  $(".showForm").on("click",function(e) {
+    e.preventDefault();
+    $(this).next(".showActionComment").toggle();
+  });
+});
+
+</script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+
+
+
+
+
+{% if data.is_protected %}
+
+<div class="container-protect">This question is protected because of {{why_protecting}} you need atleast 10 Reputation to Answer it</div>
+
+{% endif %}
+
+
+{% if data.is_protected %}
+
+<form method="GET" class="unpro" action="{% url 'qa:removeProtection'  data.id  %}" data-pk="{{ data.id }}">
+    <span id="unpro{{data.id}}">
+<button type='submit' onclick="return confirm('You really want to delete this?')" value='award'>UnProtect Question</button>
+        </span>
+</form>
+
+{% endif %}
+
+<div class="commentCount" data-pk="{{comment.id}}">
+    <div id="id_comment_vtcnt{{comment.id}}">
+        {{countThem}}
+    </div>
+</div>
+
+
+</div>
+
+<script>
+    $('.martor-preview pre').each(function(i, block) {
+        hljs.highlightBlock(block);
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+{% if canMakeAnotherEdit == True %}
+<a href="{% url 'qa:edit_question' data.id %}">Edit Question</a>
+{% else %}
+<script>
+    $(function () {
+  $('[data-toggle="popover"]').popover()
+})
+</script>
+<a href="#" data-toggle="popover" title="Previous Edit Waiting for Review" data-content="Previous Edit is Waiting for Review. Come Back Later" onclick="return false;">Edit Question</a>
+{% endif %}
+
+
+
+<script>
+    var reOpenModel = document.getElementById("ReOpenModel");
+    var reOpenButton = document.getElementById("reOpenModelButton");
+    var reOpenClose = document.getElementsByClassName("reOpenClosedClose")[0];
+    reOpenButton.onclick = function () {
+      reOpenModel.style.display = "block";
+    }
+    reOpenClose.onclick = function () {
+      reOpenModel.style.display = "none";
+    }
+    window.onclick = function (event) {
+      if (event.target == reOpenModel) {
+        reOpenModel.style.display = "none";
+      }
+    }
+</script>
+
+
+
+
+
+{% if data.is_closed == False %}
+
+    <!-- {% if can_user_vote_for_close %} Close Question {% endif %} -->
+    <!-- Trigger/Open The Modal -->
+    <button id="questionCloseButton" title="Offer Some of Reputation">{% if showClose_Votes %}<em>({{getHow_many_vote_on_close}})</em>{% endif %} Close Question</button>
+
+    <!-- The Modal -->
+    <div id="questionCloseModel" class="closeModel">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="questionCloseClose">&times;</span>
+            </div>
+            <div class="modal-flagQuestion">
+                <div class="container-fluid">
+                    <form method="post" id="close-question-form" enctype="multipart/form-data">
+                        {% csrf_token %} 
+                        <table>
+                            <h4>Close Question</h4>
+                            <section>
+
+<div id="div_id_why_closing" class="form-group"> <label for="id_why_closing_0" class=" requiredField">
+                Why closing<span class="asteriskField">*</span> </label> <div > <div class="form-check"> <input type="radio" class="form-check-input" name="why_closing" value=""  id="id_why_closing_0" required checked
+> <label class="form-check-label" for="id_why_closing_0">
+            ---------
+        </label> </div> <div class="form-check" id="mySecondButton"> <input type="radio" class="form-check-input" name="why_closing" value="DUPLICATE"  id="id_why_closing_1" required
+> <label class="form-check-label" for="id_why_closing_1">
+            duplicate
+        </label> </div> <div class="form-check"> <input type="radio" class="form-check-input" name="why_closing" value="OPINION_BASED"  id="id_why_closing_2" required
+> <label class="form-check-label" for="id_why_closing_2">
+            Opinion Based
+        </label> </div> <div class="form-check"> <input type="radio" class="form-check-input" name="why_closing" value="OFF_TOPIC"  id="id_why_closing_3" required
+> <label class="form-check-label" for="id_why_closing_3">
+            Off Topic
+        </label> </div> <div class="form-check"> <input type="radio" class="form-check-input" name="why_closing" value="NEEDS_DETAILS_OR_CLARITY"  id="id_why_closing_4" required
+> <label class="form-check-label" for="id_why_closing_4">
+            Needs details or Clarity
+        </label> </div> <div class="form-check"> <input type="radio" class="form-check-input" name="why_closing" value="NEED_MORE_FOCUS"  id="id_why_closing_5" required
+> <label class="form-check-label" for="id_why_closing_5">
+            Need More Focus
+        </label> </div> </div> </div>
+            <input type="submit" name="">
+
+<div class="container-fluid">
+    <table class="table table-striped table-sm" id="my_friends">
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+
+            {% if can_user_vote_for_close == False %}
+
+            <a href="{% url 'review:retract_Close_Flag' data.id %}">Retract Flag</a>
+
+            {% endif %}
+
+                            </section>
+                        </table>
+                        <!-- ----------------------------------------------- -->
+
+
+                        <div id="mySecondModal" class="close-model">
+
+                            <!-- Modal content -->
+                            <div class="modal-content">
+                                <div class="modal-flagQuestion">
+                                    <div class="container-fluid">
+                                            <table>
+                                                <section>
+                                                <h5><b>Paste the Url of Question this is duplicate of</b></h5>
+                                                <input type="text" name="duplicate_of" maxlength="1000" class="textinput textInput form-control" id="id_duplicate_of">
+
+                                                <br><br>
+                                                <input type="button"  class="mySecondClose" onblur="onDis();" value="I am Done">
+                                                <input id="clearIT" type="button" onclick="clearTextField();" value="Clean Everything">
+
+                                                </section>
+                                            </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    $(document).ready(function () {
+        /*
+            On submiting the form, send the POST ajax
+            request to server and after successfull submission
+            display the object.
+        */
+        $("#close-question-form").submit(function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault();
+            // serialize the data for sending the form data.
+            var serializedData = $(this).serialize();
+            // make POST ajax call
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'qa:AjaxCloseForm' data.id %}",
+                data: serializedData,
+                success: function (response) {
+                    if (response.action == "saved") {
+                        modelQ.style.display = "none";
+                        // alert("Bounty is Applied Successfully")
+                        $("#questionCloseButton").prop( "hidden", true );
+
+                    } else if (response.action == "duplicate_error") {
+                        alert("Please Write the Another Question's URL");
+                    }
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert("Something went Wrong!");
+                }
+            })
+        })
+    })
+</script>
+
+
+<script>
+
+var modelQ = document.getElementById("questionCloseModel"),
+    flagQuestionBTN = document.getElementById("questionCloseButton"),
+    closeClose = document.getElementsByClassName("questionCloseClose")[0];
+
+(flagQuestionBTN.onclick = function () {
+    modelQ.style.display = "block";
+}),
+    (closeClose.onclick = function () {
+        modelQ.style.display = "none";
+    }),
+    (window.onclick = function (e) {
+        e.target == modelQ && (modelQ.style.display = "none");
+    });
+function clearTextField() {
+    (gettingID = document.getElementById("id_duplicate_of")), (clearButton = document.getElementById("clearIT")), (gettingID.value = "");
+}
+
+
+
+    var myModel = document.getElementById("mySecondModal");
+    var myMButton = document.getElementById("mySecondButton");
+    var closeClose = document.getElementsByClassName("mySecondClose")[0];
+
+    myMButton.onclick = function () {
+      myModel.style.display = "block";
+    }
+
+    closeClose.onclick = function () {
+      myModel.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      if (event.target == myModel) {
+        myModel.style.display = "none";
+      }
+    }
+
+$(document).keydown(function(event) { 
+  if (event.keyCode == 27) { 
+    $('#questionCloseModel').hide();
+  }
+});
+
+
+function clearTextField() {
+    gettingID = document.getElementById('id_duplicate_of');
+    clearButton = document.getElementById('clearIT');
+
+    gettingID.value='';
+}
+</script>
+
+{% else %}
+
+
+
+
+
+    <!-- The Modal -->
+    <div id="ReOpenModel" class="close-model">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="reOpenClosedClose">&times; (or Hit Esc)</span>
+            </div>
+            <div class="modal-flagQuestion">
+                <div class="container-fluid">
+                    <form method="post" id="reopen-form-ajax" enctype="multipart/form-data">
+                        {% csrf_token %} 
+                        <table>
+                            <br>
+                            <h4>Re-Open Question</h4>
+                            <section>
+                                <b>It is Better Now</b>
+                                <input type="radio" class="form-check-input" name="why_opening" value="IT_IS_BETTER_NOW" id="id_why_opening_1" required="">
+                                <br>
+                                <br>
+                                <b>Closed by Mistake</b>
+                                <input type="radio" class="form-check-input" name="why_opening" value="CLOSED_BY_MISTAKE" id="id_why_opening_2" required="">
+                                <br>
+                                <br>
+                                <b>Other</b>
+                                <input type="radio" class="form-check-input"  name="why_opening" value="OTHER" id="id_why_opening_3" required="">
+                                <input class="button" type="submit">
+                            </section>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        /*
+            On submiting the form, send the POST ajax
+            request to server and after successfull submission
+            display the object.
+        */
+        $("#reopen-form-ajax").submit(function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault();
+            // serialize the data for sending the form data.
+            var serializedData = $(this).serialize();
+            // make POST ajax call
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'qa:ReOpenVotesAjax' data.id %}",
+                data: serializedData,
+                success: function (response) {
+                if (response.action == "saved") {
+                    modelQ.style.display = "none";
+                    // alert("Bounty is Applied Successfully")
+                    $("#questionCloseButton").prop("hidden", true);
+                    alert("Lack of Privilege");
+                } else if (response.action == "lackOfPrivelege") {
+                    alert("Lack of Privilege");
+                }
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert(response["responseJSON"]["error"]);
+                }
+            })
+        })
+
+    })
+</script>
+
+
+<script>
+
+    var reOpenModel = document.getElementById("ReOpenModel");
+    var reOpenButton = document.getElementById("reOpenModelButton");
+    var reOpenClose = document.getElementsByClassName("reOpenClosedClose")[0];
+    reOpenButton.onclick = function () {
+      reOpenModel.style.display = "block";
+    }
+    reOpenClose.onclick = function () {
+      reOpenModel.style.display = "none";
+    }
+    window.onclick = function (event) {
+      if (event.target == reOpenModel) {
+        reOpenModel.style.display = "none";
+      }
+    }
+
+$(document).keydown(function(event) { 
+  if (event.keyCode == 27) { 
+    $('#ReOpenModel').hide();
+  }
+});
+
+</script>
+
+{% endif %}
+
+
+
+
+
+<link href="{% static 'MarkDown-Editor/plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'MarkDown-Editor/plugins/css/resizable.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'MarkDown-Editor/martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/ace.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/mode-markdown.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/ext-language_tools.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/theme-github.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/typo.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/spellcheck.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/highlight.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/resizable.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/emojis.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/martor/js/martor.bootstrap.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'qa/js/vote.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'qa/js/question-detail-page.js' %}"></script>
+
+
+<script type="text/javascript" src="{% static 'qa/js/question-detail-modal.js' %}"></script>
+
+
+
+
+
+{% endblock content %} 
+
+
+
+
+
+
+
+
+{% block js %}
+
+
+
+
+<script>
+
+
+    function answerFlagOpenModel(id) {
+    var flagFormModel = document.getElementById(`AnswerFlagForm-${id}`);
+    if (flagFormModel) {
+        flagFormModel.style.display = "block";
+    }
+
+
+    document.getElementById(`flagAnswerID-${id}`).onclick = function(ids) {
+        flagFormModel.style.display = "none";
+    } 
+}
+
+    window.onclick = function (event) {
+      if (event.target == flagFormModel) {
+        flagFormModel.style.display = "none";
+      }
+    }
+
+
+</script>
+
+
+<script type="text/javascript">
+
+/* About substring - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substr */
+/* About lastIndexOf - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/lastIndexOf */
+
+TIME_TO_HIDE_HIGHLIGHT = 4500
+
+  $(document).ready(function() {
+    if (window.location.href.indexOf("#") > -1) {
+        x = TIME_TO_HIDE_HIGHLIGHT;
+        var getTheUrlId = window.location.href.substring(window.location.href.lastIndexOf('#') + 1)
+        
+        $(`#comment-${getTheUrlId}`).css('background-color', 'rgb(255, 255, 204)');
+        setTimeout(function() {
+            $(`#comment-${getTheUrlId}`).css('background-color', '');
+        }, x)
+    }
+  });
+
+
+</script>
+
+
+
+<script type="text/javascript">
+
+
+/* About substring - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substr */
+/* About lastIndexOf - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/lastIndexOf */
+
+TIME_TO_HIDE_HIGHLIGHT = 4500
+
+  $(document).ready(function() {
+    if (window.location.href.indexOf("#") > -1) {
+        x = TIME_TO_HIDE_HIGHLIGHT;
+        var getTheUrlId = window.location.href.substring(window.location.href.lastIndexOf('#') + 1)
+        
+        $(`#answer-${getTheUrlId}`).css('background-color', 'rgb(255, 255, 204)');
+        setTimeout(function() {
+            $(`#answer-${getTheUrlId}`).css('background-color', '');
+        }, x)
+    }
+  });
+</script>
+
+
+
+<script>
+$(document).ready(function(){$("#protect-form").submit(function(e){e.preventDefault();var t=$(this).serialize();$.ajax({type:"POST",url:"{% url 'qa:ProtectQuestionAjax' data.id %}",data:t,success:function(e){"formSaved"==e.action?(modelProtectQuestion.style.display="none",$("#questionProtectButton").prop("hidden",!0)):"lackOfPrivelege"==e.action&&alert("You need atleast _______________ Reputation")},error:function(e){alert(e.responseJSON.error)}})})});
+</script>
+
+
+
+<script>
+function flagAnswerComment(id) {
+    var flagAnswerMod = document.getElementById(`FlagAnswerModel-${id}`);
+    if (flagAnswerMod) {
+        flagAnswerMod.style.display = "block";
+    }
+    document.getElementById(`AnswerModelClose-${id}`).onclick = function(ids) {
+        flagAnswerMod.style.display = "none";
+    }
+    window.onclick = function (event) {
+      if (event.target == flagAnswerMod) {
+        flagAnswerMod.style.display = "none";
+      }
+    }
+}
+</script>
+
+
+<script>
+    $(document).ready(function(){
+        $(".save-answer-comment").on('click',function(){
+            var _questionid=$(this).data('data');
+            let thisElement = $(".commentForm");
+
+            var commented=$(".comment-answer-text-"+_questionid).val();
+
+            $.ajax({
+                url: thisElement.attr('action'),
+                type:"post",
+                data:{
+                    comment:commented,
+                    request:_questionid,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                dataType:'json',
+                beforeSend:function(){
+                    $(".save-answer-comment").addClass('disabled').text('saving...');
+                },
+                success:function(res){
+                    if(res.bool==true){
+                        $(".comment-answer-text-"+_questionid).val('');
+                        // Append Element
+                        var _html=`<ul class="comments-list js-comments-list">\n            <li id="comment-{{comment.id}}" class="comment js-comment " data-comment-id="{{comment.id}}" data-comment-owner-id="{{comment.commented_by.id}}" data-comment-score="0">\n\n                <div class="js-comment-actions comment-actions">\n                    <div class="comment-score js-comment-edit-hide">\n                    </div>\n                        \n                                    {% if request.user in comment.com_upvote.all %}\n                                    <button name='submit' type='submit' value="upVoteCommentIt"><i class="fas upvote-comment-active fa-sort-up fa-2x"></i></button>\n                                    {% else %}\n                                    <button name='submit' type='submit' value="upVoteCommentIt"><i class="fas upvote-comment-inactive fa-sort-up fa-2x"></i></button>\n                                    {% endif %}\n                                </span>\n                       \n                        <div class="comment-flagging js-comment-edit-hide">\n                            <button class="js-comment-flag s-btn s-btn__unset bg-transparent c-pointer fc-black-300 o40 h:fc-red-500 h:o100"\n                                    aria-label="Flag Comment"\n                                    aria-pressed="false"\n                                    title="Flag this comment for serious problems or moderator attention">\n                                <svg aria-hidden="true" class="svg-icon iconFlag" width="18" height="18" viewBox="0 0 18 18"><path d="M3 2v14h2v-6h3.6l.4 1h6V3H9.5L9 2H3Z"/></svg>\n                            </button>\n                        </div>\n                </div>\n\n                <div class="comment-text  js-comment-text-and-form">\n                    <div class="comment-body js-comment-edit-hide">\n                        \n                        <span class="comment-copy">${commented}</span>\n                        \n                      <div class="d-inline-flex ai-center">\n        &ndash;&nbsp;<a href="{% url 'profile:activityPageTabProfile' data.post_owner.id data.post_owner.username %}"\n                                    title="16,021 reputation"\n                                    class="comment-user">{{request.user}}</a>\n                        </div>\n                        <span class="comment-date" dir="ltr"><span title="2021-12-08 10:40:00Z, License: CC BY-SA 4.0" class="relativetime-clean">{{comment.date|naturaltime}}</span></span>\n                                <span title="this comment was edited 2 times">\n                                    <svg aria-hidden="true" class="va-text-bottom o50 svg-icon iconPencilSm" width="14" height="14" viewBox="0 0 14 14"><path d="m11.1 1.71 1.13 1.12c.2.2.2.51 0 .71L11.1 4.7 9.21 2.86l1.17-1.15c.2-.2.51-.2.71 0ZM2 10.12l6.37-6.43 1.88 1.88L3.88 12H2v-1.88Z"/></svg>\n                                </span>\n                    </div>\n                </div>\n    </li>\n\n            </ul>`;
+                    $(".answer-comment-wrapper-"+_questionid).append(_html);
+                    var prevCount=$(".comment-count-"+_questionid).text();
+                    $(".comment-count-"+_questionid).text(parseInt(prevCount)+1);
+                    } else if (res.bool == false) {
+                        $(`.contain`).html(`Write Something`);
+                        $(`.contain`).fadeOut(2000);
+                    }
+                    $(".save-answer-comment").removeClass('disabled').text('Submit');
+                }
+            });
+        });
+
+    });
+</script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+                $(`.showVotesDiv`).on('click', function(e) {
+                $(`.result-div`).html(`<img class="accept-loading-image" src="{% static 'preloader.gif' %}"></img>`)
+                // e.preventDefault();
+                let thisDiv = $(this);
+
+                $.ajax({
+                    url: thisDiv.attr('data-load-url'),
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        $(`.hideThisDiv`).hide();
+                        for (result of response.results) {
+                        $(`.result-div`).html(`<div class="flex--item d-flex fd-column ai-center color-black fs-title" style="color: green">+${result.upvotes}</div> <div class="flex--item d-flex fd-column ai-center color-black fs-title" style="color: red">-${result.downvotes}</div>`)
+                    }
+                    },
+                    // Refrence - Show Error if server is stopped for some reason or Internet
+                    // is Slow for User - https://www.edureka.co/community/72651/trigger-jquery-ajax-error-callback-based-server-response-http
+                    error: function(xhr, status, error){
+
+                        //Handle failure here
+                        // Want to Test? Stop the server and try to load the post's div.
+                            $('.toast-container').html(
+                                `<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">
+                                    <aside class="s-notice s-notice__info">
+                                        <div class="d-flex gs16 gsx ai-center jc-space-between">
+                                            <div class="flex--item">
+                                                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">
+                                                    <strong>Alert ! </strong>Something went Wrong!
+                                                </div>
+                                            </div>
+                                            <div class="flex--item mr0 js-notice-actions">
+                                                <div class="d-flex">
+                                                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">
+                                                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">
+                                                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </aside>
+                                </div>`
+                            );
+                            $(".toast").toast('show', {
+                                autohide: true,
+                            });
+                            $('.js-toast').fadeOut(8000);
+                    }
+                })
+            })
+        })
+    })
+
+</script>
+
+
+
+
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+                $(`.showanswer-VotesDiv`).on('click', function(e) {
+                $(`.result-answer-div`).html(`<img class="accept-loading-image" src="{% static 'preloader.gif' %}"></img>`)
+                // e.preventDefault();
+                let thisDiv = $(this);
+
+                $.ajax({
+                    url: thisDiv.attr('data-load-url'),
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        $(`.hideThis-answer-Div`).hide();
+                        for (result of response.results) {
+                        $(`.result-answer-div`).html(`<div class="flex--item d-flex fd-column ai-center color-black fs-title" style="color: green">+${result.upvotes}</div> <div class="flex--item d-flex fd-column ai-center color-black fs-title" style="color: red">-${result.downvotes}</div>`)
+                        }
+                    },
+                    // Refrence - Show Error if server is stopped for some reason or Internet
+                    // is Slow for User - https://www.edureka.co/community/72651/trigger-jquery-ajax-error-callback-based-server-response-http
+                    error: function(xhr, status, error){
+
+                        //Handle failure here
+                        // Want to Test? Stop the server and try to load the post's div.
+                            $('.toast-container').html(
+                                `<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">
+                                    <aside class="s-notice s-notice__info">
+                                        <div class="d-flex gs16 gsx ai-center jc-space-between">
+                                            <div class="flex--item">
+                                                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">
+                                                    <strong>Alert ! </strong>Something went Wrong!
+                                                </div>
+                                            </div>
+                                            <div class="flex--item mr0 js-notice-actions">
+                                                <div class="d-flex">
+                                                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">
+                                                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">
+                                                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </aside>
+                                </div>`
+                            );
+                            $(".toast").toast('show', {
+                                autohide: true,
+                            });
+                            $('.js-toast').fadeOut(8000);
+                    }
+                })
+            })
+        })
+    })
+
+</script>
+
+
+<!-- MARK - ACCEPT, UNACCEPT - START -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+            $('.AcceptForm').submit(function(e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url: thisElement.attr('action'),
+                    data: {
+                        'submit': 'mark',
+                    },
+                    dataType: 'json',
+                    method: 'get',
+                    async: false,
+                    success: function(response) {
+                        if (response.action == 'unaccept') {
+                            $(`#id_accept${thisElement.attr('data-pk')}`).html(`<button name='submit' type='submit' value="accept"><i class="wrong far fa-check fa-3x"></i></button><br><img class="unaccept-loading-image" src="{% static 'preloader.gif' %}"></img>`)
+                            $('.unaccept-loading-image').show();
+                            $('.unaccept-loading-image').fadeOut(1000);
+                        }
+                        else if (response.action == 'bountyError') {
+                            $('.toast-container').html(
+                                `<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">
+    <aside class="s-notice s-notice__info">
+        <div class="d-flex gs16 gsx ai-center jc-space-between">
+            <div class="flex--item">
+                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">
+                    <strong>Alert ! </strong>You already accepted an Answer
+                </div>
+            </div>
+            <div class="flex--item mr0 js-notice-actions">
+                <div class="d-flex">
+                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">
+                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">
+                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>`
+                            );
+                            $(".toast").toast('show', {
+                                autohide: true,
+                            });
+                            $('.js-toast').fadeOut(8000);
+                        } else if (response.action == "acceptIn_10_Minutes") {
+                            $('.toast-container').html(
+                                `<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">
+    <aside class="s-notice s-notice__info">
+        <div class="d-flex gs16 gsx ai-center jc-space-between">
+            <div class="flex--item">
+                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">
+                    <strong>Alert ! </strong>Accept after 10 Minutes of Posting Answer
+                </div>
+            </div>
+            <div class="flex--item mr0 js-notice-actions">
+                <div class="d-flex">
+                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">
+                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">
+                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>`
+                            );
+                            $(".toast").toast('show', {
+                                autohide: true,
+                            });
+                            $('.js-toast').fadeOut(8000);
+                        } else if (response.action == "acceptIn_10Days") {
+                            $('.toast-container').html(
+                                `<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">
+    <aside class="s-notice s-notice__info">
+        <div class="d-flex gs16 gsx ai-center jc-space-between">
+            <div class="flex--item">
+                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">
+                    <strong>Alert ! </strong>You can Accept your Answer in 2 Days
+                </div>
+            </div>
+            <div class="flex--item mr0 js-notice-actions">
+                <div class="d-flex">
+                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">
+                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">
+                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>`
+                            );
+                            $(".toast").toast('show', {
+                                autohide: true,
+                            });
+                            $('.js-toast').fadeOut(8000);
+                        } else { // Accept Only
+                            $(`#id_accept${thisElement.attr('data-pk')}`).html(`<button name='submit' type='submit' value="accept"><i  class="correct far fa-check fa-3x"></i></button><br><img class="accept-loading-image" src="{% static 'preloader.gif' %}"></img>`)
+                            $('.toast-container').html(
+                                `<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">
+    <aside class="s-notice s-notice__info">
+        <div class="d-flex gs16 gsx ai-center jc-space-between">
+            <div class="flex--item">
+                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">
+                    Dont' forget to Upvote the Post that Helped You
+                </div>
+            </div>
+            <div class="flex--item mr0 js-notice-actions">
+                <div class="d-flex">
+                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">
+                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">
+                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>`
+                            );
+                            $('.accept-loading-image').show();
+                            $('.accept-loading-image').fadeOut(1000);
+                            $(".toast").toast('show', {
+                                autohide: true,
+                            });
+                            $('.js-toast').fadeOut(8000);
+                        }
+                    }
+                })
+            })
+        })
+    })
+</script>
+
+<!-- MARK - ACCEPT, UNACCEPT - END -->
+
+
+        <script>
+        $(document).ready(function(){$(".save-comment").on("click",function(){var t=$(this).data("data"),e=$(".comment-text-"+t).val();$(".user-username").val();$.ajax({url:"{% url 'qa:save_comment' data.id %}",type:"post",data:{comment:e,answerid:t,csrfmiddlewaretoken:"{{csrf_token}}"},dataType:"json",beforeSend:function(){$(".save-comment").addClass("disabled").text("saving...")},success:function(n){if(1==n.bool){$(".comment-text-"+t).val("");var a=`<ul class="comments-list js-comments-list">\n            <li id="comment-{{comment.id}}" class="comment js-comment " data-comment-id="{{comment.id}}" data-comment-owner-id="{{comment.commented_by.id}}" data-comment-score="0">\n\n                <div class="js-comment-actions comment-actions">\n                    <div class="comment-score js-comment-edit-hide">\n                    </div>\n                        \n                                    {% if request.user in comment.com_upvote.all %}\n                                    <button name='submit' type='submit' value="upVoteCommentIt"><i class="fas upvote-comment-active fa-sort-up fa-2x"></i></button>\n                                    {% else %}\n                                    <button name='submit' type='submit' value="upVoteCommentIt"><i class="fas upvote-comment-inactive fa-sort-up fa-2x"></i></button>\n                                    {% endif %}\n                                </span>\n                       \n                        <div class="comment-flagging js-comment-edit-hide">\n                            <button class="js-comment-flag s-btn s-btn__unset bg-transparent c-pointer fc-black-300 o40 h:fc-red-500 h:o100"\n                                    aria-label="Flag Comment"\n                                    aria-pressed="false"\n                                    title="Flag this comment for serious problems or moderator attention">\n                                <svg aria-hidden="true" class="svg-icon iconFlag" width="18" height="18" viewBox="0 0 18 18"><path d="M3 2v14h2v-6h3.6l.4 1h6V3H9.5L9 2H3Z"/></svg>\n                            </button>\n                        </div>\n                </div>\n\n                <div class="comment-text  js-comment-text-and-form">\n                    <div class="comment-body js-comment-edit-hide">\n                        \n                        <span class="comment-copy">${e}</span>\n                        \n                      <div class="d-inline-flex ai-center">\n        &ndash;&nbsp;<a href="{% url 'profile:activityPageTabProfile' data.post_owner.id data.post_owner.username %}"\n                                    title="16,021 reputation"\n                                    class="comment-user">{{request.user}}</a>\n                        </div>\n                        <span class="comment-date" dir="ltr"><span title="2021-12-08 10:40:00Z, License: CC BY-SA 4.0" class="relativetime-clean">{{comment.date|naturaltime}}</span></span>\n                                <span title="this comment was edited 2 times">\n                                    <svg aria-hidden="true" class="va-text-bottom o50 svg-icon iconPencilSm" width="14" height="14" viewBox="0 0 14 14"><path d="m11.1 1.71 1.13 1.12c.2.2.2.51 0 .71L11.1 4.7 9.21 2.86l1.17-1.15c.2-.2.51-.2.71 0ZM2 10.12l6.37-6.43 1.88 1.88L3.88 12H2v-1.88Z"/></svg>\n                                </span>\n                    </div>\n                </div>\n    </li>\n\n            </ul>`;$(".comment-wrapper-"+t).append(a);var s=$(".comment-count-"+t).text();$(".comment-count-"+t).text(parseInt(s)+1)}else 0==n.bool&&($(".contain").html("Write Something"),$(".contain").hide(2e3));$(".save-comment").removeClass("disabled").text("Submit")}})})});
+        </script>
+
+{% endblock js %} 
+
+
+
+{% block css %}
+
+{% endblock css %}

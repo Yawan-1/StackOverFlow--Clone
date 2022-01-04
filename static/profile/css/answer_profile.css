@@ -1,0 +1,89 @@
+.warpper-B{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+/*.tab{
+  cursor: pointer;
+  padding:10px 20px;
+  margin:0px 2px;
+  background:#000;
+  display:inline-block;
+  color:#fff;
+  border-radius:3px 3px 0px 0px;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+}*/
+.panels-B{
+  background:#fffffff6;
+  /*width:100%;*/
+  /*max-width:500px;*/
+  border-radius:3px;
+  overflow:hidden;
+}
+.panel-B{
+  display:none;
+  animation: fadein .5s;
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+.panel-title-B{
+  font-size:1.5em;
+  font-weight:bold
+}
+.radio-B{
+  display:none;
+}
+#one-B:checked ~ .panels-B #one-panel-B,
+#two-B:checked ~ .panels-B #two-panel-B,
+#three-B:checked ~ .panels-B #three-panel-B{
+  display:block
+}
+
+.tab-selected {
+    background-color: white;
+    /*color: white;*/
+}
+.tab-selected.active {
+    background-color: grey;
+    color: white;
+}
+
+    .fa, .fas {
+    font-family: 'Font Awesome 5 Pro';
+    font-weight: 600 !important;
+}
+
+
+.unseen-reputation {
+  background-color: green;
+  border-radius: 1em;
+  color: white;
+ 
+  padding: 1px 3px;
+  font-size: 10px;
+  
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* Make the badge float in the top right corner of the button */
+.button__badge {
+  background-color: #fa3e3e;
+  border-radius: 1em;
+  color: white;
+ 
+  padding: 1px 3px;
+  font-size: 10px;
+  
+  position: absolute; /* Position the badge within the relatively positioned button */
+  top: 0;
+  right: 0;
+}
+

@@ -1,0 +1,37 @@
+{% extends "profile/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+<link href="{% static 'MarkDown-Editor/plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'MarkDown-Editor/plugins/css/resizable.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'MarkDown-Editor/martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+        {{ form|crispy }}
+        </table>
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/ace.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/mode-markdown.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/ext-language_tools.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/theme-github.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/typo.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/spellcheck.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/highlight.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/resizable.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/emojis.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/martor/js/martor.bootstrap.min.js' %}"></script>
+
+
+
+
+{% endblock content %}
+

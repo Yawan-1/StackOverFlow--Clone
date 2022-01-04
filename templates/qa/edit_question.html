@@ -1,0 +1,334 @@
+{% extends "profile/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+
+
+<!DOCTYPE html>
+
+
+    <html class=" ">
+
+    <head>
+
+        <title>Edit - Stack Overflow</title>
+        <link rel="stylesheet" href="{% static 'Tags/choices.min.css' %}" />
+        <link href="{% static 'MarkDown-Editor/plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+        <link href="{% static 'MarkDown-Editor/plugins/css/resizable.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+        <link href="{% static 'MarkDown-Editor/martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+<style>
+
+    a {
+        text-decoration: none !important;
+    }
+
+  .edit-review-message {
+    padding: .5em;
+    background-color: #FFFF99;
+    color: grey;
+  }
+
+  .form-errors {
+    padding: .5em;
+    background-color: red;
+    color: white;
+  }
+
+</style>
+
+    </head>
+    <body class="ask-page unified-theme">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+
+
+
+
+
+
+    <div class="container">
+            
+
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+    <div class="left-sidebar--sticky-container js-sticky-leftnav">
+        <nav role="navigation">
+            <ol class="nav-links">
+        <li class="">
+            <a
+               href="/"
+               class="pl8 nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Home
+                        </div>
+                    </div>
+            </a>
+        </li>
+                <li>
+                    <ol class="nav-links">
+                      <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+                        <li class="">
+                            <a id="nav-questions"
+                               href="/questions"
+                               class="pl8 nav-links--link -link__with-icon">
+                                <svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18">
+                                    <path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/>
+                                </svg>
+                                <span class="-link--channel-name">Questions</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a id="nav-tags"
+                               href="{% url 'profile:tagsPage' %}"
+                               class="nav-links--link">
+                                    <div class="d-flex ai-center">
+                                        <div class="flex--item truncate">
+                                            Tags
+                                        </div>
+                                    </div>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a id="nav-users"
+                               href="{% url 'profile:usersPage' %}"
+                               class="nav-links--link">
+                                    <div class="d-flex ai-center">
+                                        <div class="flex--item truncate">
+                                            Users
+                                        </div>
+                                    </div>
+                            </a>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+
+
+
+        <div id="content" class="snippet-hidden">
+
+
+
+<div class="ask-mainbar box-border" id="mainbar">
+
+       <div class="edit-review-message">
+            <p>Your edit will be placed in a queue until it is peer reviewed.</p>
+                   <p class="mb0">We welcome edits that make the post easier to understand and more valuable for readers. Because community members review edits, please try to make the post substantially better than how you found it, for example, by fixing grammar or adding additional resources and hyperlinks.</p>
+       </div>
+
+        
+
+
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+  <div id="post-editor-70352182" class="post-editor js-post-editor">
+            
+      <div style="position: relative;" class="js-post-editor-title-container">
+          <div class="form-item d-flex fd-column pt0 js-stacks-validation">
+              <div class="d-flex jc-space-between">
+                  <label for="title" class="flex--item s-label mb4">Title</label>
+                  <div class="flex--item ta-right text-counter mr0 fs-caption mt4"></div>
+              </div>
+              <div class="ps-relative">
+                  <input id="title" class="flex--item s-input w100 js-post-title-field" name="title" type="text" maxlength="300" tabindex="100" value="{{post.title}}" data-min-length="15" data-max-length="150" data-question-state-suffix="" placeholder="e.g. Is there an R function for finding the index of an element in a vector?" />
+              </div>
+              <div class="s-input-message mt4 d-none js-stacks-validation-message"></div>
+          </div>
+      </div>
+
+
+
+        <div class="ps-relative">
+                <label class="s-label mb4 d-block" for="wmd-input-70352182">Body</label>
+            <div class="wmd-container mb8">
+                <div class="js-stacks-validation">
+                    <div class="ps-relative">
+                        {{form.body}}
+                    </div>
+                    <div class="s-input-message mt4 d-none js-stacks-validation-message"></div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+        <div style="position: relative;">  
+
+    <div class="ps-relative">
+        <div class="form-item p0 js-stacks-validation js-tag-editor-container">
+            <div class="d-flex ai-center jc-space-between">
+                <label for="tagnames" class="s-label mb4 d-block flex--item fl1">
+                    Tags
+                </label>
+            </div>
+            <div class="ps-relative">
+                        <div>
+                            <input id="choices-text-remove-button" class="form-control" name="tags" type="text" size="60" tabindex="103" placeholder="Enter something" value="{% for tags in post.tags.all %}{{tags}},{% endfor %}">
+
+                            <div class="error_message_of_tag"></div>
+                            <div class="error_message_of_new_tag"></div><br>
+                        </div>
+                    <div class="pt8 js-community-icons"></div>
+            </div>
+            <div class="s-input-message mt4 d-none js-stacks-validation-message"></div>
+        </div>
+    </div>
+
+
+                <div class="form-item js-stacks-validation">
+                    <label for="edit-comment" class="s-label mb4 d-block">Edit Summary</label>
+                    <div class="ps-relative">
+                        <input id="id_why_editing_question" class="s-input w100 js-post-edit-comment-field" type="text" maxlength="300" size="60" name="why_editing_question" tabindex="109" data-min-length="10" data-max-length="300" placeholder="briefly explain your changes (corrected spelling, fixed grammar, improved formatting)" />
+                    </div>
+                    <div class="s-input-message mt4 d-none js-stacks-validation-message"></div>
+                </div>
+        </div>
+        {% if form.errors %}
+        <div class="form-errors">{{form.errors}}</div>
+        {% endif %}
+
+        <div class="d-flex ai-center gs8 gsx pt12 pb16">
+            <button id="submit-button" class="flex--item s-btn s-btn__primary" type="submit" tabindex="110">Save edits</button>
+            <a class="flex--item cancel-edit s-btn" tabindex="111" href="{{post.get_absolute_url}}">Cancel</a>
+        </div>
+        
+        <div class="js-general-error general-error cbt d-none"></div>
+    </form> 
+
+</div>
+
+<div id="sidebar" class="ask-sidebar">
+    <div id="scroller-anchor"></div>
+      <div id="scroller">
+          <div class="s-sidebarwidget s-sidebarwidget__yellow mb12" id="how-to-title">
+            <div class="s-sidebarwidget--header">How to Edit</div>
+              <ul class="s-sidebarwidget--content s-sidebarwidget__block-items s-sidebarwidget__items list-ls-disc list-inside">
+                  <li class="my12">Correct minor typos or mistakes</li>
+                  <li class="my12">Clarify meaning without changing it</li>
+                  <li class="my12">Add related resources or links</li>
+                  <li class="my12"><i>Always</i> respect the author’s intent</li>
+                  <li class="my12">Don&#x2019;t use edits to reply to the author</li>
+              </ul>
+          </div>
+      </div>
+</div>
+
+
+<br class="cbt">
+
+
+
+        </div>
+    </div>
+
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    <a href="#"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="#">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+
+
+        
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+
+<script src="{% static 'Tags/choices.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'Tag.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/ace.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/mode-markdown.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/ext-language_tools.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/theme-github.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/typo.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/spellcheck.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/highlight.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/resizable.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/emojis.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/martor/js/martor.bootstrap.min.js' %}"></script>
+
+
+    </body>
+    </html>
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+

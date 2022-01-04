@@ -1,0 +1,309 @@
+{% extends 'profile/base.html' %}
+{% load humanize %}
+
+{% block content %}
+
+
+
+    <html class="html__responsive ">
+
+    <head>
+        <title>Timeline {{data.title}} - Stack Overflow - Clone</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script async src="https://cdn.sstatic.net/Js/third-party/stacks/stacks.min.js?v=587378ef592b"></script>
+        <script src="https://cdn.sstatic.net/Js/stub.en.js?v=3355146a73b5"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/stacks.css?v=15473555f232">
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=de9fb8b74f61">
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/secondary.css?v=f124903501af">
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/Channels/channels.css?v=47a5e0f03c81">
+    </head>
+
+
+    <body class="unified-theme col1-page timeline-page">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+
+    <div class="container">
+            
+
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+    <div class="left-sidebar--sticky-container js-sticky-leftnav">
+        <nav role="navigation">
+            <ol class="nav-links">
+                    <li class="">
+                        <a
+                           href="/"
+                           class="pl8 nav-links--link">
+                                <div class="d-flex ai-center">
+                                    <div class="flex--item truncate">
+                                        Home
+                                    </div>
+                                </div>
+                        </a>
+                    </li>
+                <li>
+                    <ol class="nav-links">
+                        <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+
+                        <li class="">
+                            <a id="nav-questions"
+                               href="/questions"
+                               class="pl8 nav-links--link -link__with-icon">
+                              <svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18">
+                                <path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/>
+                              </svg><span class="-link--channel-name">Questions</span>
+                            </a>
+                        </li>         
+
+                        <li class="">
+                            <a id="nav-tags"
+                               href="{% url 'profile:tagsPage' %}"
+                               class="nav-links--link">
+                                    <div class="d-flex ai-center">
+                                        <div class="flex--item truncate">
+                                            Tags
+                                        </div>
+                                    </div>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a id="nav-users"
+                               href="{% url 'profile:usersPage' %}"
+                               class="nav-links--link">
+                                    <div class="d-flex ai-center">
+                                        <div class="flex--item truncate">
+                                            Users
+                                        </div>
+                                    </div>
+                            </a>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+
+
+        <div id="content" class="snippet-hidden">
+
+            <div class="mainbar-full post-timeline-v2">
+        <div class="subheader mb16 d-flex fd-column h-auto">
+            <h1 class="flex--item">
+                Timeline for <a href="{{data.get_absolute_url}}" class="question-hyperlink">{{data.title}}</a>
+            </h1>
+            <h3 class="flex--item">
+                Current License: <a href="#">
+                <em>__License Name__</em></a>
+            </h3>
+        </div>
+
+    <div class="mb16 fw-bold fs-body2">
+        {{countEvents}} event{{countEvents|pluralize}}
+    </div>
+
+    <table class="post-timeline s-table s-table__bx">
+        <thead>
+            <tr>
+                <th>when</th>
+                <th></th>
+                <th class="event-type">what</th>
+                <th></th>
+                <th></th>
+                <th>by</th>
+                <th></th>
+                <th>comment</th>
+            </tr>
+        </thead>
+        <tbody class="event-rows fs-body">
+
+
+
+{% for elmnt in paginated_timeline %}
+                
+<tr class="datehash--948362516" data-datehash="-948362516" data-eventtype="answer" data-eventid="70297079">
+    <td class="ws-nowrap creation-date">
+        <span title="2021-12-09 21:42:34Z" class="relativetime">{% if elmnt.date %}{{elmnt.date|naturaltime}}{% elif elmnt.edited_suggested_at %}{{elmnt.edited_suggested_at|naturaltime}}{% endif %}</span>
+    </td>
+
+    <td class="wmn1">
+        <span>
+        </span>
+    </td>
+
+    <td class="ws-nowrap event-type">
+        {% if elmnt.question_comment %}<span class="event-type comment">commented</span>{% elif elmnt.answer_owner %}<span class="event-type answer-type"><a href="{{elmnt.questionans.get_absolute_url}}#{{elmnt.id}}">answered</span>{% elif elmnt.by_user %}<span class="event-type answer-type">bounty offered</span>{% elif elmnt.upvote_by_q %}<span class="event-type answer-type">upvote</span>{% elif elmnt.downvote_by_q %}<span class="event-type answer-type">downvote</span>{% elif elmnt.edited_question %}<span class="event-type history">edit suggessted</span>{% endif %}
+    </td>
+
+    <td class="wmn1">
+        <span>
+        </span>
+    </td>
+    <td class="wmn1">
+        <span>
+        </span>
+    </td>
+
+
+    <td class="ws-nowrap">
+        <span>
+            {% if elmnt.question_comment %}<a href="{{elmnt.commented_by.profile.get_absolute_url}}">{{elmnt.commented_by}}</a>{% elif elmnt.answer_owner %}<a href="{{elmnt.answer_owner.profile.get_absolute_url}}">{{elmnt.answer_owner}}</a>{% elif elmnt.by_user %}<kbd style="color: red">N/A</kbd>{% elif elmnt.upvote_by_q %}<a href="{{elmnt.upvote_by_q.profile.get_absolute_url}}">{{elmnt.upvote_by_q}}</a>{% elif elmnt.downvote_by_q %}<a href="{{elmnt.downvote_by_q.profile.get_absolute_url}}">{{elmnt.downvote_by_q}}</a>{% elif elmnt.edited_question %}<kbd style="color: red">N/A</kbd>{% endif %}
+        </span>
+    </td>
+
+
+    <td class="wmn1">
+        <span>
+        </span>
+    </td>
+    <td class="event-comment">
+        <span>
+            {% if elmnt.answer_owner %}<a class="timeline" href="{% url 'qa:answerTimeline' elmnt.answer_owner.id %}">timeline</a>{% else %}<a class="timeline" href=#>timeline</a>{% endif %}
+            <span>score: 0</span>
+        </span>
+    </td>
+</tr>
+
+
+
+{% endfor %}
+
+
+
+<div class="s-pagination site1 themed pager float-left">
+    {% if paginated_timeline.has_other_pages %}
+      <ul class="pagination">
+        {% if paginated_timeline.has_previous %}
+          <li><a href="?page={{ paginated_timeline.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in paginated_timeline.paginator.page_range %}
+          {% if paginated_timeline.number == i %}
+        <div class="s-pagination--item is-selected">{{ i }}</div>
+          {% else %}
+        <a class="s-pagination--item" href="?page={{ i }}" rel="" title="Go to page 2">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if users.has_next %}
+          <li><a href="?page={{ paginated_timeline.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+</div>
+
+
+
+        </tbody>
+    </table>
+
+</div>
+        </div>
+    </div>
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    <a href="#"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link" data-gps-track="footer.click({ location: 4, link: 16})">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="#">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+        
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+    </html>
+
+
+
+{% for s in paginated_timeline %}
+
+<tr>
+
+{% if s.question_comment %}
+    <td>{{s.comment}}</td>
+{% elif s.answer_owner %}
+    <td>{{s.body}}</td>
+{% elif s.by_user %}
+    <td><kbd style="color: red">N/A</kbd></td>
+{% elif s.upvote_by_q %}
+    <td>N/A</td>
+{% elif s.downvote_by_q %}
+    <td>N/A</td>
+{% elif s.edited_question %}
+    <td><kbd style="color: red">N/A</kbd></td>
+{% endif %}
+
+</tr>
+
+{% endfor %}
+
+
+
+
+
+
+
+{% endblock content %}

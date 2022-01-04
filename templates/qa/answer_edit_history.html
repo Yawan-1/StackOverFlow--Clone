@@ -1,0 +1,243 @@
+{% extends 'profile/base.html' %}
+{% load humanize %}
+{% load martortags %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+
+
+    <html class="html__responsive ">
+
+<style>
+
+	a {
+		text-decoration: none !important;
+	}
+
+	.slider {
+	  padding: auto;
+	  display: none;
+	  /*background-color: lightblue;*/
+	}
+
+</style>
+
+    <body class="unified-theme">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+    <div class="container">
+
+
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+    <div class="left-sidebar--sticky-container js-sticky-leftnav">
+        <nav role="navigation">
+            <ol class="nav-links">
+		        <li class="">
+		            <a href="/" class="pl8 nav-links--link">
+		                <div class="d-flex ai-center">
+		                    <div class="flex--item truncate">
+		                        Home
+		                    </div>
+		                </div>
+		            </a>
+		        </li>
+                <li>
+                    <ol class="nav-links">
+                    	<li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+				        <li class="">
+				            <a id="nav-questions"
+				               href="{% url 'qa:questions' %}"
+				               class="pl8 nav-links--link -link__with-icon">
+							<svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18"><path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/></svg>
+							<span class="-link--channel-name">Questions</span>
+				            </a>
+				        </li>
+				        <li class="">
+				            <a id="nav-tags" href="{% url 'profile:tagsPage' %}" class="nav-links--link">
+				                    <div class="d-flex ai-center">
+				                        <div class="flex--item truncate">
+				                            Tags
+				                        </div>
+				                    </div>
+				            </a>
+				        </li>
+				        <li class="">
+				            <a id="nav-users" href="{% url 'profile:usersPage' %}" class="nav-links--link">
+				                <div class="d-flex ai-center">
+				                    <div class="flex--item truncate">
+				                        Users
+				                    </div>
+				                </div>
+				            </a>
+				        </li>
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+
+        <div id="content" class="snippet-hidden">
+        	<div class="subheader">
+    			<h1><a href="{{getAnswer.questionans.get_absolute_url}}#{{getAnswer.id}}" class="question-hyperlink">Return to Question</a></h1>
+    		</div>
+		<div class="js-revisions">
+
+			{% for history in editHistory %}
+
+            <div class="mb12 js-revision">
+		        <div class="d-flex p4 ai-center gs4 bg-powder-100">
+		            <div class="flex--item">
+		                    <button type="button"
+		                            class="s-btn s-btn__unset c-pointer openDiv" onclick="openSlide({{forloop.counter}})">
+		                        <div class="d-flex ai-center py8 gs8 gsx fc-black-600 md:fd-column-reverse">
+		                            <div class="flex--item">
+		                                <svg aria-hidden="true" class="js-off-icon svg-icon iconArrowRightAlt" width="18" height="18" viewBox="0 0 18 18"><path d="M6.41 2 5 3.41 10.59 9 5 14.59 6.41 16l7-7-7-7Z"/></svg>
+		                                <svg aria-hidden="true" class="js-on-icon d-none svg-icon iconArrowDownAlt" width="18" height="18" viewBox="0 0 18 18"><path d="m16.01 6.43-1.4-1.41L9 10.6 3.42 5l-1.4 1.42 7 7 7-7Z"/></svg>
+		                            </div>
+		                            <div class="flex--item w48 fs-headline1 fw-bold ta-left md:ta-center" title="revision 1">{{forloop.counter}}</div>
+		                        </div>
+		                    </button>
+		            </div>
+		            <div class="flex--item fl1 wmn1">
+		                <div class="d-flex ai-center fw-wrap">
+		                    <div class="flex--item">
+		                        <span class="js-revision-comment"></span>
+		                    </div>
+		                </div>
+		        		<div class="d-flex gs8 s-anchors s-anchors__muted fw-wrap pt8">
+		                    <a href="{% url 'qa:edit_answer' getAnswer.id %}" class="flex--item" title="edit this revision">Edit</a>
+		                    <a href="{{getAnswer.questionans.get_absolute_url}}#{{getAnswer.id}}"
+		                       class="flex--item"
+		                       title="link to this formatted revision">Link</a>
+		                	<button type="button" class="flex--item s-btn s-btn__link js-full-link d-none">Full</button>
+		        		</div>
+				        <div class="d-none md:d-block mt8">
+							<div class="s-user-card s-user-card__minimal">
+						        <div class="s-user-card--time">
+						            <time>Edited <span class="relativetime">{{history.history_date|naturaltime}}</span></time>
+						        </div>
+
+						        <a href="{{history.history_user.profile.get_absolute_url}}" class="s-avatar s-avatar__16 s-user-card--avatar" tabindex="-1" aria-hidden="true">
+						        	<img src="{% if history.history_user.profile.profile_photo %}{{history.history_user.profile.profile_photo.url}}{% endif %}" class="s-avatar--image" alt="" />
+						        </a>
+						        <div class="s-user-card--info">
+						        	<a href="{{history.history_user.profile.get_absolute_url}}" class="s-user-card--link lh-lg" >{{history.history_user}} <span class="ws-nowrap"></span></a>
+						        </div>
+							</div>
+						</div>
+		            </div>
+		        </div>
+
+		        <div id="panel-{{forloop.counter}}" class="slider">
+		        	<div class="markdown-diff tex2jax_ignore">
+                    <table class="full-diff ">
+                    	<tr>
+                    		<td class="s-prose content deleted"><div>{{history.prev_record.body|safe_markdown}}</div></td>
+
+							<td class="s-prose content inserted"><div>{{history.next_record.body|safe_markdown}}</div></td>
+						</tr>
+					</table>
+                </div>
+        </div>
+</div>
+
+		{% endfor %}
+
+		    	</div>
+    		</div>
+		</div>
+
+
+
+<script>
+
+	function openSlide(iD) {
+		$(`#panel-${iD}`).slideToggle("fast");
+
+	}
+
+</script>
+
+
+        </div>
+    </div>
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    
+                    <a href="#"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="#">cc by-sa</a>.
+<span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    </body>
+    </html>
+
+{% endblock content %}

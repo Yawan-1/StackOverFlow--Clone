@@ -1,0 +1,1764 @@
+{% load static %}
+{% load humanize %}
+{% load qa_tags %}
+
+{% load crispy_forms_tags %}
+    <html class="html__responsive html__unpinned-leftnav"><head>
+
+        <title>Review Low Quality Posts - Stack Overflow</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script async="" src="https://cdn.sstatic.net/Js/third-party/stacks/stacks.min.js?v=4c00f8ce1b14"></script>
+    <script src="https://cdn.sstatic.net/Js/stub.en.js?v=02d19f44eb4e"></script>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/stacks.css?v=556e4333f24c">
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=34c234f84be8">
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/secondary.css?v=bbf1061b903d">
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/Channels/channels.css?v=47a5e0f03c81">
+
+    <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
+
+    <link href="{% static 'notification/css/notification.css' %}" type="text/css" media="all" rel="stylesheet" />
+    <link href="{% static 'plugins/css/bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+</head>
+    <body class="review-task-page unified-theme">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+        
+
+
+
+
+<header class="top-bar js-top-bar top-bar__network">
+    <div class="wmx12 mx-auto d-flex ai-center h100" role="menubar">
+        <div class="-main flex--item">
+            <a href="#" class="" role="menuitem" aria-haspopup="true" aria-controls="left-sidebar" aria-expanded="false">
+                <span class="ps-relative"></span>
+            </a>
+            <a href="/" class="-logo">
+                <span class="-img _glyph">Stack Overflow - Clone</span>
+            </a>
+        </div>
+
+
+
+<div class="toast-container">
+</div>
+
+
+  <span id="message_area">
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'error' %}
+    <div class="alert alert-danger">{{message|safe}}</div>
+    {% else %}
+    <div class="alert alert-{{message.tags}}">
+    {{message|safe}}</div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+  </span>
+
+
+
+            <form id="search" role="search" action="" class="flex--item fl-grow1 searchbar px12 js-searchbar " autocomplete="off">
+                    <div class="ps-relative">
+                        <input name="q"
+                               type="text"
+                               placeholder="Search&#x2026;"
+                               value=""
+                               autocomplete="off"
+                               maxlength="240"
+                               class="s-input s-input__search js-search-field "
+                               aria-label="Search"
+                               aria-controls="top-search" 
+                               data-controller="s-popover"
+                               data-action="focus->s-popover#show"
+                               data-s-popover-placement="bottom-start"/>
+                        <svg aria-hidden="true" class="s-input-icon s-input-icon__search svg-icon iconSearch" width="18" height="18" viewBox="0 0 18 18"><path d="m18 16.5-5.14-5.18h-.35a7 7 0 10-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 112 7a5 5 0 0110 0Z"/></svg>
+                        <div class="s-popover p0 wmx100 wmn4 sm:wmn-initial js-top-search-popover" id="top-search" role="menu">
+</div>
+                    </div>
+            </form>
+
+
+
+
+
+        
+        
+
+                <ol class="overflow-x-auto ml-auto -secondary d-flex ai-center list-reset h100 user-logged-in" role="presentation">
+        <li class="-item searchbar-trigger"><a href="#" class="-link js-searchbar-trigger" role="button" aria-label="Search" aria-haspopup="true" aria-controls="search" title="Click to show search"><svg aria-hidden="true" class="svg-icon iconSearch" width="18" height="18" viewBox="0 0 18 18"><path d="m18 16.5-5.14-5.18h-.35a7 7 0 10-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 112 7a5 5 0 0110 0Z"/></svg></a></li>
+
+
+
+            <li class="-item">
+                <a href="{% if request.user.is_authenticated %}{% url 'profile:ActivityTabSummary' user.id user.username %}{% endif %}" class="my-profile">
+                    <div class="gravatar-wrapper-24" title="{{post.post_owner.profile.full_name}}">
+                        <img src="{% if request.user.profile.profile_photo %} {{request.user.profile.profile_photo.url}}{% endif %}" alt="" width="24" height="24" class="bar-sm -avatar js-avatar-me">
+                    </div>
+                        <span class="v-visible-sr">{{request.user.username}}</span>
+
+                        <div class="-rep js-header-rep" title="your reputation: {{request.user|calculate_reputation}}" aria-hidden="true">{{request.user|calculate_reputation}}</div>
+                        <span class="v-visible-sr">, {{request.user|calculate_reputation}} reputation</span>
+                            <div class="-badges">
+                                    {% if request.user|calculateGoldBadges %}
+                                    <span title="{{request.user|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                        <span class="badge1">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculateGoldBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculateGoldBadges}} gold badges</span>
+                                    {% endif %}
+
+                                    {% if request.user|calculatSilvereBadges %}             
+                                    <span title="{{request.user|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                        <span class="badge2">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculatSilvereBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculatSilvereBadges}} silver badges</span> 
+                                    {% endif %}
+
+                                    {% if request.user|calculateBronzeBadges %}             
+                                    <span title="{{request.user|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                        <span class="badge3">&#9679;</span>
+                                        <span class="badgecount">{{request.user|calculateBronzeBadges}}</span>
+                                    </span>
+                                    <span class="v-visible-sr">{{request.user|calculateBronzeBadges}} bronze badges</span> 
+                                    {% endif %}
+                            </div>
+                </a>
+            </li>
+
+        <li class="-item myInboxSVGOuter thisIsOuter">
+            <a class="-link myInboxSVGLink readNotification" data-pk="{{ data.id }}" onClick="openInbox();">
+                {% if showAlert %}<span class="button__badge">{{countUnreadNotifications}}</span>{% endif %}
+                <i class="fa fa-inbox fa-2x iconInbox myInboxSVG" aria-hidden="true"></i>
+                <span class="indicator-badge _important d-none">0</span>
+            </a>
+        </li>
+
+        <li class="-item achievements-button-item achieveSVGOuter achThisIsOuter">
+            <a href="#" class="-link readPrivNotification" onclick="openAchievementInbox();">
+                <i class="fa fa-trophy fa-2x iconAchievements achieveSVG" aria-hidden="true"></i>
+                {% if countUnreadPrivNotifications_1 %}<span class="unseen-reputation">+{{countUnreadPrivNotifications.countTheUnRead_Rep}}</span>{% endif %}
+                <span class="indicator-badge _positive d-none">+0</span>
+            </a>
+        </li>
+
+        {% if request.user.profile.access_review_queues %}
+        <li class="-item review-button-item reviewSVGOuter revThisIsOuter">
+            <a href="#" class="-link svg-icon iconReviewQueue" onclick="openReviewInbox();">
+                <i class="fa fa-tasks fa-2x iconReviewQueue reviewSVG" aria-hidden="true"></i>
+            </a>
+        </li>
+        {% endif %}
+
+
+</ol>
+
+    </div>
+</header>
+
+
+
+<!-- NOTIFICATION'S INBOX - START -->
+
+<div class="myNavbar">
+    <div class="navbar_right">
+        <myDiv class="myNotification" id="Notif">
+        <a class="icon_wrap" action=""></a>
+
+            <div class="notification_dd">
+                <div class="topbar-dialog inbox-dialog dno" role="menu" style="display: block;">
+
+                    <div class="header fw-wrap">
+                        <div class="flex--item fl1">
+                            <div class="ai-center d-flex jc-end">
+                                    <div class="-right">
+                                            <a href="#">all items</a>
+                                            • <a href="{% url 'users:logout_view' %}">Logout</a>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-content">
+                        <ul>
+                            {% for notification in notifications %}
+                            <li class="inbox-item ">
+                                <a href="{{notification.url}}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item" title="Stack Overflow"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span class="v-visible-sr">Stack Overflow&nbsp;</span>
+                                            {% if notification.type_of_noti == "comment_answer" %}
+                                            Comment on Answer
+                                            {% elif notification.type_of_noti == "question_comment" %}
+                                            Comment on Question
+                                            {% elif notification.type_of_noti == "community_message" %}
+                                            Community Message
+                                            {% elif notification.type_of_noti == "question_edit" %}
+                                            Edit Suggessted
+                                            {% elif notification.type_of_noti == "question_reopen_voted" %}
+                                            Question ReOpen Vote Raises
+                                            {% elif notification.type_of_noti == "NEW_ANSWER" %}
+                                            New Answer to the Question
+                                            {% endif %}
+
+                                            {% if notification.is_read == False %}<b class="unreadDot" style="color: red">Unread</b>{% endif %}
+
+                                            </span>
+                                            <span class="item-creation"><span title="2021-10-12 04:36:58Z" class="relativetime">{{notification.date_created|naturaltime}}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            {% if notification.question_noti %}{{notification.question_noti.title}}{% else %}{{notification.answer_noti}}{% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div> 
+            </div>
+        </myDiv>
+    </div>
+</div>
+
+<!-- NOTIFICATION'S INBOX - END -->
+
+
+<!-- ACHIEVEMENT'S INBOX - START -->
+
+<style>
+
+.earned {
+    color: green;
+}
+
+</style>
+
+<div class="achievement_navbar">
+    <div class="achievement_bar_right">
+        <acvhieveDiv class="achievement_notification">
+            <a class="achieve_icon_wrap" action=""></a>
+
+            <div class="achievement_dd">
+                <div class="topbar-dialog achievements-dialog dno" role="menu" style="display: block;">
+                    <div class="header fw-wrap">
+                        <h3 class="flex--item">
+                            achievements
+                                <small class="utc-clock sm:d-none">utc time <span class="js-utc-time utc-time">Good Time</span></small>
+                        </h3>
+                    </div>
+
+                    <div class="modal-content">
+                            <div class="js-date-group date-group">
+                                {% for privNotification in privNotifications %}
+                                <ul class="js-items items">
+                                        <li class="">
+                                            <a href="
+
+                                                {% if privNotification.type_of_PrivNotify == 'ANSWER_ACCEPT_REP_P' %}
+                                                    {{privNotification.url}}#{{privNotification.answer_priv_noti.id}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'EDIT_GOT_APPROVED' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'BOUNTY_AWARDED_REP_P' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'MY_ANSWER_UPVOTE_REP_P' %}
+                                                    {{privNotification.url}}#{{privNotification.answer_priv_noti.id}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'MY_QUESTION_UPVOTE_REP_P' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'Privilege_Earned' %}
+                                                    {{privNotification.url}}
+
+                                                {% elif privNotification.type_of_PrivNotify == 'BADGE_EARNED' %}
+                                                    {{privNotification.url}}
+
+                                                {% endif %}
+
+                                                " class="d-flex gs8 gsx" aria-label="2 reputation change: Pop-up-Notification-Panel box is not staying to the right, earned on Stack Overflow, 5 hours ago">
+                <div class="favicon favicon-stackoverflow site-icon flex--item" title="Stack Overflow - Clone"></div>
+
+
+
+                                                    {% if privNotification.type_of_PrivNotify == "ANSWER_ACCEPT_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_QUESTION_UPVOTE_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "EDIT_GOT_APPROVED" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "BOUNTY_AWARDED_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_ANSWER_UPVOTE_REP_P" %}
+                                                    <span class="js-faux-column rep-up flex--item" title="{{privNotification.date_created_PrivNotify}} hours ago">+{{privNotification.missingReputation}}
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "Privilege_Earned" %}
+                                                    <span class="js-faux-column  earned flex--item">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </span>
+                                                    {% elif privNotification.type_of_PrivNotify == "BADGE_EARNED" %}
+                                                    <span class="js-faux-column earned flex--item">
+                                                        <i class="fas fa-ribbon"></i>
+                                                    </span>
+                                                    {% endif %}
+
+
+                                                <div class="message-text flex--item fl1">
+                                                    <h4 class="">
+
+                                                    {% if privNotification.type_of_PrivNotify == "ANSWER_ACCEPT_REP_P" %}
+
+                                                    Answer Accepted
+                                                    <br>
+                                                    {{privNotification.answer_priv_noti.body}}
+
+                                                    {% elif privNotification.type_of_PrivNotify == "EDIT_GOT_APPROVED" %}
+
+                                                    Edit Approved
+                                                    <br>
+                                                    {{privNotification.question_priv_noti.title}}
+
+                                                    {% elif privNotification.type_of_PrivNotify == "BOUNTY_AWARDED_REP_P" %}
+
+                                                    Bounty Awarded
+
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_ANSWER_UPVOTE_REP_P" %}
+
+                                                    Answer Upvote
+                                                    <br>
+                                                    <b> • {{privNotification.answer_priv_noti.body}}</b>
+
+                                                    <!-- Done -->
+                                                    {% elif privNotification.type_of_PrivNotify == "MY_QUESTION_UPVOTE_REP_P" %}
+
+                                                    Question Upvote
+                                                    <br>
+                                                    <b> • {{privNotification.question_priv_noti.title}}</b>
+
+                                                    <!-- DONE -->
+                                                    {% elif privNotification.type_of_PrivNotify == "Privilege_Earned" %}
+
+                                                    Privilege Earned
+
+                                                    <b> • {{privNotification.for_if}}</b>
+
+                                                    <!-- DONE -->
+                                                    {% elif privNotification.type_of_PrivNotify == "BADGE_EARNED" %}
+
+                                                    Badge Earned - {{privNotification.for_if}}
+                                                    <br>
+                                                    <b> • {{privNotification.description}}</b>
+
+
+                                                    {% endif %}
+                                                    <br>
+                                                    {{privNotification.date_created_PrivNotify|naturaltime}}
+
+                                                    </h4>
+                                                </div>
+                                            </a>
+                                        </li>
+                                </ul>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </acvhieveDiv>
+        </div>
+    </div>
+
+<!-- ACHIEVEMENT'S INBOX - END -->
+
+
+
+<!-- REVIEW'S INBOX - START -->
+
+<div class="review_navbar">
+    <div class="review_bar_right">
+        <reviewDiv class="review_notification">
+        <a class="review_icon_wrap" action=""></a>
+
+            <div class="review_dd">
+                <div class="topbar-dialog inbox-dialog dno" role="menu" style="display: block;">
+
+                    <div class="header fw-wrap">
+                        <div class="flex--item fl1">
+                            <div class="ai-center d-flex jc-end">
+                                <div class="-right">
+                                    <a href="{% url 'help:privileges' %}">privileges</a>
+                                    {% if request.user.profile.accessTo_moderatorTools %}•
+                                    <a href="{% url 'tools:moderator_tools' %}">tools</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-content">
+                        <ul>
+                            <li class="inbox-item ">
+                                {% if can_show == True %}
+                                <a href="{% url 'review:review_FirstAns' next_blog.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span">&nbsp;</span>Review First Answers</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review First Answers</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if can_review == True %}
+                                <a href="{% url 'review:review_FirstQns' next_question.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review First Questions</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review First Questions</span>
+                                            <span class="item-creation"><span>{% if can_review == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review First Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if cal_LateRev == True %}
+                                <a href="{% url 'review:review_LateAnswers' questionIDS.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Late Answers</span>
+                                            <span class="item-creation"><span>{% if cal_LateRev == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Late Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Late Answers</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Late Answers
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if areClosedQuestions_Available == True %}
+                                <a href="{% url 'review:reviewClosedQuestions' reviewCloseQuestionID.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type"><span>&nbsp;</span>Review Closed Questions</span>
+                                            <span class="item-creation"><span>{% if areClosedQuestions_Available == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location">
+                                            Review Closed Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type"><span>&nbsp;</span>Review Closed Questions</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location">
+                                            Review Closed Questions
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if editQuestions_review_Available == True %}
+                                <a href="{% url 'review:reviewSuggesstedEdit' reviewEditedPts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type"><span>&nbsp;</span>Review Suggessted Edits</span>
+                                            <span class="item-creation"><span>{% if editQuestions_review_Available == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location">
+                                            Review Suggessted Edits
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Suggessted Edits</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Suggessted Edits
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if questionToReOpen_available == True %}
+                                <a href="{% url 'review:reOpen_Question_Review' reviewTo_ReOpenQuestionID.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Re-Open Votes Review</span>
+                                            <span class="item-creation"><span>{% if questionToReOpen_available == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Re-Open Votes Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Re-Open Votes Review</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Re-Open Votes Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if reviewLowPosts == True %}
+                                <a href="{% url 'review:reviewLowQualityPosts' reviewLowPts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Low-Quality Posts Review</span>
+                                            <span class="item-creation"><span>{% if reviewLowPosts == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Low-Quality Posts Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Low-Quality Posts Review</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Low-Quality Posts Review
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if is_available_FlagPosts == True %}
+                                <a href="{% url 'review:reviewFlagPosts' reviewFlagPts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Posts</span>
+                                            <span class="item-creation"><span>{% if is_available_FlagPosts == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Posts
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Posts</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Posts
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="inbox-item ">
+                                {% if is_available_FlagComments == True %}
+                                <a href="{% url 'review:reviewFlagComments' reviewFlagCmnts.id %}" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Comments</span>
+                                            <span class="item-creation"><span>{% if is_available_FlagComments == True %}Available{% else %}__None__{% endif %}</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Comments
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="d-flex gs8 gsx">
+                                        <div class="favicon favicon-stackoverflow site-icon flex--item"></div>
+                                    <div class="item-content flex--item fl1">
+                                        <div class="item-header">
+                                            <span class="item-type "><span>&nbsp;</span>Review Flag Comments</span>
+                                            <span class="item-creation"><span>__None__</span></span>
+                                        </div>
+                                        <div class="item-location ">
+                                            Review Flag Comments
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </div> 
+            </div>
+        </reviewDiv>
+    </div>
+</div>
+
+<!-- REVIEW'S INBOX - END -->
+
+
+
+
+    <div class="container">
+        
+<div data-is-here-when="" class="left-sidebar js-pinned-left-sidebar ps-relative" data-can-be="left-sidebar"></div>
+
+        <div id="content" class="snippet-hidden">
+
+        
+<div class="mainbar-full">
+
+
+    <div class="js-review-post-author-guidance-container"></div>
+    <div class="js-review-task d-flex">
+        <div class="js-review-content flex--item fl1 wmn0" style="opacity: 1;">
+
+
+{% if is_question %}
+
+<h1>Question</h1>
+
+{% if is_reviewed %}
+<div class="js-review-post-author-guidance-container">
+<div class="s-notice s-notice__info mb12">
+        <p class="mb0">You have already voted to this Post and no further action is required.</p>
+</div></div>
+{% endif %}
+
+
+
+
+
+
+
+<aside class="js-review-instructions mb12" role="status">
+<div class="s-notice s-notice__info">
+    {% if getReviewersByVote.suggested_through == "User" %}
+            <strong><span class="fc-green-600">{{lastVoteWas.reviewActions}}</span> <span>{{getReviewersByVote.at|date:"D, d M, Y"}}</span>:</strong>
+            <br>
+            Suggessted By :-: <b style="color: red;">{{getReviewersByVote.suggested_by}}</b>
+    {% else %}
+            <strong><span class="fc-green-600">{% if getReviewersByVote.why_low_quality == "Question_Less_Than_200" %} Question is Less than 200 Words {% elif getReviewersByVote.why_low_quality == "Answer_Less_Than_200" %}Answer Less than 200 Words {% elif getReviewersByVote.why_low_quality == "Comment_As_Answer" %}Comment as Answer{% endif %} </span> <span title="2021-11-07 09:46:25Z" class="relativetime">{{getThisItemFromReview.at|date:"D, d M, Y"}}</span></strong>
+            <br>
+            <br>
+            Suggessted By :-: <b style="color: red;">Automatic</b>
+    {% endif %}
+        <ul class="mt8 list-reset">
+            {% if is_reviewed %}
+                <li>
+                    <div>
+                        <a href="{{getThisItemFromReview.flag_reviewed_by.profile.get_absolute_url}}">{{getThisItemFromReview.flag_reviewed_by}}</a> reviewed this <span title="2021-11-07 09:46:25Z" class="relativetime fw-normal">{{getThisItemFromReview.date|date:"D, d M, Y"}}</span>: 
+
+                        <b>{% if getThisItemFromReview.flagReviewActions == "DELETE_IT" %}Delete It{% elif getThisItemFromReview.flagReviewActions == "STAY_AS_IT_IS" %}No Action Needed{% elif getThisItemFromReview.flagReviewActions == "CLOSE_IT" %}Close It{% endif %}</b>
+                    </div>
+                </li>
+            {% endif %}
+        </ul>
+        <div class="d-flex gs8 pt16">
+            {% if can_review == True %}
+            <a href="{% url 'review:review_FirstQns' next_question.id %}" class="js-action-button s-btn s-btn__primary flex--item">ReviewQuestions</a>
+                    Next task
+            {% else %}
+
+            {% endif %}
+
+        </div>
+</div>
+
+
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<aside class="js-review-instructions d-none mb12" role="status"></aside>
+
+            <div class="fs-title">Review the following Low Quality Question</div>
+            <div class="s-post-summary s-post-summary__minimal p0 mb16 bbw0 mt16">
+    <div class="s-post-summary--stats">
+            <div class="s-post-summary--stats-item has-accepted-answer">
+                {{data.answer_set.all.count}} answers
+            </div>
+        <div class="s-post-summary--stats-item js-metadata-vote-count" data-post-id="69805495">
+            {{data.qupvote_set.all.count}} votes
+        </div>
+        <div class="s-post-summary--stats-item">
+            {{data.viewers.all.count}} views
+        </div>
+    </div>
+    <div class="s-post-summary--content">
+        <div class="s-post-summary--content-title js-question-title-link"><a href="{{data.get_absolute_url}}" class="question-hyperlink" target="_blank">{{data.title}}</a></div>
+        <div class="s-post-summary--meta jc-start">
+            <div class="s-user-card s-user-card__minimal">
+                        <span class="s-avatar s-user-card--avatar">
+                            <a href="{% url 'profile:activityPageTabProfile' data.post_owner.id data.post_owner.username %}">
+                                <div class="gravatar-wrapper-16">
+                                    <img src="{{data.post_owner.profile.profile_photo.url}}" alt="" width="16" height="16" class="bar-sm">
+                                </div>
+                            </a>
+                        </span>
+                        <a href="{% url 'profile:activityPageTabProfile' data.post_owner.id data.post_owner.username %}">{{data.post_owner}}</a><div class="s-user-card--awards mbn1 mx4">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{data.post_owner|calculate_reputation}}</span>
+                                <span title="{{data.post_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{data.post_owner|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.post_owner|calculateGoldBadges}} gold badges</span>
+
+                                <span title="{{data.post_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{data.post_owner|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.post_owner|calculatSilvereBadges}} silver badges</span>
+
+                                <span title="{{data.post_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{data.post_owner|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.post_owner|calculateBronzeBadges}} bronze badges</span>
+                        </div>
+                <div class="s-user-card--time">Asked
+                    <span title="2021-10-22 18:54:54Z" class="ws-nowrap">{{data.date|naturaltime}}</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+    <div class="bt bc-black-100 pt12 mb16">
+        <div class="s-navigation s-navigation__muted js-review-tabs" role="tablist" data-controller="s-navigation-tablist">
+            <button type="button" role="tab" class="s-navigation--item is-selected" id="tab-revision" aria-controls="panel-revision" aria-selected="true" data-is-task="true">
+                Low Quality Question
+            </button>
+                <button type="button" role="tab" class="s-navigation--item" id="tab-answers" aria-controls="panel-answers" aria-selected="false" tabindex="-1">Answers</button>
+        </div>
+    </div>
+
+<div id="panel-revision" role="tabpanel" aria-labelledby="tab-revision">
+
+    <div class="post-layout">
+            <div class="votecell post-layout--left">
+                <div class="js-voting-container d-flex jc-center fd-column ai-stretch gs4 fc-black-200" data-post-id="69681868">
+<form method="GET" class="likeForm d-inline" action="{% url 'qa:question_upvote_downvote' data.id %}" data-pk="{{ data.id }}">
+    <div id="id_likes{{data.id}}">
+        {% if request.user == likepost.upvote_by_q %}
+        <button name='submit' type='submit' value="like"><i  class="fas active fa-sort-up fa-4x"></i></button>
+        {% else %}
+        <button name='submit' type='submit' value="like"><i  class="fas inactive fa-sort-up fa-4x"></i></button>
+        {% endif %}
+        <div class="js-vote-count flex--item d-flex fd-column ai-center fc-black-500 fs-title" itemprop="upvoteCount" data-value="{{allToShowVotes}}">
+            <p>{{allToShowVotes}}</p>
+        </div>
+    </div>
+</form>
+
+<form action="{% url 'qa:question_upvote_downvote' data.id %}" method="GET" class="d-inline dislikeForm" data-pk="{{ data.id }}">
+    <div id="id_dislikes{{data.id}}">
+        {% if request.user == likeDownpost.downvote_by_q %}
+        <button name='submit' type='submit' value="dislike"><i class="fas voteDownActive fa-sort-down fa-4x"></i></button> 
+        {% else %}
+        <button name='submit' type='submit' value="dislike"><i class="fas voteDownInActive fa-sort-down fa-4x"></i></button> 
+        {% endif %}
+    </div>
+</form>
+
+</div>
+
+            </div>
+        <div class="postcell post-layout--right">
+
+
+
+<div class="diffs">
+
+
+        <div id="panel-5290622-SideBySideHtml" role="tabpanel" aria-labelledby="tab-5290622-SideBySideHtml" class="js-diff-panel mb16" data-type="SideBySideHtml" data-url="" data-full-url="">
+
+                <div class="d-flex gs12 flex__allcells6">
+
+                    <div class="flex--item ">
+                            <h1 class="fs-title mb16">{{data.title}}</h1>
+                        <div class="s-prose js-post-body">
+                            {{data.body|truncatechars:3}}
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+
+
+        <div class="mb16">
+            {% for tag in data.tags.all %}
+            <a href="{% url 'tagbadge:taggedItemsFrom_All' tag.id %}" class="post-tag" title="show questions tagged 'python'" rel="tag">{{tag}}</a> 
+            {% endfor %}
+        </div>
+</div>
+
+
+
+    <div class="d-flex mt16">
+        <span class="fc-black-500 mr8">
+            Answered <span title="2021-11-21 04:22:05Z" class="relativetime">{{data.date|naturaltime}}</span>
+        </span>
+                    
+        <div class="s-user-card s-user-card__minimal">
+            <a href="#" class="s-avatar s-avatar__16 s-user-card--avatar" tabindex="-1" aria-hidden="true">
+                <img src="{% if data.post_owner.profile.profile_photo %}{{data.post_owner.profile.profile_photo.url}}{% endif %}" class="s-avatar--image" alt="">
+            </a>
+            <div class="s-user-card--info">
+                <a href="{% url 'profile:activityPageTabProfile' data.post_owner.id data.post_owner.username %}" class="s-user-card--link lh-lg">
+                    {{data.post_owner}}
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+<div class="mt16 mb4">
+<div class="js-post-menu pt2" data-post-id="69681868">
+    <div class="d-flex gs8 s-anchors s-anchors__muted fw-wrap">
+    </div>
+    <div class="js-menu-popup-container"></div>
+</div>
+</div>
+</div>
+
+    <span class="d-none" itemprop="commentCount"></span> 
+    <div class="post-layout--right js-post-comments-component">
+        <div id="comments-69681868" class="comments js-comments-container bt bc-black-075 mt12  dno" data-post-id="69681868" data-min-length="15">
+            <ul class="comments-list js-comments-list" data-remaining-comments-count="0" data-canpost="false" data-cansee="false" data-comments-unavailable="true" data-addlink-disabled="true">
+            </ul>
+        </div>
+
+        <div id="comments-link-69681868">
+            <a class="js-show-link comments-link dno" title="Expand to show all comments on this post" href="#" onclick="" role="button"></a>
+        </div>         
+    </div>
+    </div>
+
+</div>
+
+
+
+    <div id="panel-answers" role="tabpanel" aria-labelledby="tab-answers" class="d-none">
+
+
+{% for ans in data.answer_set.all %}
+
+
+<a name="{{ans.id}}"></a>
+    <div id="answer-{{ans.id}}" class="answer js-answer accepted-answer" data-answerid="{{ans.id}}" data-score="1" data-position-on-page="0" data-highest-scored="0" data-question-has-accepted-highest-score="0" itemprop="suggestedAnswer" itemscope="" itemtype="https://schema.org/Answer">
+    <div class="post-layout">
+        <div class="votecell post-layout--left">
+            <div class="js-voting-container d-flex jc-center fd-column ai-stretch gs4 fc-black-200" data-post-id="{{ans.id}}">
+<form method="GET" class="ansLikeForm" action="{% url 'qa:answer_upvote_downvote' ans.id  %}" data-pk="{{ ans.id }}">
+    <div id="id_Ans_UpVote{{ans.id}}">
+        {% if user in ans.a_vote_ups.all %}
+        <button name='submit' type='submit' value="voteAns"><i  class="fas active fa-sort-up fa-4x"></i></button> 
+        {% else %}
+        <button name='submit' type='submit' value="voteAns"><i  class="fas inactive fa-sort-up fa-4x"></i></button> 
+        {% endif %}
+        <div class="js-vote-count flex--item d-flex fd-column ai-center fc-black-500 fs-title" itemprop="upvoteCount" data-value="">
+            <p>{{ans.countAllTheVotes}}</p>
+        </div>
+    </div>
+</form>
+
+
+
+<form action="{% url 'qa:answer_upvote_downvote' ans.id  %}" method="GET" class="ansDislikeForm" data-pk="{{ ans.id }}">
+    <div id="id_Ans_DownVote{{ans.id}}">
+        {% if user in ans.a_vote_downs.all %}
+        <button name='submit' type='submit' value="downVoteAns"><i class="fas voteDownActive fa-sort-down fa-4x"></i></button> 
+        {% else %}
+        <button name='submit' type='submit' value="downVoteAns"><i class="fas voteDownInActive fa-sort-down fa-4x"></i></button> 
+        {% endif %}
+    </div>
+</form>
+
+        {% if ans.accepted %}
+        <i  class="correct far fa-check fa-3x" ></i>
+        {% else %}
+        <i  class="wrong far fa-check fa-3x"></i>
+        {% endif %}
+
+        <a class="js-post-issue flex--item s-btn s-btn__unset c-pointer py6 mx-auto" href="/posts/69682212/timeline" data-shortcut="T" data-ks-title="timeline" data-controller="s-tooltip" data-s-tooltip-placement="right" aria-label="Timeline" aria-describedby="--stacks-s-tooltip-d3nn9264"><svg aria-hidden="true" class="mln2 mr0 svg-icon iconHistory" width="19" height="18" viewBox="0 0 19 18"><path d="M3 9a8 8 0 113.73 6.77L8.2 14.3A6 6 0 105 9l3.01-.01-4 4-4-4h3L3 9Zm7-4h1.01L11 9.36l3.22 2.1-.6.93L10 10V5Z"></path></svg></a><div id="--stacks-s-tooltip-d3nn9264" class="s-popover s-popover__tooltip pe-none" aria-hidden="true" role="tooltip">Show activity on this post.<div class="s-popover--arrow"></div></div>
+
+</div>
+
+        </div>
+
+
+
+<div class="answercell post-layout--right">
+    <div class="s-prose js-post-body" itemprop="text">
+        {{ans.body|truncatechars:30}}
+    </div>
+    <div class="mt24">
+        <div class="d-flex fw-wrap ai-start jc-end gs8 gsy">
+            <time itemprop="dateCreated" datetime="2021-10-22T19:29:26"></time>
+            <div class="flex--item mr16" style="flex: 1 1 100px;">
+                <div class="js-post-menu" data-post-id="{{ans.id}}">
+                <div class="js-menu-popup-container"></div>
+            </div></div>
+
+            <div class="post-signature flex--item fl0">
+                <div class="user-info user-hover">
+                    <div class="user-action-time">
+                        answered <span title="2021-10-22 19:29:26Z" class="relativetime">{{ans.date|naturaltime}}</span>
+                    </div>
+                    <div class="user-gravatar32">
+                        <a href="{% url 'profile:activityPageTabProfile' ans.answer_owner.id ans.answer_owner.username %}"><div class="gravatar-wrapper-32"><img src="{% if ans.answer_owner.profile.profile_photo %}{{ans.answer_owner.profile.profile_photo.url}}{% endif %}" alt="" width="32" height="32" class="bar-sm"></div></a>
+                    </div>
+                    <div class="user-details" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                        <a href="{% url 'profile:activityPageTabProfile' ans.answer_owner.id ans.answer_owner.username %}">{{ans.answer_owner}}</a><span class="d-none" itemprop="name">{{ans.answer_owner}}</span>
+                            <div class="-flair">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{ans.answer_owner|calculate_reputation}}</span>
+                                <span title="{{ans.answer_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{ans.answer_owner|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{ans.answer_owner|calculateGoldBadges}} gold badges</span>
+
+                                <span title="{{ans.answer_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{ans.answer_owner|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{ans.answer_owner|calculatSilvereBadges}} silver badges</span>
+
+                                <span title="{{ans.answer_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{ans.answer_owner|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{ans.answer_owner|calculateBronzeBadges}} bronze badges</span>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<br><br>
+{% endfor %}
+
+
+
+
+
+</div>
+</div>
+        <div class="js-actions-sidebar flex--item">
+
+
+{% if is_reviewed == False %}
+<div class="fl-shrink0 md:d-none ml24 ws3 ps-sticky t64">
+    <div class="s-sidebarwidget s-anchors js-review-actions">
+        <div class="s-sidebarwidget--header bb bc-black-3">
+            Actions
+        </div>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+        <fieldset class="d-flex gs8 gsy fd-column p12" form="">
+                <div class="flex--item">
+                    <div class="d-flex gs8 gsx js-action-radio-parent">
+                        <div class="flex--item">
+                                <input type="radio" name="reviewActions" value="Looks_OK" class="s-radio js-action-radio" required id="id_reviewActions_1">
+                        </div>
+                        <div class="flex--item">
+                                <label class="d-block s-label fw-bold" for="id_reviewActions_1">
+                                    Looks Ok
+                                    <p class="s-description o100">This edit clearly improves the post.</p>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex--item">
+                    <div class="d-flex gs8 gsx js-action-radio-parent">
+                        <div class="flex--item">
+                            <input type="radio" name="reviewActions" value="Edit" class="s-radio js-action-radio" required id="id_reviewActions_2">
+                        </div>
+                        <div class="flex--item">
+                                <label class="d-block s-label fw-bold" for="id_reviewActions_2">
+                                    Edit
+                                    <p class="s-description o100">Make additional improvements to the post yourself.</p>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex--item">
+                    <div class="d-flex gs8 gsx js-action-radio-parent">
+                        <div class="flex--item">
+                            <input class="s-radio js-action-radio" type="radio" name="reviewActions" id="id_reviewActions_3" value="Recommend_Delete">
+                        </div>
+                        <div class="flex--item">
+                                <label class="d-block s-label fw-bold" for="id_reviewActions_3">
+                                    Recommend Delete
+                                    <p class="s-description o100">Replace an ineffective edit with your own substantive changes.</p>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex--item">
+                    <div class="d-flex gs8 gsx js-action-radio-parent">
+                        <div class="flex--item">
+                            <input class="s-radio js-action-radio" type="radio" name="reviewActions" id="id_reviewActions_4" value="Recommend_Close">
+                        </div>
+                        <div class="flex--item">
+                                <label class="d-block s-label fw-bold" for="id_reviewActions_4">
+                                    Recommend Close
+                                    <p class="s-description o100">Can't decide what to do?</p>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex--item">
+                    <div class="d-flex gs8 gsx js-action-radio-parent">
+                        <div class="flex--item">
+                            <input class="s-radio js-action-radio" type="radio" name="reviewActions" id="id_reviewActions_5" value="Skip">
+                        </div>
+                        <div class="flex--item">
+                                <label class="d-block s-label fw-bold" for="id_reviewActions_5">
+                                    Skip
+                                    <p class="s-description o100">Can't decide what to do?</p>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+            <div class="flex--item mxn12 bt bc-black-3">
+                <div class="d-flex gs8 gsx ai-center px12 pt12">
+                    <div class="flex--item fl1">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    </div>
+</div>
+{% endif %}
+<!--Mobile actions-->
+{% if is_reviewed == False %}
+<div class="d-none js-review-actions md:d-block bg-black-025 ps-fixed b0 l0 r0 pt12 px16 ba bc-black-3 z-nav-fixed">
+    <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+    <div class="d-flex ai-center pb12">
+        <div class="flex--item mr16 fs-body2 fc-black-600">
+            Actions
+        </div>
+        <div class="flex--item fl1 s-select">
+                <select class="js-action-dropdown" name="flagReviewActions">
+                    <option value="" selected="">Please select one...</option>
+                        <option value="Looks_OK">Looks Ok</option>
+                        <option value="Edit">Edit</option>
+                        <option value="Recommend_Delete">Recommend Delete</option>
+                        <option value="Recommend_Close">Recommend Close</option>
+                        <option value="SKIP">Skip</option>
+                </select>
+        </div>
+    </div>
+
+    <div class="d-flex mxn16 bt bc-black-3 bg-white py12 ai-center">
+        <div class="flex--item fl1 ml16">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </div>
+</form>
+</div>
+{% endif %}
+
+
+
+{% elif is_answer == True %}
+
+<h1>Answer</h1>
+
+{% if is_reviewed %}
+<div class="js-review-post-author-guidance-container">
+<div class="s-notice s-notice__info mb12">
+        <p class="mb0">Already voted to this Post and no further action is required.</p>
+</div></div>
+{% endif %}
+
+
+
+
+
+
+
+<aside class="js-review-instructions mb12" role="status">
+<div class="s-notice s-notice__info">
+    {% if getReviewersByVote.suggested_through == "User" %}
+            <strong><span class="fc-green-600">{{lastVoteWas.reviewActions}}</span> <span>{{getReviewersByVote.at|date:"D, d M, Y"}}</span>:</strong>
+            <br>
+            Suggessted By :-: <b style="color: red;">{{getReviewersByVote.suggested_by}}</b>
+    {% else %}
+            <strong><span class="fc-green-600">{% if getReviewersByVote.why_low_quality == "Question_Less_Than_200" %} Question is Less than 200 Words {% elif getReviewersByVote.why_low_quality == "Answer_Less_Than_200" %}Answer Less than 200 Words {% elif getReviewersByVote.why_low_quality == "Comment_As_Answer" %}Comment as Answer{% endif %} </span> <span title="2021-11-07 09:46:25Z" class="relativetime">at {{getReviewersByVote.at|date:"D, d M, Y"}}</span></strong>
+            <br>
+            <br>
+            Suggessted By :-: <b style="color: #568;">Automatic</b>
+    {% endif %}
+        <ul class="mt8 list-reset">
+            {% for reviews in reviewers %}
+                <li>
+                    <div>
+                        <a href="{% url 'profile:activityPageTabProfile' reviews.id reviews.username %}">{{reviews}}</a> reviewed this <span title="2021-11-07 09:46:25Z" class="relativetime fw-normal">{{reviews.reviewed_at|date:"D, d M, Y"}}</span>:
+
+                        <b>{% if reviews.reviewActions == "Looks_OK" %}Looks Ok{% elif reviews.reviewActions == "STAY_AS_IT_IS" %}No Action Needed{% elif reviews.reviewActions == "CLOSE_IT" %}Close It{% endif %}</b>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="d-flex gs8 pt16">
+            {% if can_review == True %}
+            <a href="{% url 'review:review_FirstQns' next_question.id %}" class="js-action-button s-btn s-btn__primary flex--item">ReviewQuestions</a>
+                    Next task
+            {% else %}
+
+            {% endif %}
+
+        </div>
+</div>
+
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<aside class="js-review-instructions d-none mb12" role="status"></aside>
+
+            <div class="fs-title">Review the following Low Quality Answer</div>
+            <br>
+            <a href="{{data.questionans.get_absolute_url}}#{{data.id}}" target="_blank">{{data.body|truncatechars:20}}</a>
+            <div class="s-post-summary s-post-summary__minimal p0 mb16 bbw0 mt16">
+
+    <div class="s-post-summary--content">
+        <div class="s-post-summary--content-title js-question-title-link"><a href="{{data.get_absolute_url}}" class="question-hyperlink" target="_blank">{{data.title}}</a></div>
+        <div class="s-post-summary--meta jc-start">
+            <div class="s-user-card s-user-card__minimal">
+                        <span class="s-avatar s-user-card--avatar">
+                            <a href="{% url 'profile:activityPageTabProfile' data.answer_owner.id data.answer_owner.username %}">
+                                <div class="gravatar-wrapper-16">
+                                    <img src="{{data.answer_owner.profile.profile_photo.url}}" alt="" width="16" height="16" class="bar-sm">
+                                </div>
+                            </a>
+                        </span>
+                        <a href="{% url 'profile:activityPageTabProfile' data.answer_owner.id data.answer_owner.username %}">{{data.answer_owner}}</a><div class="s-user-card--awards mbn1 mx4">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{data.answer_owner|calculate_reputation}}</span>
+                                <span title="{{data.answer_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{data.answer_owner|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.answer_owner|calculateGoldBadges}} gold badges</span>
+
+                                <span title="{{data.answer_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{data.answer_owner|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.answer_owner|calculatSilvereBadges}} silver badges</span>
+
+                                <span title="{{data.answer_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{data.answer_owner|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.answer_owner|calculateBronzeBadges}} bronze badges</span>
+                        </div>
+                <div class="s-user-card--time">Answered
+                    <span title="2021-10-22 18:54:54Z" class="ws-nowrap">{{data.date|naturaltime}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <div class="bt bc-black-100 pt12 mb16">
+        <div class="s-navigation s-navigation__muted js-review-tabs" role="tablist" data-controller="s-navigation-tablist">
+            <button type="button" role="tab" class="s-navigation--item is-selected" id="tab-revision" aria-controls="panel-revision" aria-selected="true" data-is-task="true">
+                Low Quality Answer
+            </button>
+                <button type="button" role="tab" class="s-navigation--item" id="tab-answers" aria-controls="panel-answers" aria-selected="false" tabindex="-1">Question</button>
+        </div>
+    </div>
+
+<div id="panel-revision" role="tabpanel" aria-labelledby="tab-revision">
+
+    <div class="post-layout">
+            <div class="votecell post-layout--left">
+                <div class="js-voting-container d-flex jc-center fd-column ai-stretch gs4 fc-black-200" data-post-id="69681868">
+<form method="GET" class="ansLikeForm" action="{% url 'qa:answer_upvote_downvote' data.id  %}" data-pk="{{ data.id }}">
+    <div id="id_Ans_UpVote{{data.id}}">
+        {% if user in data.a_vote_ups.all %}
+        <button name='submit' type='submit' value="voteAns"><i  class="fas active fa-sort-up fa-4x"></i></button> 
+        {% else %}
+        <button name='submit' type='submit' value="voteAns"><i  class="fas inactive fa-sort-up fa-4x"></i></button> 
+        {% endif %}
+        <div class="js-vote-count flex--item d-flex fd-column ai-center fc-black-500 fs-title" itemprop="upvoteCount" data-value="">
+            <p>{{data.countAllTheVotes}}</p>
+        </div>
+    </div>
+</form>
+
+
+
+<form action="{% url 'qa:answer_upvote_downvote' data.id  %}" method="GET" class="ansDislikeForm" data-pk="{{ data.id }}">
+    <div id="id_Ans_DownVote{{data.id}}">
+        {% if user in data.a_vote_downs.all %}
+        <button name='submit' type='submit' value="downVoteAns"><i class="fas voteDownActive fa-sort-down fa-4x"></i></button> 
+        {% else %}
+        <button name='submit' type='submit' value="downVoteAns"><i class="fas voteDownInActive fa-sort-down fa-4x"></i></button> 
+        {% endif %}
+    </div>
+</form>
+</div>
+
+            </div>
+
+<div class="answercell post-layout--right">
+    <div class="s-prose js-post-body" itemprop="text">
+        {{data.body}}
+    </div>
+    <div class="mt24">
+        <div class="d-flex fw-wrap ai-start jc-end gs8 gsy">
+            <time itemprop="dateCreated" datetime="2021-10-22T19:29:26"></time>
+            <div class="flex--item mr16" style="flex: 1 1 100px;">
+                <div class="js-post-menu" data-post-id="{{data.id}}">
+                <div class="js-menu-popup-container"></div>
+            </div></div>
+
+            <div class="post-signature flex--item fl0">
+                <div class="user-info user-hover">
+                    <div class="user-action-time">
+                        Answered <span title="2021-10-22 19:29:26Z" class="relativetime">{{data.date|naturaltime}}</span>
+                    </div>
+                    <div class="user-gravatar32">
+                        <a href="{% url 'profile:activityPageTabProfile' data.answer_owner.id data.answer_owner.username %}"><div class="gravatar-wrapper-32"><img src="{% if data.answer_owner.profile.profile_photo %}{{data.answer_owner.profile.profile_photo.url}}{% endif %}" alt="" width="32" height="32" class="bar-sm"></div></a>
+                    </div>
+                    <div class="user-details" itemprop="author" itemscope="" itemtype="#">
+                        <a href="{% url 'profile:activityPageTabProfile' data.answer_owner.id data.answer_owner.username %}">{{data.answer_owner}}</a><span class="d-none" itemprop="name">{{data.answer_owner}}</span>
+                            <div class="-flair">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{data.answer_owner|calculate_reputation}}</span>
+                                <span title="{{data.answer_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{data.answer_owner|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.answer_owner|calculateGoldBadges}} gold badges</span>
+
+                                <span title="{{data.answer_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{data.answer_owner|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.answer_owner|calculatSilvereBadges}} silver badges</span>
+
+                                <span title="{{data.answer_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{data.answer_owner|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.answer_owner|calculateBronzeBadges}} bronze badges</span>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+    <div id="panel-answers" role="tabpanel" aria-labelledby="tab-answers" class="d-none">
+
+
+
+
+<a name="{{data.id}}"></a>
+    <div id="answer-{{data.id}}" class="answer js-answer accepted-answer" data-answerid="{{data.id}}" data-score="1" data-position-on-page="0" data-highest-scored="0" data-question-has-accepted-highest-score="0" itemprop="suggestedAnswer" itemscope="" itemtype="https://schema.org/Answer">
+    <div class="post-layout">
+        <div class="votecell post-layout--left">
+            <div class="js-voting-container d-flex jc-center fd-column ai-stretch gs4 fc-black-200" data-post-id="{{data.id}}">
+<form method="GET" class="likeForm d-inline" action="{% url 'qa:question_upvote_downvote' data.questionans.id %}" data-pk="{{ data.questionans.id }}">
+    <div id="id_likes{{data.questionans.id}}">
+        {% if request.user == likepost.upvote_by_q %}
+        <button name='submit' type='submit' value="like"><i  class="fas active fa-sort-up fa-4x"></i></button>
+        {% else %}
+        <button name='submit' type='submit' value="like"><i  class="fas inactive fa-sort-up fa-4x"></i></button>
+        {% endif %}
+        <div class="js-vote-count flex--item d-flex fd-column ai-center fc-black-500 fs-title" itemprop="upvoteCount" data-value="{{allToShowVotes}}">
+            <p>{{allToShowVotes}}</p>
+        </div>
+    </div>
+</form>
+
+<form action="{% url 'qa:question_upvote_downvote' data.questionans.id %}" method="GET" class="d-inline dislikeForm" data-pk="{{ data.questionans.id }}">
+    <div id="id_dislikes{{data.questionans.id}}">
+        {% if request.user == likeDownpost.downvote_by_q %}
+        <button name='submit' type='submit' value="dislike"><i class="fas voteDownActive fa-sort-down fa-4x"></i></button> 
+        {% else %}
+        <button name='submit' type='submit' value="dislike"><i class="fas voteDownInActive fa-sort-down fa-4x"></i></button> 
+        {% endif %}
+    </div>
+</form>
+
+        <a class="js-post-issue flex--item s-btn s-btn__unset c-pointer py6 mx-auto" href="/posts/{{data.id}}/timeline" data-shortcut="T" data-ks-title="timeline" data-controller="s-tooltip" data-s-tooltip-placement="right" aria-label="Timeline" aria-describedby="--stacks-s-tooltip-d3nn9264"><svg aria-hidden="true" class="mln2 mr0 svg-icon iconHistory" width="19" height="18" viewBox="0 0 19 18"><path d="M3 9a8 8 0 113.73 6.77L8.2 14.3A6 6 0 105 9l3.01-.01-4 4-4-4h3L3 9Zm7-4h1.01L11 9.36l3.22 2.1-.6.93L10 10V5Z"></path></svg></a><div id="--stacks-s-tooltip-d3nn9264" class="s-popover s-popover__tooltip pe-none" aria-hidden="true" role="tooltip">Show activity on this post.<div class="s-popover--arrow"></div></div>
+
+</div>
+
+        </div>
+
+
+
+
+<div class="answercell post-layout--right">
+    <div class="s-prose js-post-body" itemprop="text">
+        {{data.questionans.body|truncatechars:30}}
+    </div>
+    <div class="mt24">
+        <div class="d-flex fw-wrap ai-start jc-end gs8 gsy">
+            <time itemprop="dateCreated" datetime="2021-10-22T19:29:26"></time>
+            <div class="flex--item mr16" style="flex: 1 1 100px;">
+                <div class="js-post-menu" data-post-id="{{data.id}}">
+                <div class="js-menu-popup-container"></div>
+            </div></div>
+
+            <div class="post-signature flex--item fl0">
+                <div class="user-info user-hover">
+                    <div class="user-action-time">
+                        Asked <span title="2021-10-22 19:29:26Z" class="relativetime">{{data.questionans.date|naturaltime}}</span>
+                    </div>
+                    <div class="user-gravatar32">
+                        <a href="{% url 'profile:activityPageTabProfile' data.questionans.post_owner.id data.questionans.post_owner.username %}"><div class="gravatar-wrapper-32"><img src="{% if data.questionans.post_owner.profile.profile_photo %}{{data.questionans.post_owner.profile.profile_photo.url}}{% endif %}" alt="" width="32" height="32" class="bar-sm"></div></a>
+                    </div>
+                    <div class="user-details" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                        <a href="{% url 'profile:activityPageTabProfile' data.questionans.post_owner.id data.questionans.post_owner.username %}">{{data.questionans.post_owner}}</a><span class="d-none" itemprop="name">{{data.questionans.post_owner}}</span>
+                            <div class="-flair">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{data.questionans.post_owner|calculate_reputation}}</span>
+                                <span title="{{data.questionans.post_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{data.questionans.post_owner|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.questionans.post_owner|calculateGoldBadges}} gold badges</span>
+
+                                <span title="{{data.questionans.post_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{data.questionans.post_owner|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.questionans.post_owner|calculatSilvereBadges}} silver badges</span>
+
+                                <span title="{{data.questionans.post_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{data.questionans.post_owner|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{data.questionans.post_owner|calculateBronzeBadges}} bronze badges</span>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<br><br>
+
+
+
+
+
+</div>
+</div>
+        <div class="js-actions-sidebar flex--item">
+
+
+{% if is_reviewed == False %}
+<div class="fl-shrink0 md:d-none ml24 ws3 ps-sticky t64">
+    <div class="s-sidebarwidget s-anchors js-review-actions">
+        <div class="s-sidebarwidget--header bb bc-black-3">
+            Actions
+        </div>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+        <fieldset class="d-flex gs8 gsy fd-column p12" form="">
+                <div class="flex--item">
+                    <div class="d-flex gs8 gsx js-action-radio-parent">
+                        <div class="flex--item">
+                                <input type="radio" name="reviewActions" value="Looks_OK" class="s-radio js-action-radio" required id="id_reviewActions_1">
+                        </div>
+                        <div class="flex--item">
+                                <label class="d-block s-label fw-bold" for="id_reviewActions_1">
+                                    Looks Ok
+                                    <p class="s-description o100">This edit clearly improves the post.</p>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex--item">
+                    <div class="d-flex gs8 gsx js-action-radio-parent">
+                        <div class="flex--item">
+                            <input type="radio" name="reviewActions" value="Edit" class="s-radio js-action-radio" required id="id_reviewActions_2">
+                        </div>
+                        <div class="flex--item">
+                                <label class="d-block s-label fw-bold" for="id_reviewActions_2">
+                                    Edit
+                                    <p class="s-description o100">Make additional improvements to the post yourself.</p>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex--item">
+                    <div class="d-flex gs8 gsx js-action-radio-parent">
+                        <div class="flex--item">
+                            <input class="s-radio js-action-radio" type="radio" name="reviewActions" id="id_reviewActions_3" value="Recommend_Delete">
+                        </div>
+                        <div class="flex--item">
+                                <label class="d-block s-label fw-bold" for="id_reviewActions_3">
+                                    Recommend Delete
+                                    <p class="s-description o100">Replace an ineffective edit with your own substantive changes.</p>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex--item">
+                    <div class="d-flex gs8 gsx js-action-radio-parent">
+                        <div class="flex--item">
+                            <input class="s-radio js-action-radio" type="radio" name="reviewActions" id="id_reviewActions_5" value="Skip">
+                        </div>
+                        <div class="flex--item">
+                                <label class="d-block s-label fw-bold" for="id_reviewActions_5">
+                                    Skip
+                                    <p class="s-description o100">Can't decide what to do?</p>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+            <div class="flex--item mxn12 bt bc-black-3">
+                <div class="d-flex gs8 gsx ai-center px12 pt12">
+                    <div class="flex--item fl1">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    </div>
+</div>
+{% endif %}
+<!--Mobile actions-->
+{% if is_reviewed == False %}
+<div class="d-none js-review-actions md:d-block bg-black-025 ps-fixed b0 l0 r0 pt12 px16 ba bc-black-3 z-nav-fixed">
+    <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+    <div class="d-flex ai-center pb12">
+        <div class="flex--item mr16 fs-body2 fc-black-600">
+            Actions
+        </div>
+        <div class="flex--item fl1 s-select">
+                <select class="js-action-dropdown" name="reviewActions">
+                    <option value="" selected="">Please select one...</option>
+                        <option value="Looks_OK">Looks Ok</option>
+                        <option value="Edit">Edit</option>
+                        <option value="Recommend_Delete">Recommend Delete</option>
+                        <option value="SKIP">Skip</option>
+                </select>
+        </div>
+    </div>
+
+    <div class="d-flex mxn16 bt bc-black-3 bg-white py12 ai-center">
+        <div class="flex--item fl1 ml16">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </div>
+</form>
+</div>
+{% endif %}
+
+
+{% endif %}
+
+
+
+</div>
+    </div>
+    <div class="js-review-editor d-none"></div>
+</div>
+
+        </div>
+    </div>
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    
+                    <a href="#"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow - Clone</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="https://stackoverflow.com/help/licensing">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+
+        
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="{% static 'plugins/css/bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+</script>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+            $('.readNotification').on('click',function(e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url:"{% url 'notification:read_All_Notifications' %}",
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        if (response.action == 'readedAll') {
+                            $(`.button__badge`).text(``)
+                            $(`.button__badge`).removeClass("button__badge");
+                        }
+                    }
+                })
+            })
+        })
+    })
+</script>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
+            $('.readPrivNotification').on('click',function(e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url:"{% url 'notification:read_All_Priv_Notifications' %}",
+                    dataType: 'json',
+                    method: 'get',
+                    success: function(response) {
+                        if (response.action == 'readedAllPrivNotifications') {
+                            $(`.unseen-reputation`).text(``)
+                            $(`.unseen-reputation`).removeClass("unseen-reputation");
+                        }
+                    }
+                })
+            })
+        })
+    })
+</script>
+
+  </div>
+
+</div>
+
+
+<script type="text/javascript" src="{% static 'notification/js/notification.js' %}"></script>
+<script type="text/javascript" src="{% static 'qa/js/vote.js' %}"></script>
+<script type="text/javascript" src="{% static 'review/js/model.js' %}"></script>
+
+</body></html>

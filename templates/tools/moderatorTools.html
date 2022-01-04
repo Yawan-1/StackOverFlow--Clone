@@ -1,0 +1,45 @@
+{% extends 'profile/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link href="{% static 'css/tools.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+
+
+	<a class="tool-link" href="{% url 'tools:deletePosts_Mod_Tools' %}">• Deleted Posts</a>
+<br><br>
+
+	<a class="tool-link" href="{% url 'tools:question_with_extreme_votes_Mod_Tools' %}">• Extreme Votes Questions</a>
+<br><br>
+
+	<a class="tool-link" href="{% url 'tools:extreme_ans_votes' %}">• Extreme Votes Answers</a>
+<br><br>
+
+	<a class="tool-link" href="{% url 'tools:most_cmts_vws_edts' %}">• Most Comments/Votes/Edit Questions</a>
+<br><br>
+
+	<a class="tool-link" href="{% url 'tools:recentlyPrtcdQns_Mod_Tools' %}">• Protected Questions</a>
+<br><br>
+
+	<a class="tool-link" href="{% url 'tools:recentlyClsd_Mod_Tools' %}">• Closed Questions</a>
+<br><br>
+
+	<a class="tool-link" href="{% url 'tools:recently_reopnd_Mod_Tools' %}">• ReOpened Questions</a>
+<br><br>
+
+	<a class="tool-link" href="{% url 'tools:pending_Close_Vts_Mod_Tools' %}">• Pending Close Votes</a>
+<br><br>
+
+	<a class="tool-link" href="{% url 'tools:pending_reopen_Vts_Mod_Tools' %}">• Pending ReOpen Votes</a>
+<br><br>
+
+	<a class="tool-link" href="{% url 'tools:newAns_To_oldQns_Mod_Tools' %}">• New Answer to Old Questions</a>
+<br><br>
+
+	<a class="tool-link" href="#">• Suggested Edits to Posts</a>
+
+
+
+
+{% endblock content %}

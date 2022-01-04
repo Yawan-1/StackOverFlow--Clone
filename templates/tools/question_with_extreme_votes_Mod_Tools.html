@@ -1,0 +1,88 @@
+{% extends 'profile/base.html' %}
+{% load humanize %}
+{% load qa_tags %}
+{% load static %}
+
+{% block content %}
+
+<link href="{% static 'css/tools.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+
+
+<div class="heading"><h2>Questions with Extreme Votes</h2></div>
+
+
+{% if questions %}
+
+{% for question in questions %}
+
+	<div class="question-summary narrow" id="question-summary-{{question.id}}">
+		<div class="w48">&nbsp;</div>
+		<div class="question-counts cp">
+			<div class="votes">
+				<div class="mini-counts">{{question.calculate_UpVote_DownVote}}</div>
+			</div>
+		<div class="status {% if question.is_answer_accepted %}is_answer_accepted{% endif %}" title="one of the answers was accepted as the correct answer">
+			<div class="mini-counts">{{question.count_answers}}</div>
+		</div>
+		<div class="views">
+			<div class="mini-counts">{{question.calculate_viewers}}</div>
+		</div>
+	</div>
+	<div class="summary">
+		<h3><a href="{{question.get_absolute_url}}" target="_blank" class="question-hyperlink">{{question.title|truncatechars:20}}</a></h3>
+		{% for tag in question.tags.all %}
+		<div class="tags t-python t-django t-django-models t-django-views t-django-queryset">
+			<a href="{% url 'tagbadge:taggedItemsFrom_All' tag.id %}" class="post-tag" title="show questions tagged &#39;{{tag}}&#39;" rel="tag">{{tag}}</a> 
+            {% endfor %}
+        </div>
+        <div class="started">
+        		<span class="answered">
+        			<b>Asked by</b> - <a href="{{question.post_owner.profile.get_absolute_url}}">{{question.post_owner}}</a>
+        		</span>
+        			<div title="{{question.answer_owner}}">
+        				<img src="{% if question.post_owner.profile.profile_photo %} {{question.post_owner.profile.profile_photo.url}}{% endif %}" alt="" width="24" height="24" class="bar-sm">
+        			</div>
+                           <div class="-flair">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{question.post_owner|calculate_reputation}}</span>
+                                {% if question.post_owner|calculateGoldBadges %}
+                                <span title="{{question.post_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{question.post_owner|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{question.post_owner|calculateGoldBadges}} gold badges</span>
+                                {% endif %}
+                                {% if question.post_owner|calculatSilvereBadges %}
+
+                                <span title="{{question.post_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{question.post_owner|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{question.post_owner|calculatSilvereBadges}} silver badges</span>
+                                {% endif %}
+                                {% if question.post_owner|calculateBronzeBadges %}
+                                <span title="{{question.post_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{question.post_owner|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{question.post_owner|calculateBronzeBadges}} bronze badges</span>
+                                {% endif %}
+                            </div>
+        		<span title="2021-10-22 19:29:26Z" class="relativetime">
+        			{% if question.lastEdited_by %}<b>Edited</b> - {{question.q_edited_time}}{% else %}<b>Asked</b> - {{question.date}}{% endif %}
+        		</span>
+        		<br>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<b class="no-post">No Posts</b>
+
+{% endif %}
+
+
+{% endblock content %}

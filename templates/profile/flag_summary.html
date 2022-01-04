@@ -1,0 +1,442 @@
+{% extends 'profile/base.html' %}
+{% load qa_tags %}
+
+{% block content %}
+<!DOCTYPE html>
+
+
+    <html class="html__responsive ">
+
+    <head>
+
+        <title>Flags raised by {{profileData}} - Stack Overflow</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script async src="https://cdn.sstatic.net/Js/third-party/stacks/stacks.min.js?v=587378ef592b"></script>
+    <script src="https://cdn.sstatic.net/Js/stub.en.js?v=02d19f44eb4e"></script>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/stacks.css?v=1600cb081e8c">
+    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=8758134482da">
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/secondary.css?v=7a5d4f10148c">
+
+    
+
+        
+        
+        
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/Channels/channels.css?v=47a5e0f03c81">
+        
+        
+        
+
+
+
+    <noscript id="noscript-css"><style>body,.top-bar{margin-top:1.9em}</style></noscript>
+    </head>
+    <body class="user-page unified-theme">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+        
+
+
+
+
+
+
+    <div class="container">
+            
+
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+    <div class="left-sidebar--sticky-container js-sticky-leftnav">
+        <nav role="navigation">
+            <ol class="nav-links">
+        <li class="">
+            <a
+               href="/"
+               class="pl8 js-gps-track nav-links--link"
+               
+               data-gps-track="top_nav.click({is_current:false, location:0, destination:8})" 
+               aria-controls="" data-controller="" data-s-popover-placement="right"
+               data-s-popover-auto-show="true" data-s-popover-hide-on-outside-click="never">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Home
+                        </div>
+                    </div>
+            </a>
+        </li>
+                <li>
+                    <ol class="nav-links">
+                            <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+
+        <li class="">
+            <a id="nav-questions"
+               href="/questions"
+               class="pl8 nav-links--link -link__with-icon">
+<svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18"><path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/></svg>                    <span class="-link--channel-name">Questions</span>
+            </a>
+        </li>
+                        
+
+        <li class="">
+            <a id="nav-tags"
+               href="/tags"
+               class="nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Tags
+                        </div>
+                    </div>
+            </a>
+        </li>
+        <li class=" youarehere">
+            <a id="nav-users"
+               href="/users"
+               class="nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Users
+                        </div>
+                    </div>
+            </a>
+        </li>
+
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+
+
+
+        <div id="content" class="snippet-hidden">
+
+            <div class="subheader">
+    <h1>Flags raised by <a href="{{profileData.get_absolute_url}}">{{profileData}}</a></h1>
+</div>
+
+
+<div id="mainbar" class="user-flag-history">
+
+        <div class="bg-black-025 ba bc-black-075 bar-sm mb16 p12">
+        <p class="mb0">
+Flagging is a way to bring inappropriate content or behavior to the attention of the community. See: <a href="#">What is flagging?</a>                    <br />
+These are the flags that you have raised, along with their current status. You can filter this list using the links in the sidebar.        </p>
+        </div>
+
+
+
+
+
+
+
+
+{% for flag in results %}
+
+        <div class="flagged-post">
+<div class="answer-summary">
+            {% if flag.question_forFlag %}<a href="{{flag.get_absolute_url}}">{% elif flag.answer_forFlag %}<a href="{{flag.questionans.get_absolute_url}}#{{flag.id}}">{% endif %}
+        <div class="answer-votes answered-accepted default">
+            {% if flag.question_forFlag %}
+                {{flag.question_forFlag.qupvote_set.all.count}}
+            {% elif flag.answer_forFlag  %}
+                {{flag.answer_forFlag.a_vote_ups.all.count}}
+            {% else %}
+                {{flag.comment_of.com_upvote.all.count}}
+            {% endif %}
+        </div>
+    </a>
+
+    <div class="answer-link">
+
+            {% if flag.question_forFlag %}
+
+            <h4>Question</h4>
+
+                <a href="{{ flag.question_forFlag.get_absolute_url }}">{{flag.question_forFlag.title}}</a>
+            {% elif flag.answer_forFlag  %}
+
+            <h4>Answer</h4>
+                <a href="{{ flag.answer_forFlag.questionans.get_absolute_url }}#{{flag.answer_forFlag.id}}">{{flag.answer_forFlag.body}}</a>
+
+            {% else %}
+
+            <h4>Comment</h4>
+            {% if flag.comment_of.question_comment %}
+                <a href="{{flag.comment_of.question_comment.get_absolute_url}}#{{flag.comment_of.id}}">{{flag.comment_of.comment}}</a>
+            {% else %}
+                <a href="{{flag.comment_of.answer_comment.questionans.get_absolute_url}}#{{flag.comment_of.id}}">{{flag.comment_of.comment}}</a>
+            {% endif %}
+            {% endif %}
+    </div>
+</div>
+
+<div class="post-user-info">
+ <span title="2021-11-02 04:46:35Z" class="relativetime">
+            {% if flag.question_forFlag %}
+                asked {{flag.question_forFlag.date}}
+            {% elif flag.answer_forFlag  %}
+                answered {{flag.answer_forFlag.date}}
+            {% else %}
+                commented {{flag.date}}
+            {% endif %}
+        </span> by
+            {% if flag.question_forFlag %}
+            <a href="{% url 'profile:activityPageTabProfile' flag.question_forFlag.post_owner.id flag.question_forFlag.post_owner.username %}">{{flag.question_forFlag.post_owner}}</a>
+            {% elif flag.answer_forFlag  %}
+            <a href="{% url 'profile:activityPageTabProfile' flag.answer_forFlag.answer_owner.id flag.answer_forFlag.answer_owner.username %}">{{flag.answer_forFlag.answer_owner}}</a>
+            {% else %}
+            <a href="{% url 'profile:activityPageTabProfile' flag.comment_of.commented_by.id flag.comment_of.commented_by.username %}">{{flag.comment_of.commented_by}}</a>
+            {% endif %}
+</div>
+
+                <div class="cbt mod-flag">
+                    <span class="revision-comment">
+            {% if flag.question_forFlag %}
+                {{flag.actions_Flag_Q}}
+            {% elif flag.answer_forFlag  %}
+                {{flag.actions_Flag_Q}}
+            {% else %}
+                {{flag.why_flagging}}
+            {% endif %}
+                    </span> &ndash;
+
+            {% if flag.question_forFlag %}
+            <a href="{% url 'profile:activityPageTabProfile' flag.flagged_by.id flag.flagged_by.username %}">{{flag.flagged_by}}</a>
+            {% elif flag.answer_forFlag  %}
+            <a href="{% url 'profile:activityPageTabProfile' flag.flagged_by.id flag.flagged_by.username %}">{{flag.flagged_by}}</a>
+            {% else %}
+            <a href="{% url 'profile:activityPageTabProfile' flag.comment_flagged_by.id flag.comment_flagged_by.username %}">{{flag.flagged_by}}</a>
+            {% endif %}
+                 
+        <span title="2021-11-12 04:19:38Z" class="relativetime">
+            {% if flag.question_forFlag %}
+                {{flag.flagged_at}}
+            {% elif flag.answer_forFlag  %}
+                {{flag.flagged_at}}
+            {% else %}
+                {{flag.date}}
+            {% endif %}
+        </span>
+                        &nbsp;
+                        <span class="flag-outcome Helpful"
+                              title="Nov 12 at 4:29">
+            {% if flag.question_forFlag %}
+
+
+            {% for review in flag.question_forFlag.reviewflagpost_set.all %}
+            {% if review.flagReviewActions == "DELETE_IT" or review.flagReviewActions == "CLOSE_IT" %}
+            <b style="color: green">Helpful</b>
+            {% elif review.flagReviewActions == "STAY_AS_IT_IS" %}
+            <b style="color: red">Rejected</b>
+            {% endif %}
+            {% endfor %}
+
+
+
+            {% elif flag.answer_forFlag  %}
+
+
+            {% for review in flag.answer_forFlag.reviewflagpost_set.all %}
+            {% if review.flagReviewActions == "DELETE_IT" or review.flagReviewActions == "CLOSE_IT" %}
+            <b style="color: green">Helpful</b>
+            {% elif review.flagReviewActions == "STAY_AS_IT_IS" %}
+            <b style="color: red">Rejected</b>
+            {% endif %}
+            {% endfor %}
+
+
+            {% else %}
+
+            <!-- {{flag.reviewflagcomment_set.all}} -->
+
+            {% for review in flag.comment_of.reviewflagcomment_set.all %}
+            {% if review.c_flagReviewActions == "DELETE_IT" %}
+            <b style="color: green">Helpful</b>
+            {% else %}
+            <b style="color: red">Rejected</b>
+            {% endif %}
+            {% endfor %}
+
+            {% endif %}
+                        </span>
+                </div>
+        </div>
+
+{% endfor %}
+
+
+
+
+
+
+    <div class="s-pagination site1 themed pager float-right">
+</div>
+
+</div>
+
+        <div id="sidebar" class="user-flag-history">
+            <div class="module">
+                <div><div class="user-info ">
+    <div class="user-action-time">
+    </div>
+    <div class="user-gravatar32">
+        <a href="{% url 'profile:activityPageTabProfile' profileData.user.id profileData.user.username %}"><div class="gravatar-wrapper-32"><img src="{% if profileData.profile_photo %}{{profileData.profile_photo.url}}{% endif %}" alt="" width="32" height="32" class="bar-sm"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="{% url 'profile:activityPageTabProfile' profileData.user.id profileData.user.username %}">{{profileData}}</a>
+        <div class="-flair">
+            <span class="reputation-score" title="reputation score " dir="ltr">{{request.user|calculate_reputation}}</span>
+
+            <span title="{{request.user|calculateGoldBadges}} gold badges" aria-hidden="true">
+                <span class="badge1"></span>
+                <span class="badgecount">{{request.user|calculateGoldBadges}}</span>
+            </span>
+            <span class="v-visible-sr">{{request.user|calculateGoldBadges}} gold badges</span>
+
+            <span title="{{request.user|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                <span class="badge2"></span>
+                <span class="badgecount">{{request.user|calculatSilvereBadges}}</span>
+            </span>
+            <span class="v-visible-sr">{{request.user|calculatSilvereBadges}} silver badges</span>
+
+            <span title="{{request.user|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                <span class="badge3"></span>
+                <span class="badgecount">{{request.user|calculateBronzeBadges}}</span>
+            </span>
+            <span class="v-visible-sr">{{request.user|calculateBronzeBadges}} bronze badges</span>
+
+        </div>
+    </div>
+</div>
+</div>
+            </div>
+            <nav class="s-sidebarwidget" role="navigation" aria-labelledby="flag-summary-filter">
+                    <h2 id="flag-summary-filter" class="s-sidebarwidget--header m0">Your flagging history</h2>
+                    <ul class="s-sidebarwidget--content s-sidebarwidget__items">
+            <li class="s-sidebarwidget--item d-block">
+                <a href="?group=1" class="d-flex bb bc-black-050">
+                    <div class="flex--item">post flags</div>
+                    <div class="flex--item ta-right fl1">2</div>
+                </a>
+                <ul class="s-sidebarwidget--subnav ml12">
+
+        <li>
+            <a href="?group=1&status=2" class="d-flex bb bc-black-050">
+                <div class="flex--item">helpful</div>
+                <div class="flex--item ta-right fl1">1</div>
+            </a>
+        </li>
+        <li>
+            <a href="?group=1&status=5" class="d-flex bb bc-black-050">
+                <div class="flex--item">aged away</div>
+                <div class="flex--item ta-right fl1">1</div>
+            </a>
+        </li>
+                </ul>
+            </li>
+            <li class="s-sidebarwidget--item d-block">
+                <a href="?group=4" class="d-flex bb bc-black-050">
+                    <div class="flex--item">comment flags</div>
+                    <div class="flex--item ta-right fl1">2</div>
+                </a>
+                <ul class="s-sidebarwidget--subnav ml12">
+
+        <li>
+            <a href="?group=4&status=2" class="d-flex bb bc-black-050">
+                <div class="flex--item">helpful</div>
+                <div class="flex--item ta-right fl1">2</div>
+            </a>
+        </li>
+                </ul>
+            </li>
+
+                            <li class="disabled-link s-sidebarwidget--item d-block">Clear all filters</li>
+                        <li class="s-sidebarwidget--item">Filter your flag history by selecting a category above.</li>
+                    </ul>
+
+            </nav>
+        </div>
+
+
+
+
+
+        </div>
+    </div>
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    
+                    <a href="https://stackoverflow.com"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="#">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+        
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+    </html>
+
+{% endblock content %}

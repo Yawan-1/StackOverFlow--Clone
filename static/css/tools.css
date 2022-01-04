@@ -1,0 +1,48 @@
+
+	.deleted-time {
+		color: lightcoral;
+	}
+
+	.answered {
+		color: green;
+	}
+
+    .heading {
+        background-color: #FFFFF0;
+        border:1px solid rgb(201, 76, 76);
+        padding: 1em;
+        text-align: center;
+	    font-family: 'Nexa';
+	    font-weight: 300;
+	    font-style: normal;
+    }
+
+    .no-post {
+    	text-align: center;
+    	padding-top: 1em;
+    	font-size: 1.5em;
+    	color: red;
+        text-align: center;
+	    font-family: 'Nexa';
+	    font-weight: 300;
+    }
+
+	.tool-link {
+		padding: 1em;
+		background-color: #581845;
+		border-radius: 1em;
+		color: white;
+		text-decoration: none;
+        font-family: 'Nexa';
+        font-weight: 500;
+        font-style: normal;
+		padding-left: 10%;
+	}
+
+    .padding {
+        color: white;
+        padding: .2em;
+        border-radius: .5em;
+        background-color: #E9967A;
+        text-decoration: none;
+    }

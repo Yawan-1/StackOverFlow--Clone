@@ -1,0 +1,425 @@
+{% extends "profile/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+
+<!DOCTYPE html>
+
+
+    <html class="html__responsive html__unpinned-leftnav">
+
+    <head>
+    <link rel="stylesheet" href="{% static 'Tags/choices.min.css' %}" />
+    </head>
+    <body class="ask-page unified-theme js-ask-page-v2 floating-content">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+
+
+
+
+<div class="container">
+
+
+        <div id="content" class="pt0 snippet-hidden">
+
+            
+<div class="d-flex ai-center py24 bg-no-repeat bg-right-bottom wide:bg-image-ask-v2 wide:h-ask-v2-background">
+        <div class="fs-headline1">
+            Ask a public question
+        </div>
+</div>
+
+<div class="d-flex ai-start jc-space-between md:fd-column md:ai-stretch">
+    <div class="flex--item fl1 wmn0">
+
+
+
+  <form method="post" reviewQuestion_url="{% url 'qa:reviewQuestion' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+            <div id="question-form">
+                <div class="bg-white bar-sm bs-md p16 ba bc-black-100">
+                    <div id="div_id_title" class="ps-relative mb16">
+                        <div class="d-flex fl1 fd-column js-stacks-validation">
+                            <label class="d-block s-label mb4" for="id_title">
+                                Title
+                                <div class="d-flex">
+                                    <p class="s-description mt2 flex--item9">Be specific and imagine you&#x2019;re asking a question to another person</p>
+                                    <div class="flex--item3 ta-right text-counter mr0 fs-caption mt2 fl1"></div>
+                                </div>
+                            </label>
+                            <div class="fl1 ps-relative">
+                                <input id="id_title" name="title" type="text" maxlength="300" tabindex="100" placeholder="e.g. Question title Goes Gere" class="s-input js-post-title-field" data-min-length="15" data-max-length="150">
+                              <div class="error_message_of_title"></div><br>
+                              <div class="shortPostTitle"></div>
+                              <div class="missingTitleError"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+      <div id="post-editor" class="post-editor js-post-editor mt0 mb16">
+              <div class="ps-relative">
+                      <label class="s-label mb4 d-block" for="wmd-input">Body
+                              <p class="s-description mt2">Include all the information someone would need to answer your question</p>
+                      </label>
+                  <div class="wmd-container mb8">
+                      <div class="js-stacks-validation">
+                          <div class="ps-relative">
+                                          {{ form.body }}
+                            <div class="missingTextBodyError"></div>
+                            <div class="shortPostBody"></div>
+                          </div>
+                          <div class="s-input-message mt4 d-none js-stacks-validation-message"></div>
+                      </div>
+                  </div>
+              </div>
+      </div>
+
+
+
+
+
+      <div class="ps-relative" id="tag-editor">
+            <div class="ps-relative">
+                <div class="form-item p0 js-stacks-validation js-tag-editor-container">
+                    <div class="d-flex ai-center jc-space-between">
+                        <label for="tagnames" class="s-label mb4 d-block flex--item fl1">
+                            Tags
+                                <div class="s-description mt2">Add up to 5 tags to describe what your question is about</div>
+                        </label>
+                    </div>
+
+                    <div class="ps-relative">
+                        <div>
+                            <input id="choices-text-remove-button" class="form-control" name="tags" type="text" size="60" value="" tabindex="103" placeholder="Enter something">
+                            <div class="error_message_of_tag"></div>
+                            <div class="error_message_of_new_tag"></div><br>
+                        </div>
+                    </div>
+                </div>
+            </div>                        
+        </div>
+      </div>
+  </div>
+
+
+  <div class="seeErrorBelow"></div>
+
+    <div class="js-visible-before-review">
+        <div class="d-flex gsx gs4 ai-center mt32">
+          <button 
+                type="button" 
+                class="btn btn-primary btn-lg" 
+                id="reviewButton"
+                data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Reviewing Post"
+                >Review
+          </button>
+        </div>
+    </div>
+
+    <div class="js-visible-before-review">
+        <div class="d-flex gsx gs4 ai-center mt32">
+        <button 
+              type="submit" 
+              id="subBut" 
+              class="btn btn-primary btn-lg"
+              disabled 
+              >Save Changes
+        </button>
+      </div>
+    </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+        </div>
+    </div>
+
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    
+                    <a href="https://stackoverflow.com"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="#">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+
+   <script>
+
+    $("#reviewButton").on('click', function () {
+      var form = $(this).closest("form");
+      $.ajax({
+        url: form.attr("reviewQuestion_url"),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function (data) {
+          if (data.taken) {
+            $('.error_message_of_title').html(`<h6>Post Title is Already Used, Use a different Title</h6>`).show();
+            $('.missingTitleError').hide();
+          } else {
+             $('.error_message_of_title').html(`<h6>Post Title is Already Used, Use a different Title</h6>`).hide();
+             $('.missingTitleError').hide();
+          }
+
+          if (data.showError) {
+            $('.error_message_of_tag').html(`<h6>Add Atleast One Tag</h6>`).show();
+            $('.error_message_of_new_tag').hide();
+          } else if (data.showNewTagError) {
+            $('.error_message_of_new_tag').html(`<h6>You need atleast 1500 Reputation to create a New Tag</h6>`).show();
+            $('.error_message_of_tag').hide();
+          } else if(data.define) {
+            $('.error_message_of_new_tag').html(`<h6>You need atleast 1500 Reputation to create a New Tag</h6>`).hide();
+            $('.error_message_of_tag').hide();
+          } else {
+            $('.error_message_of_new_tag').html(`<h6>You need atleast 1500 Reputation to create a New Tag</h6>`).hide();
+            $('.error_message_of_tag').hide();
+          }
+
+          if (data.allClear) {
+            $("#subBut").prop('disabled', false);
+            $('.seeErrorBelow').hide();
+          } else {
+            $('.seeErrorBelow').html("<h6>Something went Wrong ! Check the Error Below</h6>").show();
+            $("#subBut").prop('disabled', true);
+          }
+
+          gettingTitleId = document.getElementById("id_title").value;
+          gettingBodyId = document.getElementById("id_body").value;
+          if (gettingTitleId == "" ) {
+            $('.missingTitleError').html(`<h6>Post Title is Missing</h6>`).show();
+            // IF TITLE IS GREATER THAN 1 AND LESS THAN 10
+          } else if (gettingTitleId.length >= 1 && gettingTitleId.length <= 15) {
+            $('.shortPostTitle').html(`<h6>Title is very short</h6>`).show();
+            $('.missingTitleError').hide();
+          } else {
+            $('.shortPostTitle').hide();
+          }
+
+          if (gettingBodyId == "") {
+            $('.missingTextBodyError').html(`<h6>Text Body is Missing</h6>`).show();
+          } else if (gettingBodyId.length >= 1 && gettingBodyId.length <= 29) {
+            $('.shortPostBody').html(`<h6>Body Text must be at least 30 characters; you entered ` + gettingBodyId.length).show();
+            $('.missingTextBodyError').hide();
+          } else {
+            $('.shortPostBody').hide();
+            $('.missingTextBodyError').hide();
+          }
+        }
+      });
+    });
+
+  </script>
+
+
+<style>
+
+.error_message_of_tag {
+  color: red;
+}
+
+.error_message_of_title {
+  color: red;
+}
+
+.error_message_of_body_text {
+  color: red;
+}
+
+.shortPostTitle {
+  color: red;
+}
+
+.error_message_of_new_tag {
+  color: red;
+}
+
+.missingTextBodyError {
+  color: red;
+}
+
+.missingTitleError {
+  color: red;
+}
+
+.shortPostBody {
+  color: red;
+}
+
+.seeErrorBelow {
+  color: red;
+}
+
+</style>
+
+<script src="{% static 'Tags/choices.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'Tag.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+
+
+<link href="{% static 'MarkDown-Editor/plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'MarkDown-Editor/plugins/css/resizable.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'MarkDown-Editor/martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/ace.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/mode-markdown.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/ext-language_tools.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/theme-github.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/typo.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/spellcheck.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/highlight.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/resizable.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/emojis.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'MarkDown-Editor/martor/js/martor.bootstrap.min.js' %}"></script>
+
+<script>
+
+
+$('.btn').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 2000);
+});
+
+</script>
+
+<script>
+
+
+$('.btn').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 1500);
+});
+
+</script>
+
+<!-- Script to prevent page from close if something is written in text -->
+
+<script type="text/javascript">
+  "use strict";
+(() => {
+const modified_inputs = new Set;
+const defaultValue = "defaultValue";
+// store default values
+addEventListener("beforeinput", (evt) => {
+    const target = evt.target;
+    if (!(defaultValue in target || defaultValue in target.dataset)) {
+        target.dataset[defaultValue] = ("" + (target.value || target.textContent)).trim();
+    }
+});
+// detect input modifications
+addEventListener("input", (evt) => {
+    const target = evt.target;
+    let original;
+    if (defaultValue in target) {
+        original = target[defaultValue];
+    } else {
+        original = target.dataset[defaultValue];
+    }
+    if (original !== ("" + (target.value || target.textContent)).trim()) {
+        if (!modified_inputs.has(target)) {
+            modified_inputs.add(target);
+        }
+    } else if (modified_inputs.has(target)) {
+        modified_inputs.delete(target);
+    }
+});
+// clear modified inputs upon form submission
+addEventListener("submit", (evt) => {
+    modified_inputs.clear();
+    // to prevent the warning from happening, it is advisable
+    // that you clear your form controls back to their default
+    // state with evt.target.reset() or form.reset() after submission
+});
+// warn before closing if any inputs are modified
+addEventListener("beforeunload", (evt) => {
+    if (modified_inputs.size) {
+        const unsaved_changes_warning = "Changes you made may not be saved.";
+        evt.returnValue = unsaved_changes_warning;
+        return unsaved_changes_warning;
+    }
+});
+})();
+</script>
+        
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+    </html>
+
+
+
+{% endblock content %}
+

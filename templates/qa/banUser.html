@@ -1,0 +1,47 @@
+{% extends 'profile/base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+{% block content %}
+
+<br>
+<div class="col-sm-3">
+<table class="table table-bordered " border="1">
+  <tr>
+    <td><small>Date</small></td>
+    <td><small>Banned for</small></td>
+    <td><small>Suspension Period</small></td>
+    <td><small>Banned By</small></td>
+    <td><small>Completed ?</small></td>
+  </tr>
+{% for s in userBanHistory %}
+
+<tr>
+
+    <td>{{s.baned_at|naturaltime}}</td>
+    <td><b>{{s.banned_reasons}}</b></td>
+    <td>{{s.ban_till}}</td>
+    <td>{{s.banned_by}}</td>
+    <td>{% if s.is_banned %}Completed{% else %}<b>On Going</b>{% endif %}</td>
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+</div>
+
+
+
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+        {{ ban_form|crispy }}
+        </table>
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,109 @@
+{% extends 'profile/base.html' %}
+
+{% block content %}
+
+<!-- 
+    Function that will run when user scrolls 75% of the page
+    and ajax function inside a function will award the "Informed" badge to User
+-->
+<script>
+
+var percent = 90;
+var window_scrolled;
+
+var excuted = false
+$(window).scroll(function(e) {
+    window_scrolled = ($(document).height()/100)*75;
+    if($(window).scrollTop() + $(window).height() >= window_scrolled) {
+        if (!excuted) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url: "{% url 'qa:award_InformedBadge_OnScroll' %}",
+                    dataType: 'json',
+                    method: 'get',
+                    // async: false,
+                })
+            excuted = true
+        }
+    }
+});
+
+</script>
+
+
+
+<div id="container">
+<header>
+    <h1>Stack OverFlow Clone</h1>
+    <br>
+        <p><h6>This Page is for Award the "Informed" Badge on scroll, Badge will be awarded automatically when you scroll down to 75%. This is just demonstration to show.</h6></p>
+</header>
+
+<main>
+    <p>Cras mattis consectetur purus sit amet fermentum. Donec id elit non mi porta gravida at eget metus. Donec id elit non mi porta gravida at eget metus. Aenean lacinia bibendum nulla sed consectetur.</p>
+    <h3>Tristique Aenean Etiam Cras</h3>
+    <p>Donec id elit non mi porta gravida at eget metus. Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p>Cras mattis consectetur purus sit amet fermentum. Donec id elit non mi porta gravida at eget metus. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Etiam porta sem malesuada magna mollis euismod. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla.</p>
+    <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Donec ullamcorper nulla non metus auctor fringilla. Sed posuere consectetur est at lobortis. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Aenean lacinia bibendum nulla sed consectetur. Nulla vitae elit libero, a pharetra augue.</p>
+    <p>Donec sed odio dui. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Cras mattis consectetur purus sit amet fermentum. Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+    <ul>
+        <li>Ullamcorper Aenean Ornare</li>
+        <li>Ridiculus Lorem Malesuada Consectetur</li>
+        <li>Aenean Tristique Sit Lorem Purus</li>
+        <li>Vehicula Egestas Mollis Cursus Nibh</li>
+    </ul>
+    <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Sed posuere consectetur est at lobortis. Sed posuere consectetur est at lobortis. Maecenas faucibus mollis interdum. Nullam id dolor id nibh ultricies vehicula ut id elit. Aenean lacinia bibendum nulla sed consectetur. Nullam quis risus eget urna mollis ornare vel eu leo.</p>
+    <h3>Bibendum Aenean Dapibus Tristique</h3>
+    <p>Cras mattis consectetur purus sit amet fermentum. Donec id elit non mi porta gravida at eget metus. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Etiam porta sem malesuada magna mollis euismod. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla.</p>
+    <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Donec ullamcorper nulla non metus auctor fringilla. Sed posuere consectetur est at lobortis. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Aenean lacinia bibendum nulla sed consectetur. Nulla vitae elit libero, a pharetra augue.</p>
+    <p>Donec sed odio dui. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Cras mattis consectetur purus sit amet fermentum. Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+    <ul>
+        <li>Ullamcorper Aenean Ornare</li>
+        <li>Ridiculus Lorem Malesuada Consectetur</li>
+        <li>Aenean Tristique Sit Lorem Purus</li>
+        <li>Vehicula Egestas Mollis Cursus Nibh</li>
+    </ul>
+
+</main>
+</div>
+
+
+
+<style>
+
+body:before{
+    content:'';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: -1;
+    background: linear-gradient(to right bottom, rgba(255,255,255) );
+}
+
+html {
+    margin: 0;
+    font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+#container {
+    margin: 80px 10%;
+    padding: 30px 60px;
+    border-radius: 20px;
+    box-shadow: 0 3px 26px 0 rgba(0,0,0,0.20);
+}
+
+main {
+    padding: 20px;
+    border-radius: 10px;
+    margin: 40px 0;
+}
+
+
+</style>
+
+
+
+{% endblock content %}

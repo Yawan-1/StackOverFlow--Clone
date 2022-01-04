@@ -1,0 +1,233 @@
+{% extends 'profile/base.html' %}
+{% load humanize %}
+{% load qa_tags %}
+
+{% block content %}
+
+
+
+
+    <html class="html__responsive ">
+
+    <body class="badges-page unified-theme">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+        
+
+    <div class="container">
+            
+
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+    <div class="left-sidebar--sticky-container js-sticky-leftnav">
+        <nav role="navigation">
+            <ol class="nav-links">
+        <li class="">
+            <a
+               href="/"
+               class="pl8 nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Home
+                        </div>
+                    </div>
+            </a>
+        </li>
+                <li>
+                    <ol class="nav-links">
+                            <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+
+        <li class="">
+            <a id="nav-questions"
+               href="/questions"
+               class="pl8 nav-links--link -link__with-icon">
+				<svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18"><path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/></svg>                    <span class="-link--channel-name">Questions</span>
+            </a>
+        </li>
+                        
+
+        <li class="">
+            <a id="nav-tags"
+               href="{% url 'profile:tagsPage' %}"
+               class="  nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Tags
+                        </div>
+                    </div>
+            </a>
+        </li>
+        <li class="">
+            <a id="nav-users"
+               href="{% url 'profile:usersPage' %}"
+               class="  nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Users
+                        </div>
+                    </div>
+            </a>
+        </li>
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+
+
+
+        <div id="content" class="snippet-hidden">
+
+            
+
+
+<div id="mainbar">
+    <div class="single-badge-table">
+        <div class="single-badge-header">
+            <div class="single-badge-wrapper">
+                <div class="single-badge-badge">
+                            <span class="badge-earned-check" title="you&#x2019;ve earned this badge"></span>
+                </div>
+                <div class="single-badge-badge">
+                    <a href="#" title="" class="badge "><span class="badge3"></span>&nbsp;{{tag}}</a>
+                </div>
+                <div class="single-badge-title">
+                    {{tag.description}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% for badgeUser in objQ %}
+    <div class="single-badge-table">
+                <div class="single-badge-row-double">
+                    <div class="single-badge-awarded">
+                        Awarded <span class="relativetime">{{badgeUser.date|naturaltime}}</span> to
+                    </div>
+                    <div class="single-badge-user">
+<div class="user-info">
+    <div class="user-gravatar32">
+        <a href="{{badgeUser.awarded_to_user.profile.get_absolute_url}}"><div class="gravatar-wrapper-32"><img src="{{badgeUser.awarded_to_user.profile.profile_photo.url}}" alt="" width="32" height="32" class="bar-sm"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="{{badgeUser.awarded_to_user.profile.get_absolute_url}}">{{badgeUser.awarded_to_user}}</a>
+                            <div class="-flair">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{badgeUser.awarded_to_user|calculate_reputation}}</span>
+                                <span title="{{badgeUser.awarded_to_user|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{badgeUser.awarded_to_user|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{badgeUser.awarded_to_user|calculateGoldBadges}} gold badges</span>
+
+                                <span title="{{badgeUser.awarded_to_user|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{badgeUser.awarded_to_user|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{badgeUser.awarded_to_user|calculatSilvereBadges}} silver badges</span>
+
+                                <span title="{{badgeUser.awarded_to_user|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{badgeUser.awarded_to_user|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{badgeUser.awarded_to_user|calculateBronzeBadges}} bronze badges</span>
+                            </div>
+    </div>
+</div>
+                    </div>
+                </div>
+    </div>
+
+{% endfor %}
+
+
+
+
+</div>
+
+<div id="sidebar" class="faq-page">
+    <nav class="s-sidebarwidget mb24" id="toc">
+    <ul class="s-sidebarwidget--content s-sidebarwidget__items">
+                <li class="s-sidebarwidget--item"><a aria-current="false" href="{% url 'help:privileges' %}">Privileges</a></li>
+                <li class="s-sidebarwidget--item"><a aria-current="page" href="{% url 'tagbadge:badges' %}">Badges</a></li>
+    </ul>
+</nav>
+</div>
+
+        </div>
+    </div>
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    
+                    <a href="#"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="https://stackoverflow.com/help/licensing">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+    </html>
+
+
+{% endblock content %}

@@ -1,0 +1,47 @@
+.warpper-B{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+.panels-B{
+  background:#fffffff6;
+  width:100%;
+  /*max-width:500px;*/
+  border-radius:3px;
+  overflow:hidden;
+}
+.panel-B{
+  display:none;
+  animation: fadein .5s;
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+.panel-title-B{
+  font-size:1.5em;
+  font-weight:bold
+}
+.radio-B{
+  display:none;
+}
+#one-B:checked ~ .panels-B #one-panel-B,
+#two-B:checked ~ .panels-B #two-panel-B,
+#three-B:checked ~ .panels-B #three-panel-B,
+#fourth-B:checked ~ .panels-B #fourth-panel-B{
+  display:block
+}
+
+
+.tab-selected {
+    background-color: white;
+    /*color: white;*/
+}
+.tab-selected.active {
+    background-color: grey;
+    color: white;
+}

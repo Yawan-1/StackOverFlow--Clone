@@ -1,0 +1,179 @@
+{% extends 'profile/base.html' %}
+{% load qa_tags %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+
+<link href="{% static 'css/tools.css' %}" type="text/css" media="all" rel="stylesheet" />
+
+
+<div class="heading"><h2>Deleted Questions</h2></div>
+
+
+{% if results %}
+
+    {% for result in results %}
+
+    {% if result.post_owner %}
+
+	<div class="question-summary narrow" id="question-summary-69681868">
+		<div class="w48">&nbsp;</div>
+		<div class="question-counts cp">
+			<div class="votes">
+				<div class="mini-counts" style="color: red">Q</div>
+			</div>
+			<div class="votes">
+				<div class="mini-counts">{{result.calculate_UpVote_DownVote}}</div>
+			</div>
+		<div class="status {% if result.is_answer_accepted %}is_answer_accepted{% endif %}" title="one of the answers was accepted as the correct answer">
+			<div class="mini-counts">{{result.count_answers}}</div>
+		</div>
+		<div class="views">
+			<div class="mini-counts">{{result.calculate_viewers}}</div>
+		</div>
+	</div>
+	<div class="summary">
+		<h3><a href="{{result.get_absolute_url}}" target="_blank" class="question-hyperlink">{{result.title|truncatechars:20}}</a></h3>
+		{% for tag in result.tags.all %}
+		<div class="tags t-python t-django t-django-models t-django-views t-django-queryset">
+			<a href="{% url 'tagbadge:taggedItemsFrom_All' tag.id %}" class="post-tag" title="show questions tagged &#39;{{tag}}&#39;" rel="tag">{{tag}}</a> 
+            {% endfor %}
+        </div>
+        <div class="started">
+        		<span class="answered">
+        			<b>Asked by</b> - <a href="{{result.post_owner.profile.get_absolute_url}}">{{result.post_owner}}</a>
+        		</span>
+        			<div title="{{result.post_owner}}">
+        				<img src="{% if result.post_owner.profile.profile_photo %} {{result.post_owner.profile.profile_photo.url}}{% endif %}" alt="" width="24" height="24" class="bar-sm">
+        			</div>
+                           <div class="-flair">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{result.post_owner|calculate_reputation}}</span>
+                                {% if result.post_owner|calculateGoldBadges %}
+                                <span title="{{result.post_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{result.post_owner|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{result.post_owner|calculateGoldBadges}} gold badges</span>
+                                {% endif %}
+                                {% if result.post_owner|calculatSilvereBadges %}
+
+                                <span title="{{result.post_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{result.post_owner|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{result.post_owner|calculatSilvereBadges}} silver badges</span>
+                                {% endif %}
+                                {% if result.post_owner|calculateBronzeBadges %}
+                                <span title="{{result.post_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{result.post_owner|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{result.post_owner|calculateBronzeBadges}} bronze badges</span>
+                                {% endif %}
+                            </div>
+        		<span class="deleted-time">
+        			<b>Deleted</b> - {{result.date}}
+        		</span>
+        		<br>
+            {% if result.lastEdited_by %}
+            	<a href="{% url 'profile:activityPageTabProfile' result.q_edited_by.id result.q_edited_by.username %}">{{result.lastEdited_by}}
+            	</a>
+            {% endif %}
+            <span class="reputation-score">
+            		Asked {{result.date}}
+            </span>
+        </div>
+    </div>
+</div>
+
+{% else %}
+
+
+	<div class="question-summary narrow" id="question-summary-69681868">
+		<div class="w48">&nbsp;</div>
+		<div class="question-counts cp">
+			<div class="votes">
+				<div class="mini-counts" style="color: red">A</div>
+			</div>
+			<div class="votes">
+				<div class="mini-counts {% if result.is_answer_accepted %}is_answer_accepted{% endif %}">{{result.countAllTheVotes}}</div>
+			</div>
+			<div class="votes">
+				<div class="mini-counts"></div>
+			</div>
+		<div class="views">
+			<div class="mini-counts">{{result.count_ViewsOf_Q}}</div>
+		</div>
+	</div>
+	<div class="summary">
+		<h3><a href="{{result.questionans.get_absolute_url}}#{{result.id}}" target="_blank" class="question-hyperlink">{{result.body|truncatechars:30}}</a></h3>
+		{% for tag in result.questionans.tags.all %}
+		<div class="tags t-python t-django t-django-models t-django-views t-django-queryset">
+			<a href="{% url 'tagbadge:taggedItemsFrom_All' tag.id %}" class="post-tag" title="show questions tagged &#39;{{tag}}&#39;" rel="tag">{{tag}}
+			</a> 
+        </div>
+        {% endfor %}
+        <div class="started">
+        		<span class="answered">
+        			<b>Answered by</b> - <a href="{{result.answer_owner.profile.get_absolute_url}}">{{result.answer_owner}}</a>
+        		</span>
+        			<div title="{{result.answer_owner}}">
+        				<img src="{% if result.answer_owner.profile.profile_photo %} {{result.answer_owner.profile.profile_photo.url}}{% endif %}" alt="" width="24" height="24" class="bar-sm">
+        			</div>
+                           <div class="-flair">
+                                <span class="reputation-score" title="reputation score " dir="ltr">{{result.answer_owner|calculate_reputation}}</span>
+                                {% if result.answer_owner|calculateGoldBadges %}
+                                <span title="{{result.answer_owner|calculateGoldBadges}} gold badges" aria-hidden="true">
+                                    <span class="badge1"></span>
+                                    <span class="badgecount">{{result.answer_owner|calculateGoldBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{result.answer_owner|calculateGoldBadges}} gold badges</span>
+                                {% endif %}
+                                {% if result.answer_owner|calculatSilvereBadges %}
+
+                                <span title="{{result.answer_owner|calculatSilvereBadges}} silver badges" aria-hidden="true">
+                                    <span class="badge2"></span>
+                                    <span class="badgecount">{{result.answer_owner|calculatSilvereBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{result.answer_owner|calculatSilvereBadges}} silver badges</span>
+                                {% endif %}
+                                {% if result.answer_owner|calculateBronzeBadges %}
+                                <span title="{{result.answer_owner|calculateBronzeBadges}} bronze badges" aria-hidden="true">
+                                    <span class="badge3"></span>
+                                    <span class="badgecount">{{result.answer_owner|calculateBronzeBadges}}</span>
+                                </span>
+                                <span class="v-visible-sr">{{result.answer_owner|calculateBronzeBadges}} bronze badges</span>
+                                {% endif %}
+                            </div>
+        		<span class="deleted-time">
+        			<b>Deleted</b> - {{result.date}}
+        		</span>
+            {% if result.lastEdited_by %}
+            	<a href="{% url 'profile:activityPageTabProfile' result.q_edited_by.id result.q_edited_by.username %}">{{result.lastEdited_by}}
+            	</a>
+            {% endif %}
+            <br>
+            <span class="reputation-score">
+            		Answered {{result.date}}
+            </span>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+{% else %}
+
+<b class="no-post">No Deleted Posts</b>
+
+{% endif %}
+
+
+
+
+
+
+{% endblock content %}

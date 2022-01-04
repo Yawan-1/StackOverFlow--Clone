@@ -1,0 +1,522 @@
+{% extends 'profile/base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% load static %}
+{% block content %}
+
+
+
+<!DOCTYPE html>
+
+
+    <html class=" ">
+
+    <head>
+
+        <title>Email Settings for {{profileData}} - Stack Overflow</title>
+
+        <link href="{% static 'notification/css/notification.css' %}" type="text/css" media="all" rel="stylesheet" />
+    
+
+
+
+        
+
+    </head>
+    <body class="user-page unified-theme">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+        
+
+
+
+
+
+
+
+    <div class="container">
+            
+
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+    <div class="left-sidebar--sticky-container js-sticky-leftnav">
+        <nav role="navigation">
+            <ol class="nav-links">
+        <li class="">
+            <a
+               href="/"
+               class="pl8 nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Home
+                        </div>
+                    </div>
+            </a>
+        </li>
+                <li>
+                    <ol class="nav-links">
+                            <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+
+        <li class="">
+            <a id="nav-questions"
+               href="/questions"
+               class="pl8 nav-links--link -link__with-icon">
+<svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18"><path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/></svg>                    <span class="-link--channel-name">Questions</span>
+            </a>
+        </li>
+                        
+
+        <li class="">
+            <a id="nav-tags"
+               href="{% url 'profile:tagsPage' %}"
+               class="nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Tags
+                        </div>
+                    </div>
+            </a>
+        </li>
+        <li class=" youarehere">
+            <a id="nav-users"
+               href="{% url 'profile:usersPage' %}"
+               class="nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Users
+                        </div>
+                    </div>
+            </a>
+        </li>
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+
+
+</div>
+
+
+
+
+        <div id="content" class="snippet-hidden">
+
+            <div id="mainbar-full" class="user-show-new">
+    
+<div class="ps-relative mb16">
+        
+
+<div class="d-flex ai-center fw-wrap gs16">
+    <a class="flex--item" href="/users/17131560/van">
+        <div class="md:d-none"><div class="bar-md bs-sm"><img src="{{request.user.profile.profile_photo.url}}" alt="" width="128" height="128" class="bar-sm bar-md d-block"></div></div>
+        <div class="d-none md:d-block sm:d-none"><div class="bar-md bs-sm"><img src="{{request.user.profile.profile_photo.url}}" alt="" width="96" height="96" class="bar-sm bar-md d-block"></div></div>
+        <div class="d-none sm:d-block"><div class="bar-md bs-sm"><img src="{{request.user.profile.profile_photo.url}}" alt="" width="64" height="64" class="bar-sm bar-md d-block"></div></div>
+    </a>
+    <div class="flex--item">
+        <div class="d-flex ai-center fw-wrap gs8 wmx4">
+            <div class="flex--item mb12 fs-headline2 lh-xs">
+                {{profileData.full_name}}
+            </div>
+            <div class="flex--item">
+                <div class="d-flex ai-center fw-nowrap gs4">
+                </div>
+            </div>
+        </div>
+                <div class="mb8 fc-light fs-title lh-xs">{{profileData.title}}</div>
+
+        <ul class="list-reset s-anchors s-anchors__inherit d-flex fc-light gs8 mln4 fw-wrap">
+
+
+                    <li class="flex--item">
+            <div class="d-flex gs4 gsx ai-center">
+                <div class="flex--item fc-black-350">
+                    <svg aria-hidden="true" class="svg-icon iconCake" width="18" height="18" viewBox="0 0 18 18"><path d="M9 4.5a1.5 1.5 0 001.28-2.27L9 0 7.72 2.23c-.14.22-.22.48-.22.77 0 .83.68 1.5 1.5 1.5Zm3.45 7.5-.8-.81-.81.8c-.98.98-2.69.98-3.67 0l-.8-.8-.82.8c-.49.49-1.14.76-1.83.76-.55 0-1.3-.17-1.72-.46V15c0 1.1.9 2 2 2h10a2 2 0 002-2v-2.7c-.42.28-1.17.45-1.72.45-.69 0-1.34-.27-1.83-.76Zm1.3-5H10V5H8v2H4.25C3 7 2 8 2 9.25v.9c0 .81.91 1.47 1.72 1.47.39 0 .77-.14 1.03-.42l1.61-1.6 1.6 1.6a1.5 1.5 0 002.08 0l1.6-1.6 1.6 1.6c.28.28.64.43 1.03.43.81 0 1.73-.67 1.73-1.48v-.9C16 8.01 15 7 13.75 7Z"/></svg>
+                </div>
+                <div class="flex--item">
+Joined <span title="2021-10-12 04:36:58Z">{{profileData.user.date_joined|naturaltime}}</span>
+                </div>
+            </div>
+        </li>
+
+
+            {% if not profileData.is_high_moderator %} 
+                <li class="flex--item">
+                    <div class="d-flex gs4 gsx ai-center">
+                        <div class="flex--item fc-black-350"><i class="fa fa-clock-o fa-2x" aria-hidden="true"></i></div>
+                        <div class="flex--item">
+                            <b> Last Seen </b> {{ online_user_activity.last_activity|naturaltime }}
+                        </div>
+                    </div>
+                </li>
+            {% endif %}
+
+
+        </ul>
+
+    </div>
+</div>
+
+
+{% if request.user == request.user.profile.user %}
+    <div class="ps-absolute t0 r0 d-flex gs6 fw-wrap">
+            <a class="flex--item s-btn s-btn__outlined s-btn__muted s-btn__icon s-btn__sm" href="{% url 'profile:userProfileEdit_Settings' profileData.id %}"><svg aria-hidden="true" class="svg-icon iconPencil" width="18" height="18" viewBox="0 0 18 18"><path d="m13.68 2.15 2.17 2.17c.2.2.2.51 0 .71L14.5 6.39l-2.88-2.88 1.35-1.36c.2-.2.51-.2.71 0ZM2 13.13l8.5-8.5 2.88 2.88-8.5 8.5H2v-2.88Z"/></svg> Edit profile</a>
+    </div>
+{% endif %}
+</div>
+
+
+<div class="d-flex ai-center jc-space-between fw-wrap mb16 js-user-header">
+    <div class="flex--item s-navigation">
+            <a href="{% url 'profile:activityPageTabProfile' profileData.user.id profileData.user.username %}" class="s-navigation--item" data-shortcut="P">Profile</a>
+            <a href="{% url 'profile:ActivityTabSummary' profileData.user.id profileData.user.username %}" class="s-navigation--item" data-shortcut="A">Activity</a>
+{% if request.user == profileData.user %}
+            <a href="{% url 'profile:userProfileEdit_Settings' profileData.user.id %}" class="s-navigation--item is-selected">Settings</a>
+{% endif %}
+    </div>
+    <div class="flex--item ml-auto">
+        <div class="s-navigation s-navigation__muted ai-center">
+        </div>
+    </div>
+</div>
+
+</div>
+
+    <div class="d-none md:d-block">
+        <nav class="mb24">
+            <div class="d-flex gs4 gsy fd-column">
+                <label class="flex--item s-label" for="js-select-menu">
+                    Navigation
+                    <p class="mt2 s-description">View all settings pages</p>
+                </label>
+                <div class="flex--item s-select">
+                    <select id="js-select-menu">
+                            <optgroup label="Personal information">
+                                    <option value="{% url 'profile:userProfileEdit_Settings' user.id %}" selected="selected">Edit profile</option>
+                                    <!-- <option value="/questions">Developer Story preferences</option> -->
+                                    <option value="{% url 'profile:userProfileJonPrefrences_Settings' user.id %}">Job preferences</option>
+                            </optgroup>
+                            <optgroup label="Email Settings">
+                                    <option value="{% url 'profile:userProfileEdit_Email_Settings' user.id %}">Edit email settings</option>
+                                    <!-- <option value="/users/tag-notifications/17131560">Tag watching &amp; ignoring</option> -->
+                                    <!-- <option value="/users/email/digests/17131560">Community digests</option> -->
+                                    <!-- <option value="/users/email/question-subscriptions/17131560">Question subscriptions</option> -->
+                                    <!-- <option value="https://stackoverflow.com/users/email/job-alerts/17131560">Saved job search alerts</option> -->
+                            </optgroup>
+                            <optgroup label="Site settings">
+                                    <!-- <option value="/users/preferences/17131560">Preferences</option> -->
+                                    <!-- <option value="/users/17131560/van/flair">Flair</option> -->
+                                    <!-- <option value="/users/apps/17131560">Applications</option> -->
+                                    <!-- <option value="/users/mylogins/17131560">My logins</option> -->
+                                    <!-- <option value="/users/hidecommunities/17131560">Hide communities</option> -->
+                                    <!-- <option value="/users/delete/17131560">Delete profile</option> -->
+                            </optgroup>
+<!--                             <optgroup label="Collectives">
+                                    <option value="/users/my-collectives/17131560">Your Collectives</option>
+                            </optgroup> -->
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </div>
+<script>
+    $("#js-select-menu").on("change", function(e) {
+        // navigate to the selected location
+        window.location = this.value;
+    });
+</script>
+<div class="d-flex mb48">
+            <ul class="s-navigation s-navigation__vertical">
+                    <li class="s-navigation--title">
+                        Personal information
+                    </li>
+                        <li>
+                            <a href="{% url 'profile:userProfileEdit_Settings' user.id %}" class="s-navigation--item" data-shortcut="E">Edit profile </a>
+                        </li>
+<!--                         <li>
+                            <a href="/users/storypreferences/17131560" class="s-navigation--item" data-shortcut="">Developer Story preferences </a>
+                        </li> -->
+                        <li>
+                            <a href="{% url 'profile:userProfileJonPrefrences_Settings' user.id %}" class="s-navigation--item" data-shortcut="">Job preferences </a>
+                        </li>
+                    <li class="s-navigation--title">
+                        Email Settings
+                    </li>
+                        <li>
+                            <a href="{% url 'profile:userProfileEdit_Email_Settings' user.id %}" class="s-navigation--item is-selected" data-shortcut="">Edit email settings </a>
+                        </li>
+                        <li>
+<!--                             <a href="/users/tag-notifications/17131560" class="s-navigation--item" data-shortcut="">Tag watching &amp; ignoring </a>
+                        </li>
+                        <li>
+                            <a href="/users/email/digests/17131560" class="s-navigation--item" data-shortcut="">Community digests </a>
+                        </li>
+                        <li>
+                            <a href="/users/email/question-subscriptions/17131560" class="s-navigation--item" data-shortcut="">Question subscriptions <svg aria-hidden="true" class="ml-auto mt1 svg-icon iconShareSm" width="14" height="14" viewBox="0 0 14 14"><path d="M5 1H3a2 2 0 00-2 2v8c0 1.1.9 2 2 2h8a2 2 0 002-2V9h-2v2H3V3h2V1Zm2 0h6v6h-2V4.5L6.5 9 5 7.5 9.5 3H7V1Z"/></svg></a>
+                        </li>
+                        <li>
+                            <a href="https://stackoverflow.com/users/email/job-alerts/17131560" class="s-navigation--item" data-shortcut="B">Saved job search alerts </a>
+                        </li> -->
+<!--                     <li class="s-navigation--title">
+                        Site settings
+                    </li> -->
+<!--                         <li>
+                            <a href="/users/preferences/17131560" class="s-navigation--item" data-shortcut="P">Preferences </a>
+                        </li>
+                        <li>
+                            <a href="/users/17131560/van/flair" class="s-navigation--item" data-shortcut="F">Flair </a>
+                        </li>
+                        <li>
+                            <a href="/users/apps/17131560" class="s-navigation--item" data-shortcut="A" title="authorized applications">Applications </a>
+                        </li>
+                        <li>
+                            <a href="/users/mylogins/17131560" class="s-navigation--item" data-shortcut="M">My logins </a>
+                        </li>
+                        <li>
+                            <a href="/users/hidecommunities/17131560" class="s-navigation--item" data-shortcut="H">Hide communities </a>
+                        </li>
+                        <li> -->
+                            <!-- <a href="/users/delete/17131560" class="s-navigation--item" data-shortcut="O">Delete profile </a> -->
+                        </li>
+<!--                     <li class="s-navigation--title">
+                        Collectives
+                    </li>
+                        <li>
+                            <a href="/users/my-collectives/17131560" class="s-navigation--item" data-shortcut="">Your Collectives </a>
+                        </li> -->
+            </ul>
+        </nav>
+
+    <div id="mainbar" class="flex--item fl-grow1 user-show-new settings-page">
+        
+
+
+<div class="email-settings">
+    <div class="s-page-title mb24">
+        <h1 class="s-page-title--header m0 baw0 p0">Edit Email Settings</h1>
+    </div>
+
+        <div class="-section">
+                <header class="-header">
+
+            <div class="-info">
+<div class="input-group -edit-email-address ">
+
+
+    <form method="post" enctype="multipart/form-data" id="edit-profile-form">
+{% csrf_token %}
+
+        <label for="id_email-" class="f-label">Email Address</label>
+        <div class="d-flex gs4">
+            <div class="flex--item5 -input">
+                <input type="text" placeholder="" class="s-input h100 emailinput form-control" name="email" value="{{request.user.profile.email}}" id="id_email-" />
+            </div>
+                <div class="flex--item -btn">
+                   <button type="submit">Save Changes</button>
+                </div>
+        </div>
+
+
+    </form>
+
+
+</div>            </div>
+    </header>
+
+        </div>
+
+</div>
+
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div id="successMessage">
+    </div>
+</div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+            <footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    
+                    <a href="https://stackoverflow.com"><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col">
+                        <h5 class="-title"><a href="https://stackoverflow.com" class="js-gps-track" data-gps-track="footer.click({ location: 0, link: 15})">Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li><a href="/questions" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 16})">Questions</a></li>
+                                <li><a href="https://stackoverflow.com/jobs" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 17})">Jobs</a></li>
+                                <li><a href="https://stackoverflow.com/jobs/directory/developer-jobs" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 11})">Developer Jobs Directory</a></li>
+                                    <li><a href="https://stackoverflow.com/jobs/salary" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 28})">Salary Calculator</a></li>
+                                <li><a href="/help" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 3 })">Help</a></li>
+                                <li><a onclick='StackExchange.switchMobile("on")' class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 12 })">Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col">
+                        <h5 class="-title"><a href="https://stackoverflowbusiness.com" class="js-gps-track" data-gps-track="footer.click({ location: 0, link: 19 })">Products</a></h5>
+                        <ul class="-list">
+                            <li><a href="https://stackoverflow.com/teams" class="js-gps-track -link" 
+                                                 data-ga="[&quot;teams traffic&quot;,&quot;footer - site nav&quot;,&quot;stackoverflow.com/teams&quot;,null,{&quot;dimension4&quot;:&quot;teams&quot;}]"
+                                                 data-gps-track="footer.click({ location: 0, link: 29 })">Teams</a></li>
+                            <li><a href="https://stackoverflow.com/talent" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 20 })">Talent</a></li>
+                            <li><a href="https://stackoverflow.com/advertising" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 21 })">Advertising</a></li>
+                            <li><a href="https://stackoverflowsolutions.com/explore-teams" class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 22 })">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col">
+                    <h5 class="-title"><a class="js-gps-track" data-gps-track="footer.click({ location: 0, link: 1 })" href="https://stackoverflow.com/company">Company</a></h5>
+                    <ul class="-list">
+                            <li><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 1 })" href="https://stackoverflow.com/company">About</a></li>
+                        <li><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 27 })" href="https://stackoverflow.com/company/press">Press</a></li>
+                            <li><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 9 })" href="https://stackoverflow.com/company/work-here">Work Here</a></li>
+                        <li><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 7 })" href="https://stackoverflow.com/legal">Legal</a></li>
+                        <li><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 8 })" href="https://stackoverflow.com/legal/privacy-policy">Privacy Policy</a></li>
+                        <li><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 37 })" href="https://stackoverflow.com/legal/terms-of-service">Terms of Service</a></li>
+                            <li><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 13 })" href="https://stackoverflow.com/company/contact">Contact Us</a></li>
+                            <li class="" id="consent-footer-link"><a class="js-gps-track -link js-cookie-settings" data-gps-track="footer.click({ location: 0, link: 38 })" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link: 39 })" href="https://stackoverflow.com/legal/cookie-policy">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                <div class="site-footer--col site-footer--categories-nav">
+                    <div>
+                        <h5 class="-title"><a href="https://stackexchange.com" data-gps-track="footer.click({ location: 0, link: 30 })">Stack Exchange<br> Network</a></h5>
+                        <ul class="-list">
+                            <li>
+                                <a href="https://stackexchange.com/sites#technology" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })">
+                                    Technology
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://stackexchange.com/sites#culturerecreation" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })">
+                                    Culture &amp; recreation
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://stackexchange.com/sites#lifearts" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })">
+                                    Life &amp; arts
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://stackexchange.com/sites#science" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })">
+                                    Science
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://stackexchange.com/sites#professional" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })">
+                                    Professional
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://stackexchange.com/sites#business" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })">
+                                    Business
+                                </a>
+                            </li>
+
+                            <li class="mt16">
+                                <a href="https://api.stackexchange.com/" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })">
+                                    API
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="https://data.stackexchange.com/" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 24 })">
+                                    Data
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li><a class="js-gps-track -link" data-gps-track="footer.click({ location: 0, link:4 })" href="https://stackoverflow.blog?blb=1">Blog</a></li>
+                    <li><a href="https://www.facebook.com/officialstackoverflow/" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 31 })">Facebook</a></li>
+                    <li><a href="https://twitter.com/stackoverflow" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 32 })">Twitter</a></li>
+                    <li><a href="https://linkedin.com/company/stack-overflow" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 33 })">LinkedIn</a></li>
+                    <li><a href="https://www.instagram.com/thestackoverflow" class="-link js-gps-track" data-gps-track="footer.click({ location: 0, link: 36 })">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="https://stackoverflow.com/help/licensing">cc by-sa</a>.                    <span id="svnrev">rev&nbsp;2021.11.26.40833</span>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+
+
+
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+    </html>
+
+
+
+
+
+
+
+
+<a href="{% url 'profile:userProfileJonPrefrences_Settings' user.id %}">Job Prefrences</a>
+
+<a href="{% url 'profile:userProfileEdit_Email_Settings' user.id %}">Edit Email</a>
+
+
+
+<script>
+    $(document).ready(function () {
+        /*
+            On submiting the form, send the POST ajax
+            request to server and after successfull submission
+            display the object.
+        */
+        $("#edit-profile-form").submit(function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault();
+            // serialize the data for sending the form data.
+            var serializedData = $(this).serialize();
+            // make POST ajax call
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'profile:editProfile_EditEmail_AjaxForm' user.id %}",
+                data: serializedData,
+                success: function (response) {
+                    // display the success result.
+                    var instance = JSON.parse(response["instance"]);
+                    var fields = instance[0]["fields"];
+                    $("#successMessage").html(
+                        `<div class="val-message val-success"><span class="vote-accepted-on" title="success"> </span><p class="val-textemphasis">Your profile has been saved successfully.</p></div>
+                        `
+                    )
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert(response["responseJSON"]["error"]);
+                }
+            })
+        })
+
+    })
+</script>
+
+
+{% endblock content %}

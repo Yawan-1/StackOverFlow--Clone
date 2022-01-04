@@ -1,0 +1,239 @@
+{% extends 'profile/base.html' %}
+
+
+{% block content %}
+
+
+    <body class="unified-theme search-page">
+    <div id="notify-container"></div>
+    <div id="custom-header"></div>
+
+
+
+
+    <div class="container">
+
+<div id="left-sidebar" data-is-here-when="md lg" class="left-sidebar js-pinned-left-sidebar ps-relative">
+    <div class="left-sidebar--sticky-container js-sticky-leftnav">
+        <nav role="navigation">
+            <ol class="nav-links">
+        <li class="">
+            <a
+               href="/"
+               class="pl8 nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Home
+                        </div>
+                    </div>
+            </a>
+        </li>
+                <li>
+                    <ol class="nav-links">
+                            <li class="fs-fine tt-uppercase ml8 mt16 mb4 fc-light">Public</li>
+
+        <li class=" youarehere">
+            <a id="nav-questions"
+               href="/questions"
+               class="pl8 nav-links--link -link__with-icon">
+<svg aria-hidden="true" class="svg-icon iconGlobe" width="18" height="18" viewBox="0 0 18 18"><path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 01-4.3-2.74 6.46 6.46 0 01-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 013.83 4.51 6.45 6.45 0 01-1.51 5.73v.01Z"/></svg>                    <span class="-link--channel-name">Questions</span>
+            </a>
+        </li>
+                        
+
+        <li class="">
+            <a id="nav-tags"
+               href="{% url 'profile:tagsPage' %}"
+               class="nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Tags
+                        </div>
+                    </div>
+            </a>
+        </li>
+        <li class="">
+            <a id="nav-users"
+               href="{% url 'profile:usersPage' %}"
+               class="nav-links--link">
+                    <div class="d-flex ai-center">
+                        <div class="flex--item truncate">
+                            Users
+                        </div>
+                    </div>
+            </a>
+        </li>
+                    </ol>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+
+
+
+</div>
+
+
+
+
+        <div id="content" class="snippet-hidden">
+
+            <div id="mainbar">
+    <div class="d-flex mb24 jc-space-between fw-wrap ai-start">
+            <h1 class="flex--item fl1 fs-headline1 mb0">
+Search Results            </h1>
+            <div class="d-flex ai-center fl1 jc-end ml32">
+                <div class="ml12 aside-cta flex--item print:d-none">
+                        <a href="{% url 'qa:new_question' %}" class="ws-nowrap s-btn s-btn__primary">
+        Ask Question
+    </a>
+
+                </div>
+            </div>
+    </div>
+
+<div class="mb8">Results tagged with <a href="{% url 'tagbadge:taggedItemsFrom_All' tag.id %}" class="post-tag mx2" title="" rel="tag">{{tag}}</a> </div>
+
+
+        <div class="d-flex ai-center mb16">
+            <div class="flex--item fl1 fs-body3 mr12">
+                {{getAllQuestions.count}} result{{getAllQuestions.count|pluralize}}
+            </div>
+        </div>
+        <div class="flush-left js-search-results">
+                <div>
+
+{% for question in getAllQuestions %}
+
+	<div class="question-summary search-result" id="answer-id-53889311" data-position="1">
+        <div class="statscontainer">
+            <div class="stats">
+                <div class="vote {% if question.is_answer_accepted %}answered-accepted{% endif %}">
+                    <div class="votes ">
+                        <span class="vote-count-post "><strong>{{question.calculate_UpVote_DownVote}}</strong></span>
+                        <div class="viewcount">vote{{question.calculate_UpVote_DownVote|pluralize}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary">
+            <div class="result-link">
+            	<h3>
+		        <a href="{{question.get_absolute_url}}" title="{{question.title}}" class="question-hyperlink">
+		            {{question.title}}
+		        </a>
+				</h3>
+            </div>
+
+            <div class="excerpt">
+                {{question.body|truncatechars:80}}
+            </div>
+
+            <div class="tags d-flex gs4 fw-wrap mt2 t-firebase t-firebase-hosting t-firebase-cli">
+            	{% for tag in question.tags.all %}
+                <a href="{% url 'tagbadge:taggedItemsFrom_All' tag.id %}" class="post-tag flex--item" title="show questions tagged &#39;{{tag}}&#39;" rel="tag">{{tag}}</a>
+            	{% endfor %}
+            </div>
+
+            <div class="started float-right">
+				asked <span title="2018-12-21 18:26:43Z" class="relativetime">{{question.date}}
+				</span>
+			</div>
+		</div>
+        </div>
+    </div>
+
+{% endfor %}
+
+
+
+                </div>
+        </div>
+            <br class="cbt">
+
+</div>
+
+
+        </div>
+    </div>
+
+
+
+<footer id="footer" class="site-footer js-footer" role="contentinfo">
+        <div class="site-footer--container">
+                <div class="site-footer--logo">
+                    
+                    <a href=""><svg aria-hidden="true" class="native svg-icon iconLogoGlyphMd" width="32" height="37" viewBox="0 0 32 37"><path d="M26 33v-9h4v13H0V24h4v9h22Z" fill="#BCBBBB"/><path d="m21.5 0-2.7 2 9.9 13.3 2.7-2L21.5 0ZM26 18.4 13.3 7.8l2.1-2.5 12.7 10.6-2.1 2.5ZM9.1 15.2l15 7 1.4-3-15-7-1.4 3Zm14 10.79.68-2.95-16.1-3.35L7 23l16.1 2.99ZM23 30H7v-3h16v3Z" fill="#F48024"/></svg></a>
+                </div>
+            <nav class="site-footer--nav">
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="" class="" >Stack Overflow</a></h5>
+                        <ul class="-list js-primary-footer-links">
+                            <li class="-item"><a href="/questions" class=" -link">Questions</a></li>
+                                <li class="-item"><a href="" class=" -link" >Jobs</a></li>
+                                <li class="-item"><a href="" class=" -link" >Developer Jobs Directory</a></li>
+                                     <li class="-item"><a href="" class=" -link" >Salary Calculator</a></li>
+                                <li class="-item"><a href="" class=" -link" >Help</a></li>
+                                <li class="-item"><a onclick='StackExchange.switchMobile("on")' class=" -link" >Mobile</a></li>
+                        </ul>
+                    </div>
+                    <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                        <h5 class="-title"><a href="">Products</a></h5>
+                        <ul class="-list">
+                            <li class="-item"><a href="" class=" -link" 
+                                                 
+                                                >Teams</a></li>
+                            <li class="-item"><a href="" class=" -link" >Talent</a></li>
+                            <li class="-item"><a href="" class=" -link" >Advertising</a></li>
+                            <li class="-item"><a href="" class=" -link">Enterprise</a></li>
+                        </ul>
+                    </div>
+                <div class="site-footer--col site-footer--col__visible js-footer-col" data-name="default">
+                    <h5 class="-title"><a href="">Company</a></h5>
+                    <ul class="-list">
+                            <li class="-item"><a class=" -link" href="">About</a></li>
+                        <li class="-item"><a class=" -link" href="">Press</a></li>
+                            <li class="-item"><a class=" -link" href="">Work Here</a></li>
+                        <li class="-item"><a class=" -link" href="">Legal</a></li>
+                        <li class="-item"><a class=" -link" href="">Privacy Policy</a></li>
+                        <li class="-item"><a class="-link" href="">Terms of Service</a></li>
+                            <li class="-item"><a class=" -link"  href="">Contact Us</a></li>
+                            <li class="-item" id="consent-footer-link"><a class="-link js-cookie-settings" href="#" data-consent-popup-loader="footer">Cookie Settings</a></li>
+                        <li class="-item"><a class=" -link"  href="">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="site-footer--copyright fs-fine">
+                <ul class="-list">
+                    <li class="-item"><a class="-link" href="">Blog</a></li>
+                    <li class="-item"><a href="" class="-link" >Facebook</a></li>
+                    <li class="-item"><a href="" class="-link" >Twitter</a></li>
+                    <li class="-item"><a href="" class="-link" >LinkedIn</a></li>
+                    <li class="-item"><a href="" class="-link">Instagram</a></li>
+                </ul>
+
+                <p class="mt-auto mb24">
+site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed under <a href="#">cc by-sa</a>.
+<span id="svnrev">rev&nbsp;2021.11.12.40742</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+
+        
+    <div id="onetrust-consent-sdk" class="d-none"></div>
+    <div id="onetrust-banner-sdk" data-controller="s-modal"></div>
+    <div id="ot-pc-content" class="d-none"></div>
+    <div id="onetrust-style" class="d-none">&nbsp;</div>
+    <div class="d-none js-consent-banner-version" data-consent-banner-version="baseline"></div>
+
+    
+    </body>
+    </html>
+
+
+{% endblock content %}
