@@ -14,27 +14,11 @@ SECRET_KEY = 'django-insecure-=dei9kx=^q))zm#z-(_cwdii75e-4bsf5_7suo9ll&besz088u
 # from django.conf import settings
 settings.configure()
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [".herokuapp.com",'https://stackoverflow---clone.herokuapp.com/','stackoverflow---clone.herokuapp.com']
+ALLOWED_HOSTS = []
 
 # Application definition
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
-        },
-    },
-}
 
 INSTALLED_APPS = [
     'adminactions',
