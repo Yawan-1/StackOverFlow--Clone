@@ -131,15 +131,15 @@
                         {% else %}
                         <button name='submit' type='submit' value="like"><i  class="fas inactive fa-sort-up fa-4x"></i></button>
                         {% endif %}
-                        {% if request.user.profile.established_user_Priv %}
+                        {% if request.user.profile.established_user_Priv == False %}
+                        <div class="flex--item d-flex fd-column ai-center color-black fs-title">
+                            <div class="showVoteCount">{{data.calculate_UpVote_DownVote}}</div>
+                        </div>
+                        {% elif request.user.profile.established_user_Priv %}
                         <div class="flex--item d-flex fd-column ai-center color-black fs-title">
                             <div class="showVotesDiv" data-load-url="{% url 'qa:load_question_upvotes_downvotes' data.id %}">
-                                <div class="hideThisDiv">{{data.calculate_UpVote_DownVote}}</div>
+                                <div class="showVoteCount hideThisDiv">{{data.calculate_UpVote_DownVote}}</div>
                             </div>
-                        </div>
-                        {% else %}
-                        <div class="flex--item d-flex fd-column ai-center color-black fs-title">
-                                {{data.calculate_UpVote_DownVote}}
                         </div>
                         {% endif %}
                     </div>
@@ -176,7 +176,6 @@
                 </a>
             </div>
         </div>
-
 
     <div class="postcell post-layout--right">
     
@@ -575,11 +574,17 @@
                         {% else %}
                         <button name='submit' type='submit' value="voteAns"><i class="fas inactive fa-sort-up fa-4x"></i></button> 
                         {% endif %}
+                       {% if request.user.profile.established_user_Priv == False %}
+                        <div class="flex--item d-flex fd-column ai-center color-black fs-title">
+                            <div class="showVoteCount-answer">{{answer.countAllTheVotes}}</div>
+                        </div>
+                        {% elif request.user.profile.established_user_Priv %}
                         <div class="flex--item d-flex fd-column ai-center color-black fs-title">
                             <div class="showanswer-VotesDiv" data-load-url="{% url 'qa:load_answer_upvotes_downvotes' answer.id %}">
-                                <div class="hideThis-answer-Div">{{answer.countAllTheVotes}}</div>
+                                <div class="showVoteCount-answer hideThis-answer-Div">{{answer.countAllTheVotes}}</div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </form>
 
@@ -887,6 +892,61 @@ function showTextBox(e) {
         </div>
     </div>
 {% endfor %}
+<script>
+
+
+    function answerFlagOpenModel(id) {
+    var flagFormModel = document.getElementById(`AnswerFlagForm-${id}`);
+    if (flagFormModel) {
+        flagFormModel.style.display = "block";
+    }
+
+
+    document.getElementById(`flagAnswerID-${id}`).onclick = function(ids) {
+        flagFormModel.style.display = "none";
+    } 
+}
+
+    window.onclick = function (event) {
+      if (event.target == flagFormModel) {
+        flagFormModel.style.display = "none";
+      }
+    }
+
+
+
+
+    function openCommentModel(id) {
+    var commentFormModel = document.getElementById(`FlagCommentModel-${id}`);
+    if (commentFormModel) {
+        commentFormModel.style.display = "block";
+    }
+
+
+    document.getElementById(`closeId-${id}`).onclick = function(ids) {
+        commentFormModel.style.display = "none";
+    } 
+}
+
+    window.onclick = function (event) {
+      if (event.target == commentFormModel) {
+        commentFormModel.style.display = "none";
+      }
+    }
+
+$(document).keydown(function(event) { 
+  if (event.keyCode == 27) { 
+    $('.flag-comment-model').hide();
+  }
+});
+
+
+</script>
+
+
+
+
+
 
 <script>
 $(document).ready(function () {
@@ -1813,7 +1873,6 @@ $(document).keydown(function(event) {
 <script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/emojis.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'MarkDown-Editor/martor/js/martor.bootstrap.min.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'qa/js/vote.js' %}"></script>
 <script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'qa/js/question-detail-page.js' %}"></script>
 
@@ -1839,28 +1898,9 @@ $(document).keydown(function(event) {
 
 
 <script>
-
-
-    function answerFlagOpenModel(id) {
-    var flagFormModel = document.getElementById(`AnswerFlagForm-${id}`);
-    if (flagFormModel) {
-        flagFormModel.style.display = "block";
-    }
-
-
-    document.getElementById(`flagAnswerID-${id}`).onclick = function(ids) {
-        flagFormModel.style.display = "none";
-    } 
-}
-
-    window.onclick = function (event) {
-      if (event.target == flagFormModel) {
-        flagFormModel.style.display = "none";
-      }
-    }
-
-
+document.addEventListener("DOMContentLoaded",function(){window.addEventListener("load",function(){$(".likeForm").submit(function(t){t.preventDefault();let s=$(this);$.ajax({url:s.attr("action"),data:{submit:"like"},dataType:"json",method:"get",async:!1,success:function(t){let i=$(`#id_likes${s.attr("data-pk")}`).find(".showVoteCount").html();"undislike_and_like"==t.action?(i++,i++,$(`#id_dislikes${s.attr("data-pk")}`).html("<button name='submit' type='submit' value=\"like\"><i class=\"fas voteDownInActive fa-sort-down fa-4x\"></i><button>"),$(`#id_likes${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="like"><i  class="fas active fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount">${i}</div></div>`)):"unlike"==t.action?(i-=1,$(`#id_likes${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="like"><i  class="fas inactive fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount">${i}</div></div>`)):"voteError"==t.action?($(".toast-container").html('<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">\n    <aside class="s-notice s-notice__info">\n        <div class="d-flex gs16 gsx ai-center jc-space-between">\n            <div class="flex--item">\n                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">\n                    <strong>Alert ! </strong>Your vote is now locked, and will - unless the Question Edit.\n                </div>\n            </div>\n            <div class="flex--item mr0 js-notice-actions">\n                <div class="d-flex">\n                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">\n                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">\n                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </aside>\n</div>'),$(".toast").toast("show",{autohide:!0}),$(".js-toast").fadeOut(8e3)):"lackOfPrivelege"==t.action?($(".toast-container").html('<div data-delay="5000" class="s-toast js-toast fade" id="closeId" aria-hidden="false" style="top: 60px;">\n    <aside class="s-notice s-notice__info">\n        <div class="d-flex gs16 gsx ai-center jc-space-between">\n            <div class="flex--item">\n                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">\n                    You need atleast 15 Reputation to Up upvote\n                </div>\n            </div>\n            <div class="flex--item mr0 js-notice-actions">\n                <div class="d-flex">\n                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">\n                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">\n                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </aside>\n</div>'),$(".toast").toast("show",{autohide:!0}),$(".js-toast").fadeOut(8e3)):"cannotLikeOwnPost"==t.action?($(".toast-container").html('<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">\n    <aside class="s-notice s-notice__info">\n        <div class="d-flex gs16 gsx ai-center jc-space-between">\n            <div class="flex--item">\n                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">\n                    You cannot vote for your Own Post\n                </div>\n            </div>\n            <div class="flex--item mr0 js-notice-actions">\n                <div class="d-flex">\n                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">\n                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">\n                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </aside>\n</div>'),$(".toast").toast("show",{autohide:!0}),$(".js-toast").fadeOut(8e3)):(i++,$(`#id_likes${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="like"><i  class="fas active fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount">${i}</div></div>`))}})}),$(".dislikeForm").submit(function(t){t.preventDefault();let s=$(this);$.ajax({url:s.attr("action"),data:{submit:"downVote"},dataType:"json",method:"get",async:!1,success:function(t){let i=$(`#id_likes${s.attr("data-pk")}`).find(".showVoteCount").html();"unlike_and_dislike"==t.action?(i-=2,$(`#id_dislikes${s.attr("data-pk")}`).html("<button name='submit' type='submit' value=\"dislike\"><i class=\"fas voteDownActive fa-sort-down fa-4x\"></i></button>"),$(`#id_likes${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="dislike"><i  class="fas inactive fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount">${i}</div></div>`)):"undislike"===t.action?(i++,$(`#id_dislikes${s.attr("data-pk")}`).html("<button name='submit' type='submit' value=\"dislike\"><i class=\"fas voteDownInActive fa-sort-down fa-4x\"></i></button>"),$(`#id_likes${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="like"><i  class="fas inactive fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount">${i}</div></div>`)):"voteError"==t.action?($(".toast-container").html('<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">\n    <aside class="s-notice s-notice__info">\n        <div class="d-flex gs16 gsx ai-center jc-space-between">\n            <div class="flex--item">\n                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">\n                    <strong>Alert ! </strong>Your vote is now locked, and will - unless the Question Edit.\n                </div>\n            </div>\n            <div class="flex--item mr0 js-notice-actions">\n                <div class="d-flex">\n                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" onclick="clickToClose();" tabindex="0" role="button" aria-label="Dismiss">\n                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">\n                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </aside>\n</div>'),$(".toast").toast("show",{autohide:!0}),$(".js-toast").fadeOut(8e3)):"lackOfPrivelege"==t.action?($(".toast-container").html('<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">\n    <aside class="s-notice s-notice__info">\n        <div class="d-flex gs16 gsx ai-center jc-space-between">\n            <div class="flex--item">\n                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">\n                    <strong>Alert ! </strong>You need alteast 125 Reputation to Down Vote\n                </div>\n            </div>\n            <div class="flex--item mr0 js-notice-actions">\n                <div class="d-flex">\n                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">\n                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">\n                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </aside>\n</div>'),$(".toast").toast("show",{autohide:!0}),$(".js-toast").fadeOut(8e3)):"cannotLikeOwnPost"==t.action?($(".toast-container").html('<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">\n    <aside class="s-notice s-notice__info">\n        <div class="d-flex gs16 gsx ai-center jc-space-between">\n            <div class="flex--item">\n                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">\n                    <strong>Alert ! </strong>You cannot vote for your own post.\n                </div>\n            </div>\n            <div class="flex--item mr0 js-notice-actions">\n                <div class="d-flex">\n                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" onclick="clickToClose();" tabindex="0" role="button" aria-label="Dismiss">\n                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">\n                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </aside>\n</div>'),$(".toast").toast("show",{autohide:!0}),$(".js-toast").fadeOut(8e3)):(i-=1,$(`#id_dislikes${s.attr("data-pk")}`).html("<button name='submit' type='submit' value=\"dislike\"><i class=\"fas voteDownActive fa-sort-down fa-4x\"></i></button>"),$(`#id_likes${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="like"><i  class="fas inactive fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount">${i}</div></div>`))}})})})});
 </script>
+
 
 
 <script type="text/javascript">
@@ -1973,6 +2013,13 @@ function flagAnswerComment(id) {
 
     });
 </script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){window.addEventListener("load",function(){$(".ansLikeForm").submit(function(t){t.preventDefault();let s=$(this);$.ajax({url:s.attr("action"),data:{submit:"like"},dataType:"json",method:"get",async:!1,success:function(t){let a=$(`#id_Ans_UpVote${s.attr("data-pk")}`).find(".showVoteCount-answer").html();"unDownVoteAndLike"==t.action?(a++,a++,$(`#id_Ans_DownVote${s.attr("data-pk")}`).html("<button name='submit' type='submit' value=\"like\"><i class=\"fas voteDownInActive fa-sort-down fa-4x\"></i><button>"),$(`#id_Ans_UpVote${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="like"><i  class="fas active fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount-answer">${a}</div></div>`)):"unlikeAnswer"==t.action?(a-=1,$(`#id_Ans_UpVote${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="voteAns"><i class="fas inactive fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount-answer">${a}</div></div>`)):"lackOfPrivelege"==t.action?($(".toast-container").html('<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">\n    <aside class="s-notice s-notice__info">\n        <div class="d-flex gs16 gsx ai-center jc-space-between">\n            <div class="flex--item">\n                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">\n                    <strong>Alert ! </strong>You need alteast 15 Reputation to Up Vote\n                </div>\n            </div>\n            <div class="flex--item mr0 js-notice-actions">\n                <div class="d-flex">\n                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">\n                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">\n                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </aside>\n</div>'),$(".toast").toast("show",{autohide:!0}),$(".js-toast").fadeOut(8e3)):"cannotLikeOwnPost"==t.action?($(".toast-container").html('<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">\n    <aside class="s-notice s-notice__info">\n        <div class="d-flex gs16 gsx ai-center jc-space-between">\n            <div class="flex--item">\n                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">\n                    <strong>Alert ! </strong>You cannot vote for your Own Post\n                </div>\n            </div>\n            <div class="flex--item mr0 js-notice-actions">\n                <div class="d-flex">\n                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">\n                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">\n                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </aside>\n</div>'),$(".toast").toast("show",{autohide:!0}),$(".js-toast").fadeOut(8e3)):(a++,$(`#id_Ans_UpVote${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="voteAns"><i  class="fas active fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount-answer">${a}</div></div>`))}})}),$(".ansDislikeForm").submit(function(t){t.preventDefault();let s=$(this);$.ajax({url:s.attr("action"),data:{submit:"ansDownVote"},dataType:"json",method:"get",async:!1,success:function(t){let a=$(`#id_Ans_UpVote${s.attr("data-pk")}`).find(".showVoteCount-answer").html();"unUpvoteAndDownVote"==t.action?(a-=2,$(`#id_Ans_DownVote${s.attr("data-pk")}`).html("<button name='submit' type='submit' value=\"downVoteAns\"><i class=\"fas voteDownActive fa-sort-down fa-4x\"></i></button>"),$(`#id_Ans_UpVote${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="downVoteAns"><i  class="fas inactive fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount-answer">${a}</div></div>`)):"undislike"===t.action?(a++,$(`#id_Ans_UpVote${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="voteAns"><i class="fas inactive fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount-answer">${a}</div></div>`),$(`#id_Ans_DownVote${s.attr("data-pk")}`).html("<button name='submit' type='submit' value=\"downVoteAns\"><i class=\"fas voteDownInActive fa-sort-down fa-4x\"></i></button>")):"lackOfPrivelege"==t.action?($(".toast-container").html('<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">\n    <aside class="s-notice s-notice__info">\n        <div class="d-flex gs16 gsx ai-center jc-space-between">\n            <div class="flex--item">\n                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">\n                    <strong>Alert ! </strong>You need alteast 125 Reputation to Down Vote\n                </div>\n            </div>\n            <div class="flex--item mr0 js-notice-actions">\n                <div class="d-flex">\n                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">\n                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">\n                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </aside>\n</div>'),$(".toast").toast("show",{autohide:!0}),$(".js-toast").fadeOut(8e3)):"cannotLikeOwnPost"==t.action?($(".toast-container").html('<div data-delay="5000" class="s-toast js-toast fade" aria-hidden="false" style="top: 60px;">\n    <aside class="s-notice s-notice__info">\n        <div class="d-flex gs16 gsx ai-center jc-space-between">\n            <div class="flex--item">\n                <div class="m0 js-toast-body" id="js-notice-toast-message" role="status" tabindex="0">\n                    <strong>Alert ! </strong>You cannot vote for your Own Post\n                </div>\n            </div>\n            <div class="flex--item mr0 js-notice-actions">\n                <div class="d-flex">\n                    <button class="p8 s-btn d-flex flex__center fc-dark js-dismiss" tabindex="0" role="button" aria-label="Dismiss">\n                        <svg class="m0 svg-icon iconClearSm" width="14" height="14" viewBox="0 0 14 14">\n                            <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </aside>\n</div>'),$(".toast").toast("show",{autohide:!0}),$(".js-toast").fadeOut(8e3)):(a-=1,$(`#id_Ans_UpVote${s.attr("data-pk")}`).html(`<button name='submit' type='submit' value="voteAns"><i class="fas inactive fa-sort-up fa-4x"></i></button><div class="flex--item d-flex fd-column ai-center color-black fs-title"><div class="showVoteCount-answer">${a}</div></div>`),$(`#id_Ans_DownVote${s.attr("data-pk")}`).html("<button name='submit' type='submit' value=\"downVoteAns\"><i class=\"fas voteDownActive fa-sort-down fa-4x\"></i></button>"))}})})})});
+
+</script>
+
 
 <script>
 

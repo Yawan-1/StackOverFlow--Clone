@@ -119,27 +119,3 @@ function createSVG(tag, attrs) {
 
     const modal=(()=>{var e={},t={speedOpen:50,speedClose:250,toggleClass:"hidden",selectorTarget:"[data-modal-target]",selectorTrigger:"[data-modal-trigger]",selectorClose:"[data-modal-close]",selectorOverlay:"[data-modal-overlay]",selectorWrapper:"[data-modal-wrapper]",selectorInputFocus:"[data-modal-input-focus]"};Element.prototype.closest||(Element.prototype.matches||(Element.prototype.matches=Element.prototype.msMatchesSelector||Element.prototype.webkitMatchesSelector),Element.prototype.closest=function(e){var t=this;if(!document.documentElement.contains(this))return null;do{if(t.matches(e))return t;t=t.parentElement}while(null!==t);return null});var a=function(e){"true"===e.getAttribute("aria-expanded")?e.setAttribute("aria-expanded",!1):e.setAttribute("aria-expanded",!0)},s=function(e,s){var r=s;if("string"==typeof e&&(r=document.getElementById(e))&&r.setAttribute("data-auto-trigger",""),r){var o=r.querySelector(t.selectorOverlay),l=r.querySelector(t.selectorWrapper),n=r.querySelector(t.selectorInputFocus);r.classList.remove(t.toggleClass),document.documentElement.style.overflow="hidden","string"!=typeof e&&a(e),setTimeout(function(){if(o){var e=o.getAttribute("data-class-in").split(" "),t=o.getAttribute("data-class-out").split(" ");o.classList.remove(...t),o.classList.add(...e)}if(l){var a=l.getAttribute("data-class-in").split(" "),s=l.getAttribute("data-class-out").split(" ");l.classList.remove(...s),l.classList.add(...a)}var i,c,d,u;n&&n.focus(),c=(i=r).querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])'),d=c[0],u=c[c.length-1],i.addEventListener("keydown",function(e){("Tab"===e.key||9===e.keyCode)&&(e.shiftKey?document.activeElement===d&&(u.focus(),e.preventDefault()):document.activeElement===u&&(d.focus(),e.preventDefault()))})},t.speedOpen)}},r=function(e){var s=e.closest(t.selectorTarget),r=document.querySelector('[aria-controls="'+s.id+'"'),o=s.querySelector(t.selectorOverlay),l=s.querySelector(t.selectorWrapper);if(null===r&&(r=document.querySelector('a[href="#'+s.id+'"')),o){var n=o.getAttribute("data-class-in").split(" "),i=o.getAttribute("data-class-out").split(" ");o.classList.remove(...n),o.classList.add(...i)}if(l){var c=l.getAttribute("data-class-in").split(" "),d=l.getAttribute("data-class-out").split(" ");l.classList.remove(...c),l.classList.add(...d)}document.documentElement.style.overflow="",s.hasAttribute("data-auto-trigger")?s.removeAttribute("data-auto-trigger"):a(r),setTimeout(function(){s.classList.add(t.toggleClass)},t.speedClose)},o=function(e){var a,o,l=e.target,n=null;l.hasAttribute(t.selectorTrigger.replace(/[\[\]']+/g,""))&&l.hasAttribute("aria-controls")?(a=l.closest(t.selectorTrigger),o=document.getElementById(a.getAttribute("aria-controls")),n=!0):l.hash&&l.hash.substr(1).indexOf("modal")>-1&&(a=l,o=document.getElementById(l.hash.substr(1)),n=!0);var i=l.closest(t.selectorClose);n&&o&&s(a,o),i&&r(i),(n||i)&&e.preventDefault()},l=function(e){if("Escape"===e.key||27===e.keyCode){var a,s=document.querySelectorAll(t.selectorTarget);for(a=0;a<s.length;++a)s[a].classList.contains(t.toggleClass)||r(s[a])}};return e.init=function(){document.addEventListener("click",o,!1),document.addEventListener("keydown",l,!1)},e.openModal=s,e.closeModal=r,e})();
 
-
-    function openCommentModel(id) {
-    var flagFormModel = document.getElementById(`FlagCommentModel-${id}`);
-    if (flagFormModel) {
-        flagFormModel.style.display = "block";
-    }
-
-
-    document.getElementById(`closeId-${id}`).onclick = function(ids) {
-        flagFormModel.style.display = "none";
-    } 
-}
-
-    window.onclick = function (event) {
-      if (event.target == flagFormModel) {
-        flagFormModel.style.display = "none";
-      }
-    }
-
-$(document).keydown(function(event) { 
-  if (event.keyCode == 27) { 
-    $('.flag-comment-model').hide();
-  }
-});

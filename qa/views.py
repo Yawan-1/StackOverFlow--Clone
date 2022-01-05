@@ -3338,7 +3338,7 @@ def award_InformedBadge_OnScroll(request):
     return JsonResponse({'action': 'awarded'})
 
 
-@awardReputation
+# @awardReputation
 def question_upvote_downvote(request, question_id):
     post = get_object_or_404(Question, pk=question_id)
     likepost = post.qupvote_set.filter(upvote_by_q=request.user).first()
@@ -3421,11 +3421,6 @@ def question_upvote_downvote(request, question_id):
         if QDownvote.objects.filter(
                 downvote_by_q=request.user,
                 downvote_question_of=post).exists():
-            # QDownvote.objects.filter(downvote_by_q=request.user, downvote_question_of=post).delete()
-            # m = QUpvote(upvote_by_q=request.user, upvote_question_of=post)
-            # m.save()
-
-            # return JsonResponse({'action': 'undislike_and_like'})
 
             if downVotedPost.date > upvote_time_limit or edited_time > downVotedPost.date:
                 QDownvote.objects.filter(
@@ -3544,14 +3539,13 @@ def question_upvote_downvote(request, question_id):
 
                     finalReputation = total_question_rep + total_answer_rep
 
-                    if finalReputation >= 10:
-                        print("Awarded the Create Wiki Posts")
-                        post.post_owner.profile.create_wiki_posts = True
-                        post.post_owner.profile.save()
+                    # if finalReputation >= 10:
+                    #     print("Awarded the Create Wiki Posts")
+                    #     post.post_owner.profile.create_wiki_posts = True
+                    #     post.post_owner.profile.save()
 
                     if created == QUpvote.objects.filter(
                             upvote_by_q=request.user).first():
-                        print("It is First")
                         TagBadge.objects.get_or_create(
                             awarded_to_user=request.user,
                             badge_type="BRONZE",
