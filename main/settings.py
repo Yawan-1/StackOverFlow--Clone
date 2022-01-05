@@ -247,7 +247,7 @@ CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_IMAGE_BACKEND = "pillow"
 
-
+# django debug toolbar configuration
 # INTERNAL_IPS = [
 #     '127.0.0.1',
 # ]
