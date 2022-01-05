@@ -209,6 +209,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #     # Add to this list all the locations containing your static files 
 # )
 
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Martor Configuration
