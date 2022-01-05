@@ -16,7 +16,7 @@ settings.configure()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.herokuapp.com']
+ALLOWED_HOSTS = ['https://stackoverflow---clone.herokuapp.com']
 
 # Application definition
 
