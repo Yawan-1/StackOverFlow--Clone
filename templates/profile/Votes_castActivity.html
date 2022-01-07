@@ -1076,7 +1076,7 @@ $(document).ready(function(){
                 All actions
             </a>
             {% if profileData.user == request.user %}
-            <a class="s-navigation--item" href="{% url 'profile:Votes_castActivity' profileData.user.id profileData.user.username %}" title="Votes you have cast">
+            <a class="s-navigation--item is-selected" href="{% url 'profile:Votes_castActivity' profileData.user.id profileData.user.username %}" title="Votes you have cast">
                 Votes
             </a>
             {% endif %}

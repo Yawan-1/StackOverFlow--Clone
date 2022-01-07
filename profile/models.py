@@ -59,7 +59,7 @@ class Profile(models.Model):
     email = models.EmailField(max_length=30, default='')
     location = models.CharField(max_length=30, default='')
     title = models.CharField(max_length=30, default='')
-    profile_photo = models.ImageField(upload_to='profile_photos', default='media/media/isle.jpg')
+    profile_photo = models.ImageField(upload_to='profile_photos', default='media/isle.jpg')
     about_me = models.CharField(max_length=30, default='', blank=True, null=True)
     website_link = models.URLField(blank=True)
     twitter_link = models.URLField(blank=True)

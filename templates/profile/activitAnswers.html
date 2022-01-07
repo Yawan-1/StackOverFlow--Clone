@@ -785,9 +785,9 @@
 
 <div class="d-flex ai-center fw-wrap gs16 md:fd-column md:ai-start">
     <a class="flex--item" href="{% url 'profile:activityPageTabProfile' profileData.user.id profileData.user.username %}">
-        <div class="md:d-none"><div class="bar-md bs-sm"><img src="{{profileData.profile_photo.url}}" alt="" width="128" height="128" class="bar-sm bar-md d-block"></div></div>
-        <div class="d-none md:d-block sm:d-none"><div class="bar-md bs-sm"><img src="{{profileData.profile_photo.url}}" alt="" width="96" height="96" class="bar-sm bar-md d-block"></div></div>
-        <div class="d-none sm:d-block"><div class="bar-md bs-sm"><img src="{{profileData.profile_photo.url}}" alt="" width="64" height="64" class="bar-sm bar-md d-block"></div></div>
+        <div class="md:d-none"><div class="bar-md bs-sm"><img src="{% if profileData.profile_photo %}{{profileData.profile_photo.url}}{% endif %}" alt="" width="128" height="128" class="bar-sm bar-md d-block"></div></div>
+        <div class="d-none md:d-block sm:d-none"><div class="bar-md bs-sm"><img src="{% if profileData.profile.profile_photo %}{{profileData.profile_photo.url}}{% endif %}" alt="" width="96" height="96" class="bar-sm bar-md d-block"></div></div>
+        <div class="d-none sm:d-block"><div class="bar-md bs-sm"><img src="{% if profileData.profile.profile_photo %}{{profileData.profile_photo.url}}{% endif %}" alt="" width="64" height="64" class="bar-sm bar-md d-block"></div></div>
     </a>
     <div class="flex--item">
         <div class="d-flex ai-center fw-wrap gs8 wmx4">
