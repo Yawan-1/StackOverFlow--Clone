@@ -14,9 +14,9 @@ SECRET_KEY = 'django-insecure-=dei9kx=^q))zm#z-(_cwdii75e-4bsf5_7suo9ll&besz088u
 # from django.conf import settings
 settings.configure()
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://stackoverflow---clone.herokuapp.com/']
 
 # Application definition
 
