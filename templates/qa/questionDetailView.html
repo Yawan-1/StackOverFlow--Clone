@@ -240,7 +240,7 @@
 
 
         <div class="s-prose js-post-body" itemprop="text">      
-            <p>{{data.body}}</p>
+            <p>{{data.body|safe_markdown}}</p>
         </div>
 
         <div class="mt24 mb12">
@@ -1856,12 +1856,17 @@ $(document).keydown(function(event) {
 
 
 
-
+<!-- MarkDown Editor CSS Files - START -->
 <link href="{% static 'MarkDown-Editor/plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" />
 <link href="{% static 'MarkDown-Editor/plugins/css/resizable.min.css' %}" type="text/css" media="all" rel="stylesheet" />
 <link href="{% static 'MarkDown-Editor/martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+<!-- MarkDown Editor CSS Files - START -->
 
 
+
+
+
+<!-- MarkDown Editor JS Files - START -->
 <script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/ace.js' %}"></script>
 <script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/mode-markdown.js' %}"></script>
 <script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/ext-language_tools.js' %}"></script>
@@ -1872,11 +1877,11 @@ $(document).keydown(function(event) {
 <script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/resizable.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'MarkDown-Editor/plugins/js/emojis.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'MarkDown-Editor/martor/js/martor.bootstrap.min.js' %}"></script>
-
 <script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
+<!-- MarkDown Editor JS Files - END -->
+
+
 <script type="text/javascript" src="{% static 'qa/js/question-detail-page.js' %}"></script>
-
-
 <script type="text/javascript" src="{% static 'qa/js/question-detail-modal.js' %}"></script>
 
 
