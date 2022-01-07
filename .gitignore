@@ -78,6 +78,7 @@ env.bak/
 venv.bak/
 cloneenv/
 static_cdn/
+staticfiles/
 
 
 
