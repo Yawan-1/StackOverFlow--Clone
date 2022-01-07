@@ -54,6 +54,15 @@ A simple function to convert listed strings
 into seperate strings.
 """
 
+# 404 HANDLER
+def handler404(request, *args, **kwargs):
+    return render(request, 'home/404.html')
+
+
+# 500 HANDLER
+def handler500(request, *args, **kwargs):
+    return render(request, 'home/500.html')
+
 
 def listTOString(word):
     emptyString = ""
