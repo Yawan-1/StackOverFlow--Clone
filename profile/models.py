@@ -59,7 +59,7 @@ class Profile(models.Model):
     email = models.EmailField(max_length=30, default='')
     location = models.CharField(max_length=30, default='')
     title = models.CharField(max_length=30, default='')
-    profile_photo = models.ImageField(upload_to='profile_photos', default='media/isle.jpg')
+    profile_photo = models.ImageField(upload_to='profile_photos', default='media/media/isle.jpg')
     about_me = models.CharField(max_length=30, default='', blank=True, null=True)
     website_link = models.URLField(blank=True)
     twitter_link = models.URLField(blank=True)
@@ -77,19 +77,8 @@ class Profile(models.Model):
     review_close_votes = models.BooleanField(default=False)
     favorite_question_S = models.BooleanField(default=False)
     lifeJacket = models.BooleanField(default=False)
-    # stellar_question_F = models.BooleanField(default=False)
-    # nice_question_T = models.BooleanField(default=False)
-    # good_question_S = models.BooleanField(default=False)
-    # great_question_F = models.BooleanField(default=False)
-    # popular_question_T = models.BooleanField(default=False)
-    # notable_question_S = models.BooleanField(default=False)
-    # famous_question_F = models.BooleanField(default=False)
-    # archaeologist_S = models.BooleanField(default=False)
-    # altruist_B = models.BooleanField(default=False)
-    # promoter_B = models.BooleanField(default=False)
-    # investor_B = models.BooleanField(default=False)
-    # benefactor_B = models.BooleanField(default=False)
-    # civit_duty_silver = models.BooleanField(default=False)
+
+
     altruist = models.BooleanField(default=False)
 # PRIVILEGES
     commenter = models.BooleanField(default=False)
@@ -113,16 +102,6 @@ class Profile(models.Model):
     job_type = models.CharField(max_length=30, choices=JOB_TYPE_CHOICES)
     job_search_status = models.CharField(max_length=30, choices=JOB_STATUS)
     phone_number = models.CharField(max_length=30, blank=True, null=True)
-    # story_image = models.ImageField(upload_to='story_images')
-    # location
-    # email_me_recommendations_jobs
-    # job_title
-    # company_name
-    # from_
-    # to_
-    # what_technologies_using_there
-    # what_are_responsibilities
-
 
 
     create_posts = models.BooleanField(default=True) # Done
@@ -132,15 +111,15 @@ class Profile(models.Model):
     flag_posts = models.BooleanField(default=False) # Done
     comment_everywhere_Priv = models.BooleanField(default=False) # Done
     set_bounties = models.BooleanField(default=False) # Done
-    edit_community_wiki = models.BooleanField(default=False) #------------Later------------#
+    edit_community_wiki = models.BooleanField(default=False)
     voteDownPriv = models.BooleanField(default=False) # Done
-    view_close_votes_Priv = models.BooleanField(default=False) #------------Later------------#
-    access_review_queues = models.BooleanField(default=False) #------------Later------------#
+    view_close_votes_Priv = models.BooleanField(default=False)
+    access_review_queues = models.BooleanField(default=False)
     established_user_Priv = models.BooleanField(default=False) # Done
     create_tags = models.BooleanField(default=False) # Done
     edit_questions_answers = models.BooleanField(default=False) # Done
     cast_close_AND_Reopen_votes = models.BooleanField(default=False) # Done
-    accessTo_moderatorTools = models.BooleanField(default=False) #------------Later------------#
+    accessTo_moderatorTools = models.BooleanField(default=False)
     protect_questions = models.BooleanField(default=False) # Done
     trusted_user_Priv = models.BooleanField(default=False)
 
@@ -149,21 +128,6 @@ class Profile(models.Model):
     suggested_Edit_counter = models.IntegerField(default=0, blank=True, null=True)
     editPostTimeOfUser = models.DateTimeField(auto_now_add=False, blank=True, null=True)
     Refiner_Illuminator_TagPostCounter = models.IntegerField(default=0, blank=True, null=True)
-
-# Voting to delete answers with score of -1 or < -1
-# Voting to delete questions with score of -3 or  < -3
-
-
-
-# pariticipate in meta
-# talk in chat
-# reduce ads
-# create chat rooms
-# create gallery chat rooms
-# create tag synonyms
-# approve tag wiki edits
-
-
 
     def __str__(self):
         return f'{self.user}'
@@ -198,50 +162,3 @@ class Position(models.Model):
     company_website = models.CharField(max_length=30, default='')
     technologies = models.CharField(max_length=30, default='')
     responsibilities = models.CharField(max_length=30, default='')
-    # from_
-    # to_
-
-# class Blogs_or_Videos(models.Model):
-    # link
-
-# class Open_source(models.Model):
-    # name_of_project
-    # link_to_repo
-    # short_des
-    # technologies
-    # from_
-    # to_
-
-# class Top_post(models.Model):
-    #  link
-    # questions - 
-    # answers - 
-
-# class Feature_or_Apps(models.Model):
-    # title
-    # url
-    # technologies
-    # description
-    # from_to
-    # to_
-
-
-# class Education(models.Model):
-    # university
-    # degree
-    # url
-    # technologies
-    # summary
-    # from_
-    # to_
-
-
-
-# class Certification(models.Model):
-# class Assessment(models.Model):
-# class Milestone(models.Model):
-
-# class Tag(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     test_tag_1 = models.BooleanField(default=False)
-#     
