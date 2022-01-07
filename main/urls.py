@@ -20,7 +20,7 @@ from django.conf import settings
 # import debug_toolbar
 
 urlpatterns = [
-    path('adminisGoodofmy_clone_so/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', include('profile.urls')),
     path('', include('qa.urls')),
     path('', include('notification.urls')),
