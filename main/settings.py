@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-=dei9kx=^q))zm#z-(_cwdii75e-4bsf5_7suo9ll&besz088u
 settings.configure()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-# Added Allowed Hosts
+
 ALLOWED_HOSTS = ['https://stackoverflow---clone.herokuapp.com/','localhost','http://127.0.0.1','stackoverflow---clone.herokuapp.com','.herokuapp.com']
 
 # Application definition
