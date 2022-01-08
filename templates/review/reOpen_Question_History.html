@@ -8,24 +8,33 @@
     <html class="html__responsive html__unpinned-leftnav">
 
     <head>
-
         <title>Review History - ReOpen Votes Review - Stack Overflow</title>
-    <script id="webpack-public-path" type="text/uri-list">https://cdn.sstatic.net/</script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script async src="https://cdn.sstatic.net/Js/third-party/stacks/stacks.min.js?v=4c00f8ce1b14"></script>
-    <script src="https://cdn.sstatic.net/Js/stub.en.js?v=02d19f44eb4e"></script>
-    
-    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/stacks.css?v=556e4333f24c">
-    <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=34c234f84be8">
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script async src="https://cdn.sstatic.net/Js/third-party/stacks/stacks.min.js?v=4c00f8ce1b14"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/stacks.css?v=556e4333f24c">
+        <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=34c234f84be8">
         <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/secondary.css?v=bbf1061b903d">
-
-
-            <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
         <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/Channels/channels.css?v=47a5e0f03c81">
+<style>
 
+    .logo-name {
+        padding: 8px;
+        color: #568;
+        border: 1px solid white;
+        font-family: 'Nexa';
+        src: url(...);
+        font-weight: 500;
+        font-style: normal;
+    }
+
+    .fa-stack-overflow {
+        color: blue;
+    }
+
+</style>
     </head>
     <body class="review-page unified-theme">
     <div id="notify-container"></div>
@@ -38,10 +47,9 @@
                 <div class="topbar-dialog leftnav-dialog js-leftnav-dialog dno">
                     <div class="left-sidebar js-unpinned-left-sidebar" data-can-be="left-sidebar" data-is-here-when="sm"></div>
                 </div>
-                    <a href="/" class="-logo js-gps-track"
-                        data-gps-track="top_nav.click({is_current:false, location:2, destination:8})">
-                        <span class="-img _glyph">Stack Overflow</span>
-                    </a>
+            <a href="{% url 'profile:home' %}" class="-logo">
+                <i class="fab fa-stack-overflow fa-3x"></i><div class="logo-name">StackOverFlow-<b>Clone</b></div>
+            </a>
         </div>
 
 

@@ -15,6 +15,23 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=34c234f84be8">
         <link href="{% static 'notification/css/notification.css' %}" type="text/css" media="all" rel="stylesheet" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<style>
+
+    .logo-name {
+        padding: 8px;
+        color: #568;
+        border: 1px solid white;
+        font-family: 'Nexa';
+        src: url(...);
+        font-weight: 500;
+        font-style: normal;
+    }
+
+    .fa-stack-overflow {
+        color: blue;
+    }
+
+</style>
     </head>
 
 
@@ -28,8 +45,8 @@
             <a href="#" class="" role="menuitem" aria-haspopup="true" aria-controls="left-sidebar" aria-expanded="false">
                 <span class="ps-relative"></span>
             </a>
-            <a href="/" class="-logo">
-                <span class="-img _glyph">Stack Overflow - Clone</span>
+            <a href="{% url 'profile:home' %}" class="-logo">
+                <i class="fab fa-stack-overflow fa-3x"></i><div class="logo-name">StackOverFlow-<b>Clone</b></div>
             </a>
         </div>
 

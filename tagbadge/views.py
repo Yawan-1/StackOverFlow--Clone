@@ -29,6 +29,6 @@ def taggedItemsFrom_All(request, tag_id):
 
     questions = Question.objects.filter(tags=tag)
 
-    context = {'tag':tag,'questions':questions}
+    context = {'tag':tag,'questions':questions,'count_questions':questions.count()}
     return render(request, 'qa/taggedItemsFrom_All.html', context)
 

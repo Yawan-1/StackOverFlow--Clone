@@ -110,3 +110,14 @@ def count_answers_by_user(user_id):
 def count_questions_by_user(user_id):
     countQuestions = Question.objects.filter(post_owner=user_id).count()
     return countQuestions
+
+@register.filter
+def count_questions_all():
+    counted_question_from_all = Question.objects.filter(is_deleted=False).count()
+    return counted_question_from_all
+
+# I don't know why but it is not working and will cover in next update.
+@register.filter
+def count_question_from_tag(tag):
+    count_questions_from_tag = Question.objects.filter(tags__name__icontains=tag)
+    return count_questions_from_tag.count()

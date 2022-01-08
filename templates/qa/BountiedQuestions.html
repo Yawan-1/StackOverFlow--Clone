@@ -25,7 +25,23 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/stacks.css?v=15473555f232">
     <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=de9fb8b74f61">        
     <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Shared/Channels/channels.css?v=47a5e0f03c81">
+<style>
 
+    .logo-name {
+        padding: 8px;
+        color: #568;
+        border: 1px solid white;
+        font-family: 'Nexa';
+        src: url(...);
+        font-weight: 500;
+        font-style: normal;
+    }
+
+    .fa-stack-overflow {
+        color: blue;
+    }
+
+</style>
     </head>
     <body class="questions-page unified-theme">
     <div id="notify-container"></div>
@@ -41,7 +57,7 @@
                 <div class="left-sidebar js-unpinned-left-sidebar" data-can-be="left-sidebar" data-is-here-when="sm"></div>
             </div>
             <a href="{% url 'profile:home' %}" class="-logo">
-                <span class="-img _glyph">Stack Overflow - Clone</span>
+                <i class="fab fa-stack-overflow fa-3x"></i><div class="logo-name">StackOverFlow-<b>Clone</b></div>
             </a>
         </div>
 
@@ -172,9 +188,9 @@
                 <div class="topbar-dialog leftnav-dialog js-leftnav-dialog dno">
                     <div class="left-sidebar js-unpinned-left-sidebar" data-can-be="left-sidebar" data-is-here-when="sm"></div>
                 </div>
-                <a href="#" class="-logo">
-                    <span class="-img _glyph">Stack Overflow</span>
-                </a>
+            <a href="{% url 'profile:home' %}" class="-logo">
+                <i class="fab fa-stack-overflow fa-3x"></i><div class="logo-name">StackOverFlow-<b>Clone</b></div>
+            </a>
         </div>
 
         <ol class="overflow-x-auto ml-auto -secondary d-flex ai-center list-reset h100 user-logged-out" role="presentation">
