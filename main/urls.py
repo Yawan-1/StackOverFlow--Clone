@@ -22,7 +22,7 @@ from qa import views as qa_views
 
 handler404 = qa_views.handler404
 handler500 = qa_views.handler500
-
+# 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('profile.urls')),
