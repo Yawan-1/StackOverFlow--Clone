@@ -19,12 +19,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 from qa import views as qa_views
 # import debug_toolbar
-# Done
+
 handler404 = qa_views.handler404
 handler500 = qa_views.handler500
 
 urlpatterns = [
-    path('adminisGoodofmy_clone_so/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', include('profile.urls')),
     path('', include('qa.urls')),
     path('', include('notification.urls')),
