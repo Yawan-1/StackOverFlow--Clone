@@ -1149,7 +1149,7 @@ $(document).ready(function(){
                                         </div>
                                         <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
                                     </div>
-                                    {% elif profileData.targeted_tag == "Citizen Patrol" %}
+                                    {% elif profileData.targeted_tag == "Citizen Duty" %}
                                     <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
                                         <div class="d-flex gs12 gsx m0 s-progress--label">
                                             <div class="flex--item mr0 s-badge--image badge3"></div>
@@ -1535,13 +1535,12 @@ site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed u
         </div>
 
     </footer>
-
 {% if request.user.is_authenticated %}
 <div id="pop-Modal" class="modal-box">
     <div class="modal-content">
 
-        <p>
-<div  class="d-flex fd-column gs32 gsy flex__center bs-sm bw0 bar-sm popup _badge-selection" id="Model2" style="z-index: 8951; position: absolute; top: 67px; left: calc(50% - 480px);" data-controller="se-draggable" >
+<aside id="js-select-badge-contents" class="s-modal" data-s-modal-target="modal" tabindex="-1" role="dialog" aria-labelledby="select-badge-modal-title" aria-hidden="false" data-loaded="false">
+<div class="s-modal--dialog d-flex g16 fd-column overflow-hidden ws-normal hmx5 h100">
 
     <header class="d-flex jc-center ps-relative mt8 w100">
         <h1 class="mb0 fc-dark fs-headline1 lh-sm">Select your next badge</h1>
@@ -1549,24 +1548,9 @@ site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed u
             <a class="d-flex flex__center -link" id="close-popup" title="Close this popup (or hit ESC)"><svg aria-hidden="true" class="m0 svg-icon iconClear" width="18" height="18" viewBox="0 0 18 18"><path d="M15 4.41 13.59 3 9 7.59 4.41 3 3 4.41 7.59 9 3 13.59 4.41 15 9 10.41 13.59 15 15 13.59 10.41 9 15 4.41Z"></path></svg></a>
         </div>
     </header>
-    <div class="d-flex flex__allcells4 fw-wrap bar-sm ba bc-black-100 overflow-x-hidden " style="height: 75%">
 
-
-
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Student">
-
-
-            <div class="d-flex">
-                <div class="flex--item">
-                    <span class="badge">
-                        <span class="badge3"></span> Student
-                    </span>
-                </div>
-                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
-            </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm">First question with score of 1 or more</p>
-    </div>
-
+    <div class="s-modal--body flex--item fl1 overflow-auto mb0">
+        <div class="d-grid sm:grid__1 g8 ai-stretch js-badge-list-container grid__2">
 
 <!-- IMPLEMENTED - Leave Comments -->
 
@@ -2288,7 +2272,6 @@ site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed u
 
 
 </div>
-        </p>
       </div>
     </div>
 {% endif %}

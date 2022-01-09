@@ -833,7 +833,7 @@ $(document).ready(function(){
                                                             <div class="d-flex flex__center fl1 s-badge--label">Benefactor</div>
                                                         </div>
                                                         <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
-                                                    </div> {% elif profileData.targeted_tag == "Citizen Patrol" %}
+                                                    </div> {% elif profileData.targeted_tag == "Citizen Duty" %}
                                                     <div id="badge-card-next" class="s-progress s-progress__badge s-progress__bronze">
                                                         <div class="d-flex gs12 gsx m0 s-progress--label">
                                                             <div class="flex--item mr0 s-badge--image badge3"></div>
@@ -1227,738 +1227,746 @@ site design / logo &#169; 2021 Stack Exchange Inc; user contributions licensed u
 
     </footer>
 
-
 {% if request.user.is_authenticated %}
-<div id="pop-Modal " class="modal-box ">
-    <div class="modal-content ">
+<div id="pop-Modal" class="modal-box">
+    <div class="modal-content">
 
-        <p>
-<div  class="d-flex fd-column gs32 gsy flex__center bs-sm bw0 bar-sm popup _badge-selection " id="Model2 " style="z-index: 8951; position: absolute; top: 67px; left: calc(50% - 480px); " data-controller="se-draggable " >
+<aside id="js-select-badge-contents" class="s-modal" data-s-modal-target="modal" tabindex="-1" role="dialog" aria-labelledby="select-badge-modal-title" aria-hidden="false" data-loaded="false">
+<div class="s-modal--dialog d-flex g16 fd-column overflow-hidden ws-normal hmx5 h100">
 
-    <header class="d-flex jc-center ps-relative mt8 w100 ">
-        <h1 class="mb0 fc-dark fs-headline1 lh-sm ">Select your next badge</h1>
-        <div class="ps-absolute tn12 rn4 popup-close ">
-            <a class="d-flex flex__center -link " id="close-popup " title="Close this popup (or hit ESC) "><svg aria-hidden="true " class="m0 svg-icon iconClear " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M15 4.41 13.59 3 9 7.59 4.41 3 3 4.41 7.59 9 3 13.59 4.41 15 9 10.41 13.59 15 15 13.59 10.41 9 15 4.41Z "></path></svg></a>
+    <header class="d-flex jc-center ps-relative mt8 w100">
+        <h1 class="mb0 fc-dark fs-headline1 lh-sm">Select your next badge</h1>
+        <div class="ps-absolute tn12 rn4 popup-close">
+            <a class="d-flex flex__center -link" id="close-popup" title="Close this popup (or hit ESC)"><svg aria-hidden="true" class="m0 svg-icon iconClear" width="18" height="18" viewBox="0 0 18 18"><path d="M15 4.41 13.59 3 9 7.59 4.41 3 3 4.41 7.59 9 3 13.59 4.41 15 9 10.41 13.59 15 15 13.59 10.41 9 15 4.41Z"></path></svg></a>
         </div>
     </header>
-    <div class="d-flex flex__allcells4 fw-wrap bar-sm ba bc-black-100 overflow-x-hidden " style="height: 75% ">
 
-
-
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Student ">
-
-
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge3 "></span> Student
-                    </span>
-                </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
-            </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">First question with score of 1 or more</p>
-    </div>
-
+    <div class="s-modal--body flex--item fl1 overflow-auto mb0">
+        <div class="d-grid sm:grid__1 g8 ai-stretch js-badge-list-container grid__2">
 
 <!-- IMPLEMENTED - Leave Comments -->
 
     {% if countComments <= 10 %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Bronze " style=" " data-badge-database-name="Commentator ">
-            <span class="-flag-recommend ">Recommended</span>
-        <div class="s-progress s-progress__badge s-progress__bronze ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge3 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Commentator">
+            <span class="-flag-recommend">Recommended</span>
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">
                 Commentator - {{countComments}}/10</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="80 " style="max-width: 100%; width: {{countComments|percentage}}%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" style="max-width: 100%; width: {{countComments|percentage}}%;"></div>
         </div>
-    <form method="GET " class="Commentator " action="{% url 'profile:select_BadgeTarget' user.id %} " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="Leave 10 comments "></h6></p>
+    <form method="GET" class="Commentator" action="{% url 'profile:select_BadgeTarget'  user.id  %}" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Leave 10 comments"></h6></p>
     </form>
     </div>
     {% else %}
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Student ">
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Student">
 
 
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge3 "></span> Commentator
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Commentator
                     </span>
                 </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
             </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">Leave 10 comments</p>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Leave 10 comments</p>
     </div>
     {% endif %}
 
 
 
     {% if profileData.altruist %}
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Student ">
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge3 "></span> Altruist
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Student">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Altruist
                     </span>
                 </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
             </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">BountyAwardAnotherPerQuestion</p>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">BountyAwardAnotherPerQuestion</p>
     </div>
     {% else %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Bronze " style=" " data-badge-database-name="Altruist ">
-        <div class="s-progress s-progress__badge s-progress__bronze ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge3 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Altruist</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Altruist">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Altruist</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: 100%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 100%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline altruist " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="BountyAwardAnotherPerQuestion "></h6></p>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline altruist" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="BountyAwardAnotherPerQuestion"></h6></p>
     </form>
     </div>
     {% endif %}
 
 
     {% if profileData.post_edit_inactive_for_six_month <= 100 %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Silver " style=" " data-badge-database-name="Archaeologist ">
-        <div class="s-progress s-progress__badge s-progress__silver ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge2 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Archaeologist - {{profileData.post_edit_inactive_for_six_month}}/100</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Archaeologist">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Archaeologist - {{profileData.post_edit_inactive_for_six_month}}/100</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: {{profileData.post_edit_inactive_for_six_month|advanced_percentage:100}}%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.post_edit_inactive_for_six_month|advanced_percentage:100}}%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline archaeologist " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="Edit100PostsInactive for 6 months "></h6></p>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline archaeologist" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Edit100PostsInactive for 6 months"></h6></p>
     </form>
     </div>
     {% else %}
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Archaeologist ">
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge3 "></span> Archaeologist
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Archaeologist">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Archaeologist
                     </span>
                 </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
             </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">Edit 100 Posts Inactive for 6 months</p>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Edit 100 Posts Inactive for 6 months</p>
     </div>
     {% endif %}
 
 
     {% if completed == False %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Bronze " style=" " data-badge-database-name="Autobiographer ">
-        <div class="s-progress s-progress__badge s-progress__bronze ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge3 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Autobiographer</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Autobiographer">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Autobiographer</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: 0%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline autobiographer " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="CompleteAboutSectionOfUserProfile "></h6></p>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline autobiographer" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="CompleteAboutSectionOfUserProfile"></h6></p>
     </form>
     </div>
     {% else %}
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Autobiographer ">
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge3 "></span> Autobiographer
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Autobiographer">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Autobiographer
                     </span>
                 </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
             </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">Complete About Section of User Profile</p>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Complete About Section of User Profile</p>
     </div>
     {% endif %}
 
 
     {% if benefactor_earned == False %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Bronze " style=" " data-badge-database-name="Benefactor ">
-        <div class="s-progress s-progress__badge s-progress__bronze ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge3 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Benefactor</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Benefactor">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Benefactor</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: 0%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline benefactor " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="FirstBountyAwardOnOwnQ "></h6></p>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline benefactor" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="FirstBountyAwardOnOwnQ"></h6></p>
     </form>
     </div>
     {% else %}
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Benefactor ">
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge3 "></span> Benefactor
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Benefactor">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Benefactor
                     </span>
                 </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
             </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">First Bounty Award on Own Question</p>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">First Bounty Award on Own Question</p>
     </div>
     {% endif %}
 
 
     {% if ctzn_ptrl_earned == False %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Bronze " style=" " data-badge-database-name="Citizen Patrol ">
-        <div class="s-progress s-progress__badge s-progress__bronze ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge3 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Citizen Patrol</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Citizen Patrol">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Citizen Patrol</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: 0%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline citizen_duty " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="First flagged post "></h6></p>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline citizen_duty" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="First flagged post"></h6></p>
     </form>
     </div>
     {% else %}
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Citizen Patrol ">
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge3 "></span> Citizen Patrol
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Citizen Patrol">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Citizen Patrol
                     </span>
                 </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
             </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">First flagged post</p>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">First flagged post</p>
     </div>
     {% endif %}
 
 
     {% if civc_duty == False %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Silver " style=" " data-badge-database-name="Civic Duty ">
-        <div class="s-progress s-progress__badge s-progress__silver ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge2 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Civic Duty - {{countVotes}}/300</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Civic Duty">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Civic Duty - {{countVotes}}/300</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: {{countVotes|advanced_percentage_without_profile}}%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{countVotes|advanced_percentage_without_profile}}%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline civic_duty " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="Vote300OrMoreTimes "></h6></p>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline civic_duty" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Vote300OrMoreTimes"></h6></p>
     </form>
     </div>
     {% else %}
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Civic Duty ">
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge3 "></span> Civic Duty
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Civic Duty">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Civic Duty
                     </span>
                 </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
             </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">Vote 300 or More Times</p>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Vote 300 or More Times</p>
     </div>
     {% endif %}
 
 
     {% if profileData.posts_edited_counter <= 500 %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Gold " style=" " data-badge-database-name="Copy Editor ">
-        <div class="s-progress s-progress__badge s-progress__gold ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge1 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Copy Editor - {{profileData.posts_edited_counter}}/500</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Gold" style="" data-badge-database-name="Copy Editor">
+        <div class="s-progress s-progress__badge s-progress__gold">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge1"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Copy Editor - {{profileData.posts_edited_counter}}/500</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: {{profileData.posts_edited_counter|advanced_percentage:500}}%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.posts_edited_counter|advanced_percentage:500}}%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline copy_editor " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="Edit 500 Posts "></h6></p>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline copy_editor" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Edit 500 Posts"></h6></p>
     </form>
     </div>
     {% else %}
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Copy Editor ">
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge1 "></span> Copy Editor
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Copy Editor">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge1"></span> Copy Editor
                     </span>
                 </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
             </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">Vote 300 or More Times</p>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Vote 300 or More Times</p>
     </div>
     {% endif %}
 
 
     {% if critic_earned == False %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Bronze " style=" " data-badge-database-name="Critic ">
-        <div class="s-progress s-progress__badge s-progress__bronze ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge3 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Critic</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Critic">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Critic</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: 0%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline critic " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="FirstDownVote "></h6></p>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline critic" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="FirstDownVote"></h6></p>
     </form>
     </div>
     {% else %}
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Critic ">
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge3 "></span> Critic
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Critic">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Critic
                     </span>
                 </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
             </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">First Down Vote</p>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">First Down Vote</p>
     </div>
     {% endif %}
 
 
 <!-- UNFINISHED -->
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Bronze " style=" " data-badge-database-name="Custodian ">
-        <div class="s-progress s-progress__badge s-progress__bronze ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge3 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Custodian</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Custodian">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Custodian</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: 0%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline custodian " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="CompleteAtLeastOneReviewTask "></h6></p>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline custodian" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="CompleteAtLeastOneReviewTask"></h6></p>
     </form>
     </div>
 
 
     {% if deputy_earned == False %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Silver " style=" " data-badge-database-name="Deputy ">
-        <div class="s-progress s-progress__badge s-progress__silver ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge2 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Deputy - 0/80</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Deputy">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Deputy - 0/80</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: {{profileData.helpful_flags_counter|advanced_percentage:80}}%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.helpful_flags_counter|advanced_percentage:80}}%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline deputy " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="Raise80HelpfulFlags "></h6></p>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline deputy" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Raise80HelpfulFlags"></h6></p>
     </form>
     </div>
     {% else %}
-    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze " style=" " data-badge-database-name="Deputy ">
-            <div class="d-flex ">
-                <div class="flex--item ">
-                    <span class="badge ">
-                        <span class="badge2 "></span> Deputy
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Deputy">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Deputy
                     </span>
                 </div>
-                <div class="d-flex ml-auto ai-center fc-green-400 "><svg aria-hidden="true " class="svg-icon iconCheckmark " width="18 " height="18 " viewBox="0 0 18 18 "><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z "></path></svg></div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
             </div>
-        <p class="mb0 pt16 pb12 fc-dark lh-sm ">Raise 80 HelpfulFlags</p>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Raise 80 HelpfulFlags</p>
     </div>
     {% endif %}
 
     {% if disclpned_earned == False %}
-    <div class="flex--item ps-relative -list-item js-badge-progress js-badge-class-Bronze " style=" " data-badge-database-name="Disciplined ">
-        <div class="s-progress s-progress__badge s-progress__bronze ">
-            <div class="d-flex gs12 gsx m0 s-progress--label ">
-                <div class="flex--item mr0 s-badge--image badge3 "></div>
-                <div class="d-flex flex__center fl1 s-badge--label ">Disciplined</div>
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Disciplined">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Disciplined</div>
             </div>
-            <div class="s-progress--bar " role="progressbar " aria-valuemin="0 " aria-valuemax="100 " aria-valuenow="0 " style="width: 0%; "></div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
         </div>
-    <form action="{% url 'profile:select_BadgeTarget' user.id %} " method="GET " class="d-inline disciplned " data-pk="{{ data.id }} ">
-        <p class="mb0 pt16 pb12 fc-dark lh-sm "><h6><input type="submit " value="DeleteOwnPostWith>+3"></h6>
-                                                            </p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Disciplined">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge3"></span> Disciplined </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">DeleteOwnPostWith>+3</p>
-                                                        </div> {% endif %} {% if excvter_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Excavator">
-                                                            <div class="s-progress s-progress__badge s-progress__bronze">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge3"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Excavator</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline excavator" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="EditFirstPostInactive6Months"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Excavator">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge3"></span> Excavator </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">EditFirstPostInactive6Months</p>
-                                                        </div> {% endif %} {% if investor_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Investor">
-                                                            <div class="s-progress s-progress__badge s-progress__bronze">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge3"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Investor</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline investor" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="FirstBountyOfferOnAnotherPQ"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Investor">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge3"></span> Investor </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">FirstBountyOfferOnAnotherPQ</p>
-                                                        </div> {% endif %} {% if marshal_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Gold" style="" data-badge-database-name="Marshal">
-                                                            <div class="s-progress s-progress__badge s-progress__gold">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge1"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Marshal - {{profileData.helpful_flags_counter}}/500</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.helpful_flags_counter|advanced_percentage:500}}%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline marshal" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="Raise500HelpFulFlags"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Marshal">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge1"></span> Marshal </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">Raise 500 HelpFulFlags</p>
-                                                        </div> {% endif %} {% if necromancer_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Necromancer">
-                                                            <div class="s-progress s-progress__badge s-progress__silver">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge2"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Necromancer</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline necromancer" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="AnswerQuestionMoreThan60Days"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Necromancer">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge2"></span> Necromancer </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">AnswerQuestionMoreThan60Days</p>
-                                                        </div> {% endif %} {% if pr_pressre_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Peer Pressure">
-                                                            <div class="s-progress s-progress__badge s-progress__bronze">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge3"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Peer Pressure</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline peer_pressure" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="DeleteOwnPostWithScore<-3"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Peer Pressure">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge2"></span> Peer Pressure </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">DeleteOwnPostWithScore
-                                                                <-3</p>
-                                                        </div> {% endif %} {% if promoter_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Promoter">
-                                                            <div class="s-progress s-progress__badge s-progress__bronze">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge3"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Promoter</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline promoter" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="FirstBountyOfferOnOwnQ"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Promoter">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge2"></span> Promoter </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">FirstBountyOfferOnOwnQ</p>
-                                                        </div> {% endif %} {% if proffreader_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Proofreader">
-                                                            <div class="s-progress s-progress__badge s-progress__bronze">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge3"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Proofreader - {{profileData.suggested_Edit_counter}}/100</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.suggested_Edit_counter}}%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline proofreader" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="ApprAndReje100SuggeEdit"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Proofreader">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge2"></span> Proofreader </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">ApprAndReje100SuggeEdit</p>
-                                                        </div> {% endif %} {% if refiner_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Refiner">
-                                                            <div class="s-progress s-progress__badge s-progress__silver">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge2"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Refiner - {{profileData.Refiner_Illuminator_TagPostCounter}}/50</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.Refiner_Illuminator_TagPostCounter|advanced_percentage:50}}%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline refiner" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="EditAndAnswer50QIn12H"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Refiner">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge2"></span> Refiner </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">EditAndAnswer50QIn12H</p>
-                                                        </div> {% endif %} {% if reviv_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Revival">
-                                                            <div class="s-progress s-progress__badge s-progress__bronze">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge3"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Revival</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline revival" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="AnswerMoreThan30DaysFstAns>2"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Revival">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge3"></span> Revival </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">AnswerMoreThan30DaysFstAns>2</p>
-                                                        </div> {% endif %} {% if slf_lrnr_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Self-Learner">
-                                                            <div class="s-progress s-progress__badge s-progress__bronze">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge3"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Self-Learner</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline self_learner" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="AnswerOwnQuestionWith>2"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Self-Learner">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge3"></span> Self-Learner </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">AnswerOwnQuestionWith>2</p>
-                                                        </div> {% endif %} {% if stnk_whte_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Strunk &amp; White">
-                                                            <div class="s-progress s-progress__badge s-progress__silver">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge2"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Strunk &amp; White - {{profileData.posts_edited_counter}}/80</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.posts_edited_counter|advanced_percentage:80}}%; max-width: 100%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline strunk_white" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="Edit80Posts"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Strunk &amp; White">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge2"></span> Strunk &amp; White </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">Edit 80 Posts</p>
-                                                        </div> {% endif %} {% if suffrage_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Suffrage">
-                                                            <div class="s-progress s-progress__badge s-progress__bronze">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge3"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Suffrage - {{totalVotes}}/30</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{totalVotes|advanced_percentage:30}}%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline suffrage" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="Use30VotesInADay"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Suffrage">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge2"></span> Suffrage </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">Use30VotesInADay</p>
-                                                        </div> {% endif %} {% if teacher_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Teacher">
-                                                            <div class="s-progress s-progress__badge s-progress__bronze">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge3"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Teacher</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline teacher" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="AnsaQwithScore>1"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Teacher">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge2"></span> Teacher </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">AnsaQwithScore>1</p>
-                                                        </div> {% endif %} {% if vx_pop_earned == False %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Vox Populi">
-                                                            <div class="s-progress s-progress__badge s-progress__bronze">
-                                                                <div class="d-flex gs12 gsx m0 s-progress--label">
-                                                                    <div class="flex--item mr0 s-badge--image badge3"></div>
-                                                                    <div class="d-flex flex__center fl1 s-badge--label">Vox Populi - {{totalVotes}}/40</div>
-                                                                </div>
-                                                                <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{totalVotes|advanced_percentage:40}}%;"></div>
-                                                            </div>
-                                                            <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline vox_populi" data-pk="{{ data.id }}">
-                                                                <p class="mb0 pt16 pb12 fc-dark lh-sm">
-                                                                    <h6><input type="submit" value="UseMaximum40VotesInADay"></h6></p>
-                                                            </form>
-                                                        </div> {% else %}
-                                                        <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Vox Populi">
-                                                            <div class="d-flex">
-                                                                <div class="flex--item"> <span class="badge">
-                        <span class="badge3"></span> Vox Populi </span>
-                                                                </div>
-                                                                <div class="d-flex ml-auto ai-center fc-green-400">
-                                                                    <svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18">
-                                                                        <path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb0 pt16 pb12 fc-dark lh-sm">Use30VotesInADay</p>
-                                                        </div> {% endif %} </div>
-                                                </div>
-                                            </div>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {% endif %}
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline disciplned" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="DeleteOwnPostWith>+3"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Disciplined">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Disciplined
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">DeleteOwnPostWith>+3</p>
+    </div>
+    {% endif %}
+
+
+    {% if excvter_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Excavator">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Excavator</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline excavator" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="EditFirstPostInactive6Months"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Excavator">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Excavator
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">EditFirstPostInactive6Months</p>
+    </div>
+    {% endif %}
+
+
+    {% if investor_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Investor">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Investor</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline investor" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="FirstBountyOfferOnAnotherPQ"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Bronze" style="" data-badge-database-name="Investor">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Investor
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">FirstBountyOfferOnAnotherPQ</p>
+    </div>
+    {% endif %}
+
+
+    {% if marshal_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Gold" style="" data-badge-database-name="Marshal">
+        <div class="s-progress s-progress__badge s-progress__gold">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge1"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Marshal - {{profileData.helpful_flags_counter}}/500</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.helpful_flags_counter|advanced_percentage:500}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline marshal" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Raise500HelpFulFlags"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Marshal">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge1"></span> Marshal
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Raise 500 HelpFulFlags</p>
+    </div>
+    {% endif %}
+
+
+    {% if necromancer_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Necromancer">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Necromancer</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline necromancer" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="AnswerQuestionMoreThan60Days"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Necromancer">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Necromancer
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">AnswerQuestionMoreThan60Days</p>
+    </div>
+    {% endif %}
+
+    {% if pr_pressre_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Peer Pressure">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Peer Pressure</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline peer_pressure" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="DeleteOwnPostWithScore<-3"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Peer Pressure">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Peer Pressure
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">DeleteOwnPostWithScore<-3</p>
+    </div>
+    {% endif %}
+
+    {% if promoter_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Promoter">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Promoter</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline promoter" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="FirstBountyOfferOnOwnQ"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Promoter">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Promoter
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">FirstBountyOfferOnOwnQ</p>
+    </div>
+    {% endif %}
+
+
+    {% if proffreader_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Proofreader">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Proofreader - {{profileData.suggested_Edit_counter}}/100</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.suggested_Edit_counter}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline proofreader" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="ApprAndReje100SuggeEdit"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Proofreader">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Proofreader
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">ApprAndReje100SuggeEdit</p>
+    </div>
+    {% endif %}
+
+    {% if refiner_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Refiner">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Refiner - {{profileData.Refiner_Illuminator_TagPostCounter}}/50</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.Refiner_Illuminator_TagPostCounter|advanced_percentage:50}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline refiner" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="EditAndAnswer50QIn12H"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Refiner">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Refiner
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">EditAndAnswer50QIn12H</p>
+    </div>
+    {% endif %}
+
+
+    {% if reviv_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Revival">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Revival</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline revival" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="AnswerMoreThan30DaysFstAns>2"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Revival">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Revival
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">AnswerMoreThan30DaysFstAns>2</p>
+    </div>
+    {% endif %}
+
+
+    {% if slf_lrnr_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Self-Learner">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Self-Learner</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline self_learner" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="AnswerOwnQuestionWith>2"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Self-Learner">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Self-Learner
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">AnswerOwnQuestionWith>2</p>
+    </div>
+    {% endif %}
+
+
+    {% if stnk_whte_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Silver" style="" data-badge-database-name="Strunk &amp; White">
+        <div class="s-progress s-progress__badge s-progress__silver">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge2"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Strunk &amp; White - {{profileData.posts_edited_counter}}/80</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{profileData.posts_edited_counter|advanced_percentage:80}}%; max-width: 100%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline strunk_white" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Edit80Posts"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Strunk &amp; White">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Strunk &amp; White
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Edit 80 Posts</p>
+    </div>
+    {% endif %}
+
+    {% if suffrage_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Suffrage">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Suffrage - {{totalVotes}}/30</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{totalVotes|advanced_percentage:30}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline suffrage" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="Use30VotesInADay"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Suffrage">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Suffrage
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Use30VotesInADay</p>
+    </div>
+    {% endif %}
+
+
+    {% if teacher_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Teacher">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Teacher</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline teacher" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="AnsaQwithScore>1"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Teacher">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge2"></span> Teacher
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">AnsaQwithScore>1</p>
+    </div>
+    {% endif %}
+
+    {% if vx_pop_earned == False %}
+    <div class="flex--item ps-relative -list-item js-badge-progress  js-badge-class-Bronze" style="" data-badge-database-name="Vox Populi">
+        <div class="s-progress s-progress__badge s-progress__bronze">
+            <div class="d-flex gs12 gsx m0 s-progress--label">
+                <div class="flex--item mr0 s-badge--image badge3"></div>
+                <div class="d-flex flex__center fl1 s-badge--label">Vox Populi - {{totalVotes}}/40</div>
+            </div>
+            <div class="s-progress--bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: {{totalVotes|advanced_percentage:40}}%;"></div>
+        </div>
+    <form action="{% url 'profile:select_BadgeTarget' user.id %}" method="GET" class="d-inline vox_populi" data-pk="{{ data.id }}">
+        <p class="mb0 pt16 pb12 fc-dark lh-sm"><h6><input type="submit" value="UseMaximum40VotesInADay"></h6></p>
+    </form>
+    </div>
+    {% else %}
+    <div class="flex--item ps-relative -list-item js-badge-progress is-completed js-completed js-badge-class-Gold" style="" data-badge-database-name="Vox Populi">
+            <div class="d-flex">
+                <div class="flex--item">
+                    <span class="badge">
+                        <span class="badge3"></span> Vox Populi
+                    </span>
+                </div>
+                <div class="d-flex ml-auto ai-center fc-green-400"><svg aria-hidden="true" class="svg-icon iconCheckmark" width="18" height="18" viewBox="0 0 18 18"><path d="M16 4.41 14.59 3 6 11.59 2.41 8 1 9.41l5 5 10-10Z"></path></svg></div>
+            </div>
+        <p class="mb0 pt16 pb12 fc-dark lh-sm">Use30VotesInADay</p>
+    </div>
+    {% endif %}
+
+</div>
+    </div>
+
+
+</div>
+      </div>
+    </div>
+{% endif %}
                                     <script type="text/javascript" src="{% static 'notification/js/notification.js' %}"></script>
                                     <script type="text/javascript" src="{% static 'profile/js/badge.js' %}"></script>
                                     <div id="onetrust-consent-sdk" class="d-none"></div>
