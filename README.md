@@ -2,6 +2,7 @@
 
 <a href="https://github.com/Yawan-1/StackOverFlow--Clone/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Yawan-1/StackOverFlow--Clone"></a>
 <a href="https://github.com/Yawan-1/StackOverFlow--Clone/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/Yawan-1/StackOverFlow--Clone"></a>
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Yawan-1/StackOverFlow--Clone">
 
 A Clone of StackOver Flow, I implemented almost every functionalities, 
 I just wanted to notice and show developers how StackOver-Flow works
