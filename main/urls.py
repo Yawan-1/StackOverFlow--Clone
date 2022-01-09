@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from qa import views as qa_views
 # import debug_toolbar
-
+# Done
 handler404 = qa_views.handler404
 handler500 = qa_views.handler500
 
