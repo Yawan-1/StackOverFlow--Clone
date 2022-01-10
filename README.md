@@ -32,6 +32,7 @@ Here is a working live demo : <a href="https://stonkoverflow.herokuapp.com/">Dem
 
 * 50+ Badges are implemented to award
 * 20 Privileges to Earn
+* Track Badges
 * Reputation Awarding
 * Privilege and Activity Notifications
 * Live Q&A MarkDown Preview
