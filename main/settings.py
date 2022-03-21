@@ -215,6 +215,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Heroku setting
+# Serving the statics through Whitenoise in Heroku
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -237,12 +239,6 @@ MARTOR_TOOLBAR_BUTTONS = [
     'link', 'image-link', 'image-upload', 'emoji',
     'direct-mention', 'toggle-maximize', 'help'
 ]
-
-MARTOR_MARKDOWN_BASE_MENTION_URL = getattr(
-    settings, 'MARTOR_MARKDOWN_BASE_MENTION_URL',
-    'http://127.0.0.1:8000/pageOnlyWithUser/'
-)
-
 
 CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
 
@@ -271,4 +267,5 @@ CKEDITOR_IMAGE_BACKEND = "pillow"
 #     'debug_toolbar.panels.profiling.ProfilingPanel',
 # ]
 
+# Heroku setting
 django_heroku.settings(locals())
