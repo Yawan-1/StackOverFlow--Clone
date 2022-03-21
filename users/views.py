@@ -7,7 +7,6 @@ from profile.models import Profile
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
-from django.views.generic.edit import FormView
 from django.contrib.auth import logout
 
 def signup_view(request):
