@@ -24,7 +24,7 @@ Here is a working live demo : <a href="https://stonkoverflow.herokuapp.com/">Dem
 * [Redis 5.x](https://pypi.org/project/django-redis/)
 * [BootStrap 4](https://getbootstrap.com/)
 * [Jquery 3](https://api.jquery.com/)
-* [Postgresql 4](https://www.postgresql.org/)
+* [Postgresql 14](https://www.postgresql.org/)
 
 
 ## Functionalities
