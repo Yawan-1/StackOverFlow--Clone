@@ -18,9 +18,9 @@
 ## To Fix Things in Order.
 
 
-5). **Comment out Unused code**
+1). **Comment out Unused code**
 
-3). **Pretiffy JavaScript and HTML**
+2). **Pretiffy JavaScript and HTML**
 
 3). **Fix Some Broken Links**
 
@@ -29,3 +29,5 @@
 5). **Change to camel case variable convention in python in all functions**
 
 6). **Seperate big functions into small functions**
+
+7). **New stackoverflow Design (The previous one is old and not working fine)**
