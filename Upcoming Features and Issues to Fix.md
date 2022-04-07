@@ -31,3 +31,5 @@
 6). **Seperate big functions into small functions**
 
 7). **New stackoverflow Design (The previous one is old and not working fine)**
+
+8). **Fix the Track Badge is not seems to be working**
