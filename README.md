@@ -15,7 +15,7 @@ I just wanted to notice and show developers how StackOver-Flow works
 
 ## Demo
 
-Here is a working live demo : <a href="https://stonkoverflow.herokuapp.com/">Demo</a> <b>(Removed from heroku because usuage of so's production LOGO</b> But i will be back with my own better design than them)</b>
+Here is a working live demo : <a href="https://stonkoverflow.herokuapp.com/">Demo</a> <b>(Removed from heroku because usage of so's production LOGO</b> But i will be back with my own better design than them)</b>
 
 ## Technology Stack
 
