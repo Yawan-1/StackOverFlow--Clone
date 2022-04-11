@@ -26,6 +26,14 @@ from django.contrib.auth.decorators import login_required
 # Flag Question History - DONE
 # ReOpen Question History - DONE
 
+"""
+The HttpRequest.is_ajax() method is removed in DJANGO 4, 
+so i used is_ajax function to check if the request is
+ajax or Not by identifying 'XMLHttpRequest'
+Also replaced is_ajax method with this is_ajax function.
+"""
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 def reOpen_Question_History(request, reviewquestionreopenvotes_id):
     getReviewItem = get_object_or_404(
@@ -3505,7 +3513,7 @@ def review_FirstQns(request, question_id):
 def EditQuestionAjax(request, question_id):
     data = get_object_or_404(Question, pk=question_id)
     # request should be ajax and method should be POST.
-    if request.is_ajax and request.method == "POST":
+    if is_ajax(request) and request.method == "POST":
         # get the form data
         edit_Q_Form = UpdateQuestion(instance=data,
                                      data=request.POST,
@@ -3530,7 +3538,7 @@ def EditQuestionAjax(request, question_id):
 def Edit_Q_In_SuggesstedEdits(request, question_id):
     data = get_object_or_404(Question, pk=question_id)
     # request should be ajax and method should be POST.
-    if request.is_ajax and request.method == "POST":
+    if is_ajax(request) and request.method == "POST":
         # get the form data
         edit_Q_Form = UpdateQuestion(instance=data,
                                      data=request.POST,
@@ -3555,7 +3563,7 @@ def Edit_Q_In_SuggesstedEdits(request, question_id):
 def Edit_Answer_In_SuggesstedEdits(request, answer_id):
     data = get_object_or_404(Answer, pk=answer_id)
     # request should be ajax and method should be POST.
-    if request.is_ajax and request.method == "POST":
+    if is_ajax(request) and request.method == "POST":
         # get the form data
         edit_Q_Form = EditAnswerForm(instance=data,
                                      data=request.POST,
@@ -3582,7 +3590,7 @@ def Edit_Answer_In_SuggesstedEdits(request, answer_id):
 def EditAllowanceAjaxForm(request, answer_id):
     data = get_object_or_404(Answer, pk=answer_id)
     # request should be ajax and method should be POST.
-    if request.is_ajax and request.method == "POST":
+    if is_ajax(request) and request.method == "POST":
         # get the form data
         editForm = EditAnswerForm(instance=data,
                                   data=request.POST,
@@ -3606,7 +3614,7 @@ def EditAllowanceAjaxForm(request, answer_id):
 
 def edit_in_Closing_Ajax(request, question_id):
     data = get_object_or_404(Question, pk=question_id)
-    if request.is_ajax and request.method == "POST":
+    if is_ajax(request) and request.method == "POST":
         editForm = UpdateQuestion(
             instance=data,
             data=request.POST,
