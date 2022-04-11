@@ -58,6 +58,15 @@ into seperate strings.
 def handler404(request, *args, **kwargs):
     return render(request, 'home/404.html')
 
+"""
+The HttpRequest.is_ajax() method is removed in DJANGO 4, 
+so i used is_ajax function to check if the request is
+ajax or Not by identifying 'XMLHttpRequest'
+
+Also replaced is_ajax method with this is_ajax function.
+"""
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 # 500 HANDLER
 def handler500(request, *args, **kwargs):
@@ -122,7 +131,7 @@ def InlineTagEditingForm(request, question_id):
     """
     data = get_object_or_404(Question, pk=question_id)
 
-    if request.is_ajax and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         form = InlineTagEditForm(
             instance=data, data=request.POST, files=request.FILES)
         if form.is_valid():
@@ -1014,7 +1023,7 @@ def flag_answer_ajax(request, answer_id):
     """
     getAnswer = get_object_or_404(Answer, pk=answer_id)
 
-    if request.is_ajax and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         Flag_Form = AnswerFlagForm(data=request.POST)
         if Flag_Form.is_valid():
             new_post = Flag_Form.save(commit=False)
@@ -1150,7 +1159,7 @@ def AjaxBountyForm(request, question_id):
     """
     data = get_object_or_404(Question, pk=question_id)
 
-    if request.is_ajax and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         bounty_form = BountyForm(data=request.POST)
         if bounty_form.is_valid():
             if request.user.profile.set_bounties:
@@ -1370,7 +1379,7 @@ def ProtectQuestionAjax(request, question_id):
     """
     data = get_object_or_404(Question, pk=question_id)
 
-    if request.is_ajax and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         protectForm = ProtectForm(data=request.POST)
         if protectForm.is_valid():
             if request.user.profile.protect_questions:
@@ -1416,7 +1425,7 @@ def ReOpenVotesAjax(request, question_id):
         awarded_to_user=request.user, badge_type="GOLD")
 # TAGGING - END
 
-    if request.is_ajax and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         re_open_form = VoteToReOpenForm(data=request.POST)
         if re_open_form.is_valid():
             new_post = re_open_form.save(commit=False)
@@ -2293,7 +2302,7 @@ def AjaxCloseForm(request, question_id):
         question_to_closing=data).exclude(ended=True).first()
 
     # request should be ajax and method should be POST.
-    if request.is_ajax and request.method == 'POST':
+    if is_ajax(request) and request.method == 'POST':
         close_form = CloseForm_Q(data=request.POST)
         if close_form.is_valid():
             if request.user.profile.cast_close_AND_Reopen_votes:
@@ -2564,7 +2573,7 @@ def save_comment_answer(request, answer_id):
 def FlagCommentAjax(request, commentq_id):
     commentID = get_object_or_404(CommentQ, pk=commentq_id)
     # request should be ajax and method should be POST.
-    if request.is_ajax and request.method == "POST":
+    if is_ajax(request) and request.method == "POST":
         # get the form data
         edit_Q_Form = CommentFlagForm(data=request.POST)
         # save the data and after fetch the object in instance
