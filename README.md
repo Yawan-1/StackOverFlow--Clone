@@ -60,7 +60,7 @@ Clone this repository
 
 1. Clone this project using
 ````
-$ git clone URL
+$ git clone https://github.com/Yawan-1/StackOverFlow--Clone
 ````
 
 For Postgresql usage*, you will need to download and install it.
