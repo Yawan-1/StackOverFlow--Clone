@@ -38,6 +38,15 @@ from notification.models import PrivRepNotification
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
+"""
+The HttpRequest.is_ajax() method is removed in DJANGO 4, 
+so i used is_ajax function to check if the request is
+ajax or Not by identifying 'XMLHttpRequest'
+Also replaced is_ajax method with this is_ajax function.
+"""
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 def Ajax_searchTag(request):
     q = request.GET.get('w')
     results = Tag.objects.filter(name__icontains=q).distinct()
@@ -2324,7 +2333,7 @@ def uploadPosition(request, user_id):
 def addPositionAjax(request,user_id):
     # data = get_object_or_404(Question, pk=question_id)
     # request should be ajax and method should be POST.
-    if request.is_ajax and request.method == "POST":
+    if is_ajax(request) and request.method == "POST":
         # get the form data
         edit_Q_Form = PositionCreateForm(request.POST, request.FILES)
         # save the data and after fetch the object in instance
@@ -2986,7 +2995,7 @@ def userProfileEdit_Settings(request, user_id):
 def EditProfileAjaxForm(request, user_id):
     # data = get_object_or_404(Answer, pk=answer_id)
     # request should be ajax and method should be POST.
-    if request.is_ajax and request.method == "POST":
+    if is_ajax(request) and request.method == "POST":
         # get the form data
         editProfile = EditProfileForm(instance=request.user.profile,
                           data=request.POST,
@@ -3050,7 +3059,7 @@ def userProfileJonPrefrences_Settings(request, user_id):
 
 
 def editProfile_JobPreAjax_Form(request, user_id):
-    if request.is_ajax and request.method == "POST":
+    if is_ajax(request) and request.method == "POST":
         # get the form data
         editProfile = EditJobPrefrences(instance=request.user.profile,
                           data=request.POST,
@@ -3090,7 +3099,7 @@ def userProfileEdit_Email_Settings(request, user_id):
 def editProfile_EditEmail_AjaxForm(request, user_id):
     # data = get_object_or_404(Answer, pk=answer_id)
     # request should be ajax and method should be POST.
-    if request.is_ajax and request.method == "POST":
+    if is_ajax(request) and request.method == "POST":
         # get the form data
         editEmail = EditEmailForm(instance=request.user.profile,
                           data=request.POST,
