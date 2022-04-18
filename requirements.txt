@@ -32,7 +32,7 @@ martor==1.6.4
 mypy-extensions==0.4.3
 packaging==21.0
 pathspec==0.9.0
-Pillow==8.3.1
+Pillow==9.0.1
 platformdirs==2.3.0
 pluggy==1.0.0
 portalocker==2.3.2
