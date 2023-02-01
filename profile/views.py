@@ -2990,32 +2990,39 @@ def userProfileEdit_Settings(request, user_id):
 
     context = {'Edit_profile_form': Edit_profile_form,'profileData':profileData,'online_user_activity':online_user_activity,}
     return render(request, 'profile/EditProfile.html', context)
+from django.core.files.storage import FileSystemStorage
 
 
 def EditProfileAjaxForm(request, user_id):
     # data = get_object_or_404(Answer, pk=answer_id)
     # request should be ajax and method should be POST.
     if is_ajax(request) and request.method == "POST":
-        # get the form data
-        editProfile = EditProfileForm(instance=request.user.profile,
-                          data=request.POST,
-                          files=request.FILES)
-        # save the data and after fetch the object in instance
-        if editProfile.is_valid():
-            instance = editProfile.save()
-            if request.user.profile.about_me != '':
-                awardBadge = TagBadge.objects.get_or_create(awarded_to_user=request.user,badge_type="Bronze", tag_name="Autobiographer",bade_position="BADGE")
-                sendNotification = PrivRepNotification.objects.get_or_create(for_user=request.user, url="#", type_of_PrivNotify="BADGE_EARNED", for_if="Autobiographer")
 
-            # serialize in new friend object in json
-            new_instance = serializers.serialize('json', [
-                instance,
-            ])
-            # send to client side.
-            return JsonResponse({"instance": new_instance}, status=200)
-        else:
-            # some form errors occured.
-            return JsonResponse({"error": editProfile.errors}, status=400)
+
+
+        request.user.profile.full_name = request.POST.get("full_name")
+        request.user.profile.location = request.POST.get("location")
+        request.user.profile.title = request.POST.get("title")
+        request.user.profile.about_me = request.POST.get("about_me")
+        request.user.profile.website_link = request.POST.get("website_link")
+        request.user.profile.twitter_link = request.POST.get("twitter_link")
+        request.user.profile.github_link = request.POST.get("github_link")
+        request.user.profile.not_to_Display_Full_name = request.POST.get("not_to_Display_Full_name")
+
+        
+        if request.FILES != {}:
+            request.user.profile.profile_photo = request.FILES["image"]
+
+        request.user.profile.save()
+
+
+        if request.user.profile.about_me != '':
+            awardBadge = TagBadge.objects.get_or_create(awarded_to_user=request.user,badge_type="Bronze", tag_name="Autobiographer",bade_position="BADGE")
+            sendNotification = PrivRepNotification.objects.get_or_create(for_user=request.user, url="#", type_of_PrivNotify="BADGE_EARNED", for_if="Autobiographer")
+
+
+        return JsonResponse({"instance": "SUCCESS"}, status=200)
+
 
     # some error occured
     return JsonResponse({"error": ""}, status=400)
