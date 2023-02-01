@@ -54,11 +54,11 @@ JOB_TYPE_CHOICES = [
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    full_name = models.CharField(max_length=30, default='')
-    not_to_Display_Full_name = models.CharField(max_length=30, default='')
+    full_name = models.CharField(max_length=30, default='', blank=True)
+    not_to_Display_Full_name = models.CharField(max_length=30, default='', blank=True)
     email = models.EmailField(max_length=30, default='')
-    location = models.CharField(max_length=30, default='')
-    title = models.CharField(max_length=30, default='')
+    location = models.CharField(max_length=30, default='', blank=True)
+    title = models.CharField(max_length=30, default='', blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos', default='media/isle.jpg')
     about_me = models.CharField(max_length=30, default='', blank=True, null=True)
     website_link = models.URLField(blank=True)
