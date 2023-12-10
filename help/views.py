@@ -1,15 +1,15 @@
 from django.shortcuts import render
 
-
 def privileges(request):
     
-    context = {}
+	context = {}
 	return render(request, 'help/privileges.html', context)
+
 
 
 def CreateWikiPosts_Privilege_Info_Page(request):
     
-    context = {}
+	context = {}
 	return render(request, 'privileges/createWikiPosts.html', context)
 
 def RemoveNewUserRestric_Privilege_Info_Page(request):
@@ -66,5 +66,5 @@ def ProtectQ_Privilege_Info_Page(request):
 
 def TrustedUser_Privilege_Info_Page(request):
 
-	return render(request, 'privileges/TrustedUser.html', context)
+		return render(request, 'privileges/TrustedUser.html', context)
 
