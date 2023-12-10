@@ -9,7 +9,6 @@ def privileges(request):
 
 def CreateWikiPosts_Privilege_Info_Page(request):
     
-	context = {}
 	return render(request, 'privileges/createWikiPosts.html', context)
 
 def RemoveNewUserRestric_Privilege_Info_Page(request):
