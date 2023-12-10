@@ -1,14 +1,14 @@
 from django.shortcuts import render
 
-def privileges(request):
 
-	context = {}
+def privileges(request):
+    
+    context = {}
 	return render(request, 'help/privileges.html', context)
 
-
-
 def CreateWikiPosts_Privilege_Info_Page(request):
-
+    
+    context = {}
 	return render(request, 'privileges/createWikiPosts.html', context)
 
 def RemoveNewUserRestric_Privilege_Info_Page(request):
