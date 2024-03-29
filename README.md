@@ -95,6 +95,7 @@ then migrate to load the operations of Data Migrations in database.
 $ python manage.py makemigrations
 $ python manage.py migrate
 ````
+> [Migration Operations](https://docs.djangoproject.com/en/3.2/ref/migration-operations/) will be automatically created on migration creation to save Tags and Tag Badges.
 
 Then, simply run the server using this command.
 ````
