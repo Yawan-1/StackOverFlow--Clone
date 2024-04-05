@@ -5,9 +5,7 @@
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Yawan-1/StackOverFlow--Clone">
 ![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg)
 
-A Clone of StackOver Flow, I implemented almost every functionalities, 
-I just wanted to notice and show developers how StackOver-Flow works
-, do tasks <b style="color:lightgreen">under the hood</b>, how tasks and queries are executing behind the scenes.
+Clone of Stack Overflow where I implemented nearly all of its functionalities. My intention was to provide insight and demonstration to developers on the inner workings of Stack Overflow - including how tasks are performed <b style="color:lightgreen">behind the scenes</b> and how queries are executed..
 
 ## Images
 
@@ -85,7 +83,7 @@ For Postgresql usage*, you will need to download and install it.
 }
   ````
 
-_*Note: You can skip postgresql installation if you're setting up this project using sqlite. simply just comment the postgresql configuration and uncomment sqlite configuration_
+_*Note: If you are setting up this project using sqlite, you have the option to bypass the postgresql installation step. To do so, please consider commenting out the postgresql configuration and uncommenting the sqlite configuration._
 
 
 
@@ -113,7 +111,7 @@ See detailed [Deploying django app on Heroku](https://devcenter.heroku.com/artic
 
 ## Contributing
 
-If you have any question or issues, It may have bugs that i may have missed. You can create <a href="https://github.com/Yawan-1/StackOverFlow--Clone/pulls">Pull request</a> or you can also contact me.
+If you have any question or issues, It may have bugs that i may have missed. You can create <a href="https://github.com/Yawan-1/StackOverFlow--Clone/pulls">Pull request</a>.
 
 Note: <small>Frontend and complete design is also inside this project's repo (html, css).</small>
 
