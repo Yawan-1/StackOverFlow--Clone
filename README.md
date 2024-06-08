@@ -7,6 +7,8 @@
 
 Clone of Stack Overflow where I implemented nearly all of its functionalities. My intention was to provide insight and demonstration to developers on the inner workings of Stack Overflow - including how tasks are performed <b style="color:lightgreen">behind the scenes</b> and how queries are executed..
 
+> Note: Please have a look at the Blog explaining <a href="https://yawan-1.github.io/">What I learned from this Project?</a>
+
 ## Images
 
 <img src="/images/animation.gif">
