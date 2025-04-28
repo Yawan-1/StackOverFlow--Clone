@@ -41,6 +41,7 @@ py
 pycodestyle
 pyparsing
 pytest
+python-dotenv
 python-slugify
 pytz
 redis
